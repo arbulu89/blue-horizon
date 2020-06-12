@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 class SourcesController < ApplicationController
   include Exportable
   before_action :set_sources, only: [:index, :show, :new, :edit]
@@ -21,14 +23,18 @@ class SourcesController < ApplicationController
 
   # POST /sources
   def create
-    @source = Source.new(source_params)
+    unless params[:source]['filename'].empty?
+      @source = Source.new(source_params)
 
-    if @source.save
-      terra_validate
-    else
+      return terra_validate if @source.save
+
       set_sources
-      render :new
+      return render :new
     end
+
+    return redirect_to(new_source_path,
+      flash: { error: 'Source filename can not be empty.' }
+    )
   end
 
   # PATCH/PUT /sources/1
@@ -62,7 +68,8 @@ class SourcesController < ApplicationController
   end
 
   def terra_validate
-    Source.all.each(&:export)
+    # Source.all.each(&:export)
+    @source.export
     terra = Terraform.new
     output = terra.validate(true)
 
