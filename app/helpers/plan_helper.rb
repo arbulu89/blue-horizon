@@ -1,7 +1,7 @@
 # helper for rendering `terraform show` output as a plan
 module PlanHelper
   def terraform_plan(show_output)
-    return "" if show_output == nil
+    return "" if show_output.blank?
     @plan = JSON.parse(show_output)
     @resources = find_resources_recursively(@plan.dig("planned_values", "root_module"))
     render(Rails.configuration.x.terraform_plan_view)

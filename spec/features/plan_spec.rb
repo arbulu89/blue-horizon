@@ -40,4 +40,35 @@ describe 'planning', type: :feature do
       expect(find('#plan code.output')).to have_content(current_plan)
     end
   end
+
+  context 'with the dynamic plan view' do
+    let!(:current_plan) { current_plan_fixture }
+
+    before do
+      Rails.configuration.x.terraform_plan_view = "plans/dynamic"
+    end
+
+    it 'displays the current plan' do
+      visit(plan_path)
+      expect(find('#plan')).to have_selector('table.table')
+    end
+  end
+
+  context 'with the sap_azure plan view' do
+    let!(:current_plan) { sap_azure_plan_fixture }
+
+    before do
+      Rails.configuration.x.terraform_plan_view = "plans/sap_azure"
+    end
+
+    it 'displays the current plan' do
+      visit(plan_path)
+      plan_element = find('#plan')
+      expect(plan_element.text).to include "System settings"
+      expect(plan_element.text).to include "Resource group"
+      expect(plan_element.text).to include "HANA nodes"
+      expect(plan_element.text).to include "Virtual networks"
+      expect(plan_element.text).to include "Security group"
+    end
+  end
 end
