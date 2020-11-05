@@ -8,7 +8,7 @@ module PlanHelper
     plan = JSON.parse(show_output)
     resources = find_resources_recursively(plan.dig('planned_values', 'root_module'))
 
-    render Rails.configuration.x.terraform_plan_view, locals: { plan: plan, resources: resources }
+    render Rails.configuration.x.terraform_plan_view, { plan: plan, resources: resources }
   end
 
   # i don't care about your cyclomatic complexity, rubocop, I want a big dumb switch.

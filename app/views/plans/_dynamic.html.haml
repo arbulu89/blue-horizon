@@ -5,7 +5,7 @@
       %th Name
       %th Details
   %tbody
-    - @resources.each do |address, resource|
+    - resources.each do |address, resource|
       %tr{id: address}
         %td
           %i.eos-icons= resource_icon(resource)
