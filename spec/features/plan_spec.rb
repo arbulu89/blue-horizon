@@ -45,7 +45,7 @@ describe 'planning', type: :feature do
     let!(:current_plan) { current_plan_fixture }
 
     before do
-      Rails.configuration.x.terraform_plan_view = "plans/dynamic"
+      Rails.configuration.x.terraform_plan_view = 'plans/dynamic'
     end
 
     it 'displays the current plan' do
@@ -58,17 +58,17 @@ describe 'planning', type: :feature do
     let!(:current_plan) { sap_azure_plan_fixture }
 
     before do
-      Rails.configuration.x.terraform_plan_view = "plans/sap_azure"
+      Rails.configuration.x.terraform_plan_view = 'plans/sap_azure'
     end
 
     it 'displays the current plan' do
       visit(plan_path)
       plan_element = find('#plan')
-      expect(plan_element.text).to include "System settings"
-      expect(plan_element.text).to include "Resource group"
-      expect(plan_element.text).to include "HANA nodes"
-      expect(plan_element.text).to include "Virtual networks"
-      expect(plan_element.text).to include "Security group"
+      expect(plan_element.text).to include 'System settings'
+      expect(plan_element.text).to include 'Resource group'
+      expect(plan_element.text).to include 'HANA nodes'
+      expect(plan_element.text).to include 'Virtual networks'
+      expect(plan_element.text).to include 'Security group'
     end
   end
 end

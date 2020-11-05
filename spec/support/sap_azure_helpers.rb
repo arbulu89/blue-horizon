@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SapAzureHelpers
   def sap_azure_plan_fixture
     source_path = Rails.root.join('spec', 'fixtures', 'sap_azure')
