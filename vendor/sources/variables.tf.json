@@ -43,7 +43,7 @@
     },
     "sap_admin_password": {
       "type": "string",
-      "description": "SAP administrator password. It is used to access to the sidadm user<!-- password_key [group:HANA_configuration] [pattern:/^[A-Za-z0-9.]{1}(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[A-Za-z0-9]{7,}$/] [extra_information:The password must contain, at least 8 characters, 1 digit, 1 upper-case character, 1 lower-case character and does not accept special characters]-->"
+      "description": "SAP administrator password. It is used to access to the sidadm user<!-- password_key [group:HANA_configuration] [pattern:/^\\.?(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[A-Za-z0-9]{8,}$/] [extra_information:The password must contain, at least 8 characters, 1 digit, 1 upper-case character, 1 lower-case character and does not accept special characters]-->"
     },
     "hana_ha_enabled": {
       "type": "bool",
