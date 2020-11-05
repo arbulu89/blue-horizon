@@ -25,7 +25,7 @@ class Cluster
       cloud_framework:      Rails.configuration.x.cloud_framework,
       instance_count:       prefixed_get(:instance_count),
       instance_type:        prefixed_get(
-          :instance_type, Variable.load.attributes['instance_type']
+        :instance_type, Variable.load.attributes['instance_type']
       ),
       instance_type_custom: prefixed_get(:instance_type_custom),
       hana_ha_enabled:      prefixed_get(
