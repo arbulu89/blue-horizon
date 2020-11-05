@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'planning', type: :feature do
-  let(:plan_button) { I18n.t('plan') }
-
   before do
     populate_sources(include_mocks: false)
   end
@@ -51,24 +49,6 @@ describe 'planning', type: :feature do
     it 'displays the current plan' do
       visit(plan_path)
       expect(find('#plan')).to have_selector('table.table')
-    end
-  end
-
-  context 'with the sap_azure plan view' do
-    let!(:current_plan) { sap_azure_plan_fixture }
-
-    before do
-      Rails.configuration.x.terraform_plan_view = 'plans/sap_azure'
-    end
-
-    it 'displays the current plan' do
-      visit(plan_path)
-      plan_element = find('#plan')
-      expect(plan_element.text).to include 'System settings'
-      expect(plan_element.text).to include 'Resource group'
-      expect(plan_element.text).to include 'HANA nodes'
-      expect(plan_element.text).to include 'Virtual networks'
-      expect(plan_element.text).to include 'Security group'
     end
   end
 end
