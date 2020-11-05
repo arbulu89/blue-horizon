@@ -26,7 +26,7 @@ Layout/EndAlignment:
   EnforcedStyleAlignWith: start_of_line
 
 Layout/LineLength:
-  Max: 80
+  Max: 120
   Exclude:
     - "config/**/*"
 
@@ -47,10 +47,10 @@ RSpec/ExampleLength:
 
 RSpec/FactoryBot/CreateList:
   Enabled: false
-  
+
 RSpec/LetSetup:
   Enabled: false
-  
+
 RSpec/MessageSpies:
   Enabled: false
 
