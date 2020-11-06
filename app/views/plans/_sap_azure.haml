@@ -34,6 +34,8 @@
           %dl.row{id: address}
             %dt.col-4 Name:
             %dd.col-8= vm_resource.dig 'values', 'name'
+            %dt.col-4 Size:
+            %dd.col-8= vm_resource.dig 'values', 'vm_size'
             %dt.col-4 Private IP address:
             %dd.col-8= resources.dig "module.bluehorizon.module.hana_node.azurerm_network_interface.hana[#{index}]", 'values', 'ip_configuration', 0, 'private_ip_address'
             %dt.col-4 OS Image:
@@ -66,7 +68,9 @@
     = plan_section_header 'Bastion', 'node'
     %dl.row
       %dt.col-4 Name:
-      %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_virtual_machine.bastion[0]','values', 'name'
+      %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_virtual_machine.bastion[0]', 'values', 'name'
+      %dt.col-4 Size:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_virtual_machine.bastion[0]', 'values', 'vm_size'
       %dt.col-4 Private IP address:
       %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_network_interface.bastion[0]', 'values', 'ip_configuration', 0, 'private_ip_address'
       %dt.col-4 OS Image:
@@ -80,6 +84,8 @@
     %dl.row
       %dt.col-4 Name:
       %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]','values', 'name'
+      %dt.col-4 Size:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]', 'values', 'vm_size'
       %dt.col-4 Private IP address:
       %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_network_interface.monitoring[0]', 'values', 'ip_configuration', 0, 'private_ip_address'
       %dt.col-4 OS Image:

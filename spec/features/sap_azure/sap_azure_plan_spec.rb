@@ -40,6 +40,7 @@ describe 'sap azure plan', type: :feature do
     expect(hana_nodes).to have_selector '.hana-node', count: 2
     hana_nodes.find_all('.hana-node').each_with_index do |hana_node,i|
       expect(hana_node).to have_text "Name: vmhana0#{i+1}"
+      expect(hana_node).to have_text 'Size: Standard_E8s_v3'
       expect(hana_node).to have_text "Private IP address: 10.74.1.1#{i}"
       expect(hana_node).to have_text 'OS Image: sles-sap-15-sp2'
       expect(hana_node).to have_selector '.disk', count: 7
@@ -58,11 +59,13 @@ describe 'sap azure plan', type: :feature do
 
     bastion = plan_block.find '.bastion'
     expect(bastion).to have_text 'Name: vmbastion'
+    expect(bastion).to have_text 'Size: Standard_B1s'
     expect(bastion).to have_text 'Private IP address: 10.74.2.5'
     expect(bastion).to have_text 'OS Image: sles-sap-15-sp2'
 
     monitoring_server = plan_block.find '.monitoring-server'
     expect(monitoring_server).to have_text 'Name: vmmonitoring'
+    expect(monitoring_server).to have_text 'Size: Standard_D2s_v3'
     expect(monitoring_server).to have_text 'Private IP address: 10.74.1.5'
     expect(monitoring_server).to have_text 'OS Image: sles-sap-15-sp2'
     expect(monitoring_server).to have_selector '.disk', count: 1
