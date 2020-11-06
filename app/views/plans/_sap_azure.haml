@@ -38,12 +38,13 @@
             %dd.col-8= resources.dig "module.bluehorizon.module.hana_node.azurerm_network_interface.hana[#{index}]", 'values', 'ip_configuration', 0, 'private_ip_address'
             %dt.col-4 OS Image:
             %dd.col-8= vm_resource.dig 'values', 'storage_image_reference', 0, 'offer'
-            %dt.col-4 Disks:
+            %dt.col-4 Data disks:
             %dd.col-8.mb-0
               - (vm_resource.dig('values', 'storage_data_disk')||[]).each do |disk|
                 %li.py-0.disk
                   %span= disk['name']
                   %span= "(#{disk['disk_size_gb']}GB)"
+
 %div.row
 
   %div.col.virtual-networks
@@ -60,7 +61,20 @@
       %dt.col-4 Address range:
       %dd.col-8= resources.dig('module.bluehorizon.azurerm_subnet.mysubnet[0]', 'values', 'address_prefixes').join(',')
 
-  %div.col.monitoring-server
+  %div.col.bastion
+
+    = plan_section_header 'Bastion', 'node'
+    %dl.row
+      %dt.col-4 Name:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_virtual_machine.bastion[0]','values', 'name'
+      %dt.col-4 Private IP address:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_network_interface.bastion[0]', 'values', 'ip_configuration', 0, 'private_ip_address'
+      %dt.col-4 OS Image:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_virtual_machine.bastion[0]', 'values', 'storage_image_reference', 0, 'offer'
+
+%div.row
+
+  %div.col-6.monitoring-server
 
     = plan_section_header 'Monitoring server', 'node'
     %dl.row
@@ -70,7 +84,7 @@
       %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_network_interface.monitoring[0]', 'values', 'ip_configuration', 0, 'private_ip_address'
       %dt.col-4 OS Image:
       %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]', 'values', 'storage_image_reference', 0, 'offer'
-      %dt.col-4 Disks:
+      %dt.col-4 Data disks:
       %dd.col-8.mb-0
         - (resources.dig('module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]', 'values', 'storage_data_disk')||[]).each do |disk|
           %li.py-0.disk

@@ -56,6 +56,11 @@ describe 'sap azure plan', type: :feature do
     expect(networks[1]).to have_text 'Name: snet-test'
     expect(networks[1]).to have_text 'Address range: 10.74.1.0/24'
 
+    bastion = plan_block.find '.bastion'
+    expect(bastion).to have_text 'Name: vmbastion'
+    expect(bastion).to have_text 'Private IP address: 10.74.2.5'
+    expect(bastion).to have_text 'OS Image: sles-sap-15-sp2'
+
     monitoring_server = plan_block.find '.monitoring-server'
     expect(monitoring_server).to have_text 'Name: vmmonitoring'
     expect(monitoring_server).to have_text 'Private IP address: 10.74.1.5'
