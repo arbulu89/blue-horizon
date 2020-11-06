@@ -1,107 +1,110 @@
 %div.row
 
-  %div.col
+  %div.col.system-settings
 
-    = plan_section_header "System settings", "config_map"
+    = plan_section_header 'System settings', 'config_map'
     %dl.row
-      %dt.col-4 System identifier
-      %dd.col-8= plan.dig("variables", "system_identifier", "value").upcase
-      %dt.col-4 Instance number
-      %dd.col-8= plan.dig("variables", "instance_number", "value")
-      %dt.col-4 Admin user
-      %dd.col-8= plan.dig("variables", "system_identifier", "value").downcase.concat("adm")
-      %dt.col-4 Admin password
-      %dd.col-8= plan.dig("variables", "sap_admin_password", "value")
+      %dt.col-4 System identifier:
+      %dd.col-8= plan.dig('variables', 'system_identifier', 'value').upcase
+      %dt.col-4 Instance number:
+      %dd.col-8= plan.dig('variables', 'instance_number', 'value')
+      %dt.col-4 Admin user:
+      %dd.col-8= plan.dig('variables', 'system_identifier', 'value').downcase.concat('adm')
+      %dt.col-4 Admin password:
+      %dd.col-8= plan.dig('variables', 'sap_admin_password', 'value')
 
-  %div.col
+  %div.col.resource-group
 
-    = plan_section_header "Resource group", "namespace"
+    = plan_section_header 'Resource group', 'namespace'
     %dl.row
-      %dt.col-4 Name
-      %dd.col-8= resources.dig("module.bluehorizon.azurerm_resource_group.myrg[0]", "values", "name")
-      %dt.col-4 Region
-      %dd.col-8= resources.dig("module.bluehorizon.azurerm_resource_group.myrg[0]", "values", "location")
+      %dt.col-4 Name:
+      %dd.col-8= resources.dig('module.bluehorizon.azurerm_resource_group.myrg[0]', 'values', 'name')
+      %dt.col-4 Region:
+      %dd.col-8= resources.dig('module.bluehorizon.azurerm_resource_group.myrg[0]', 'values', 'location')
 
 %div.row
 
-  %div.col
+  %div.col.hana-nodes
 
-    = plan_section_header "HANA nodes", "node"
+    = plan_section_header 'HANA nodes', 'node'
     %div.row
-      - resources.select { |address| address =~ /module\.bluehorizon\.module\.hana_node\.azurerm_virtual_machine\.hana/ }.each_with_index do |(address, vm_resource),index|
-        %div.col
+      - node_pattern = /module\.bluehorizon\.module\.hana_node\.azurerm_virtual_machine\.hana/
+      - resources.select { |address| address =~ node_pattern }.each_with_index do |(address, vm_resource),index|
+        %div.col.hana-node
           %dl.row{id: address}
-            %dt.col-4 Name
-            %dd.col-8= vm_resource.dig("values", "name")
-            %dt.col-4 Private IP address
-            %dd.col-8= resources.dig("module.bluehorizon.module.hana_node.azurerm_network_interface.hana[#{index}]", "values", "ip_configuration", 0, "private_ip_address")
-            %dt.col-4 OS Image
-            %dd.col-8= vm_resource.dig("values", "storage_image_reference", 0, "offer")
-            %dt.col-4 Disks
+            %dt.col-4 Name:
+            %dd.col-8= vm_resource.dig 'values', 'name'
+            %dt.col-4 Private IP address:
+            %dd.col-8= resources.dig "module.bluehorizon.module.hana_node.azurerm_network_interface.hana[#{index}]", 'values', 'ip_configuration', 0, 'private_ip_address'
+            %dt.col-4 OS Image:
+            %dd.col-8= vm_resource.dig 'values', 'storage_image_reference', 0, 'offer'
+            %dt.col-4 Disks:
             %dd.col-8.mb-0
-              - (vm_resource.dig("values", "storage_data_disk")||[]).each do |disk|
-                %li.py-0
-                  %span= disk.dig("name")
-                  %span= "(#{disk.dig("disk_size_gb")}GB)"
+              - (vm_resource.dig('values', 'storage_data_disk')||[]).each do |disk|
+                %li.py-0.disk
+                  %span= disk['name']
+                  %span= "(#{disk['disk_size_gb']}GB)"
+%div.row
+
+  %div.col.virtual-networks
+
+    = plan_section_header 'Virtual networks', 'ip'
+    %dl.row.network
+      %dt.col-4 Name:
+      %dd.col-8= resources.dig 'module.bluehorizon.azurerm_virtual_network.mynet[0]', 'values', 'name'
+      %dt.col-4 Address range:
+      %dd.col-8= resources.dig('module.bluehorizon.azurerm_virtual_network.mynet[0]', 'values', 'address_space').join(',')
+    %dl.row.network
+      %dt.col-4 Name:
+      %dd.col-8= resources.dig 'module.bluehorizon.azurerm_subnet.mysubnet[0]', 'values', 'name'
+      %dt.col-4 Address range:
+      %dd.col-8= resources.dig('module.bluehorizon.azurerm_subnet.mysubnet[0]', 'values', 'address_prefixes').join(',')
+
+  %div.col.monitoring-server
+
+    = plan_section_header 'Monitoring server', 'node'
+    %dl.row
+      %dt.col-4 Name:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]','values', 'name'
+      %dt.col-4 Private IP address:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_network_interface.monitoring[0]', 'values', 'ip_configuration', 0, 'private_ip_address'
+      %dt.col-4 OS Image:
+      %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]', 'values', 'storage_image_reference', 0, 'offer'
+      %dt.col-4 Disks:
+      %dd.col-8.mb-0
+        - (resources.dig('module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]', 'values', 'storage_data_disk')||[]).each do |disk|
+          %li.py-0.disk
+            %span= disk['name']
+            %span= "(#{disk['disk_size_gb']}GB)"
 
 %div.row
 
-  %div.col
+  %div.col.security-group
 
-    = plan_section_header "Virtual networks", "ip"
+    = plan_section_header 'Security group', 'security'
     %dl.row
-      %dt.col-4 Name
-      %dd.col-8= resources.dig("module.bluehorizon.azurerm_virtual_network.mynet[0]", "values", "name")
-      %dt.col-4 Address range
-      %dd.col-8= resources.dig("module.bluehorizon.azurerm_virtual_network.mynet[0]", "values", "address_space", 0)
-    %dl.row
-      %dt.col-4 Name
-      %dd.col-8= resources.dig("module.bluehorizon.azurerm_subnet.mysubnet[0]", "values", "name")
-      %dt.col-4 Address range
-      %dd.col-8= resources.dig("module.bluehorizon.azurerm_subnet.mysubnet[0]", "values", "address_prefix")
-
-  %div.col
-
-    = plan_section_header "Monitoring server", "node"
-    %dl.row
-      %dt.col-4 Name
-      %dd.col-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]","values", "name")
-      %dt.col-4 Private IP address
-      %dd.col-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_network_interface.monitoring[0]", "values", "ip_configuration", 0, "private_ip_address")
-      %dt.col-4 OS Image
-      %dd.col-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]", "values", "storage_image_reference", 0, "offer")
-      %dt.col-4 Disks
-      %dd.col-8.mb-0
-        - (resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]", "values", "storage_data_disk")||[]).each do |disk|
-          %li.py-0
-            %span= disk.dig("name")
-            %span= "(#{disk.dig("disk_size_gb")}GB)"
-
-
-= plan_section_header "Security group", "security"
-%dl.row
-  %dt.col-2 Name
-  %dd.col-10= resources.dig("module.bluehorizon.azurerm_network_security_group.mysecgroup","values", "name")
-  %dt.col-12 Rules
-  %dd.col-12
-    %table.table.table
-      %thead
-        %th Name
-        %th Access
-        %th Direction
-        %th Source addresses
-        %th Source ports
-        %th Destination addresses
-        %th Destination ports
-        %th Protocol
-      %tbody
-        - (resources.dig("module.bluehorizon.azurerm_network_security_group.mysecgroup", "values", "security_rule")||[]).each do |rule|
-          %tr
-            %td= rule.dig("name")
-            %td= rule.dig("access")
-            %td= rule.dig("direction")
-            %td= "#{rule.dig("source_address_prefix")} #{rule.dig("source_address_prefixes").join(",")}"
-            %td= "#{rule.dig("source_port_range")} #{rule.dig("source_port_ranges").join(",")}"
-            %td= "#{rule.dig("destination_address_prefix")} #{rule.dig("destination_address_prefixes").join(",")}"
-            %td= "#{rule.dig("destination_port_range")} #{rule.dig("destination_port_ranges").join(",")}"
-            %td= rule.dig("protocol")
+      %dt.col-2 Name:
+      %dd.col-10= resources.dig 'module.bluehorizon.azurerm_network_security_group.mysecgroup', 'values', 'name'
+      %dt.col-12 Rules:
+      %dd.col-12
+        %table.table.rules
+          %thead
+            %th Name
+            %th Access
+            %th Direction
+            %th Source addresses
+            %th Source ports
+            %th Destination addresses
+            %th Destination ports
+            %th Protocol
+          %tbody
+            - (resources.dig('module.bluehorizon.azurerm_network_security_group.mysecgroup', 'values', 'security_rule')||[]).each do |rule|
+              %tr.rule
+                %td= rule['name']
+                %td= rule['access']
+                %td= rule['direction']
+                %td= "#{rule['source_address_prefix']} #{rule['source_address_prefixes'].join(',')}"
+                %td= "#{rule['source_port_range']} #{rule['source_port_ranges'].join(',')}"
+                %td= "#{rule['destination_address_prefix']} #{rule['destination_address_prefixes'].join(',')}"
+                %td= "#{rule['destination_port_range']} #{rule['destination_port_ranges'].join(',')}"
+                %td= rule['protocol']
