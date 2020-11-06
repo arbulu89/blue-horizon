@@ -27,25 +27,25 @@ describe 'sap azure plan', type: :feature do
     expect(plan_block).to have_selector '.security-group'
 
     system_settings = plan_block.find '.system-settings'
-    expect(system_settings).to have_text "System identifier: PRD"
-    expect(system_settings).to have_text "Instance number: 00"
-    expect(system_settings).to have_text "Admin user: prdadm"
-    expect(system_settings).to have_text "Admin password: .Password1"
+    expect(system_settings).to have_text 'System identifier: PRD'
+    expect(system_settings).to have_text 'Instance number: 00'
+    expect(system_settings).to have_text 'Admin user: prdadm'
+    expect(system_settings).to have_text 'Admin password: .Password1'
 
     resource_group = plan_block.find '.resource-group'
-    expect(resource_group).to have_text "Name: rg-ha-sap-test"
-    expect(resource_group).to have_text "Region: westeurope"
+    expect(resource_group).to have_text 'Name: rg-ha-sap-test'
+    expect(resource_group).to have_text 'Region: westeurope'
 
     hana_nodes = plan_block.find '.hana-nodes'
     expect(hana_nodes).to have_selector '.hana-node', count: 2
-    hana_nodes.find_all('.hana-node').each_with_index do |hana_node,i|
-      expect(hana_node).to have_text "Name: vmhana0#{i+1}"
+    hana_nodes.find_all('.hana-node').each_with_index do |hana_node, i|
+      expect(hana_node).to have_text "Name: vmhana0#{i + 1}"
       expect(hana_node).to have_text 'Size: Standard_E8s_v3'
       expect(hana_node).to have_text "Private IP address: 10.74.1.1#{i}"
       expect(hana_node).to have_text 'OS Image: sles-sap-15-sp2'
       expect(hana_node).to have_selector '.disk', count: 7
-      hana_node.find_all('.disk').each_with_index do |hana_disk,j|
-        expect(hana_disk).to have_text "disk-hana0#{i+1}-Data0#{j+1} (128GB)"
+      hana_node.find_all('.disk').each_with_index do |hana_disk, j|
+        expect(hana_disk).to have_text "disk-hana0#{i + 1}-Data0#{j + 1} (128GB)"
       end
     end
 
@@ -69,7 +69,7 @@ describe 'sap azure plan', type: :feature do
     expect(monitoring_server).to have_text 'Private IP address: 10.74.1.5'
     expect(monitoring_server).to have_text 'OS Image: sles-sap-15-sp2'
     expect(monitoring_server).to have_selector '.disk', count: 1
-    expect(monitoring_server.find('.disk')).to have_text "disk-monitoring-Data01 (10GB)"
+    expect(monitoring_server.find('.disk')).to have_text 'disk-monitoring-Data01 (10GB)'
 
     security_group = plan_block.find '.security-group'
     expect(security_group).to have_text 'Name: nsg-test'

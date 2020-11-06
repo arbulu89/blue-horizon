@@ -11,8 +11,8 @@ module PlanHelper
     render Rails.configuration.x.terraform_plan_view, { plan: plan, resources: resources }
   end
 
-  def plan_section_header(title, icon = "abstract")
-    icon_tag = tag.i icon, class: "eos-icons"
+  def plan_section_header(title, icon='abstract')
+    icon_tag = tag.i icon, class: 'eos-icons'
     tag.h4 icon_tag + title
   end
 
