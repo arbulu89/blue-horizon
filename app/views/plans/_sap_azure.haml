@@ -1,83 +1,90 @@
 %div.row
 
-  %div.col-sm
+  %div.col
 
-    %h4 Resource group
+    = plan_section_header "System settings", "config_map"
     %dl.row
-      %dt.col-sm-4 Name
-      %dd.col-sm-8= resources.dig("module.bluehorizon.azurerm_resource_group.myrg[0]", "values", "name")
-      %dt.col-sm-4 Region
-      %dd.col-sm-8= resources.dig("module.bluehorizon.azurerm_resource_group.myrg[0]", "values", "location")
+      %dt.col-4 System identifier
+      %dd.col-8= plan.dig("variables", "system_identifier", "value").upcase
+      %dt.col-4 Instance number
+      %dd.col-8= plan.dig("variables", "instance_number", "value")
+      %dt.col-4 Admin user
+      %dd.col-8= plan.dig("variables", "system_identifier", "value").downcase.concat("adm")
+      %dt.col-4 Admin password
+      %dd.col-8= plan.dig("variables", "sap_admin_password", "value")
 
-  %div.col-sm
+  %div.col
 
-    %h4 System settings
+    = plan_section_header "Resource group", "namespace"
     %dl.row
-      %dt.col-sm-4 System identifier
-      %dd.col-sm-8= plan.dig("variables", "system_identifier", "value").upcase
-      %dt.col-sm-4 Instance number
-      %dd.col-sm-8= plan.dig("variables", "instance_number", "value")
-      %dt.col-sm-4 Admin user
-      %dd.col-sm-8= plan.dig("variables", "system_identifier", "value").downcase.concat("adm")
-      %dt.col-sm-4 Admin password
-      %dd.col-sm-8= plan.dig("variables", "sap_admin_password", "value")
+      %dt.col-4 Name
+      %dd.col-8= resources.dig("module.bluehorizon.azurerm_resource_group.myrg[0]", "values", "name")
+      %dt.col-4 Region
+      %dd.col-8= resources.dig("module.bluehorizon.azurerm_resource_group.myrg[0]", "values", "location")
 
 %div.row
 
-  %div.col-sm
+  %div.col
 
-    %h4 HANA nodes
-    - resources.select { |address| address =~ /module\.bluehorizon\.module\.hana_node\.azurerm_virtual_machine\.hana/ }.each_with_index do |(address, vm_resource),index|
-      %dl.row{id: address}
-        %dt.col-sm-4 Name
-        %dd.col-sm-8= vm_resource.dig("values", "name")
-        %dt.col-sm-4 Private IP address
-        %dd.col-sm-8= resources.dig("module.bluehorizon.module.hana_node.azurerm_network_interface.hana[#{index}]", "values", "ip_configuration", 0, "private_ip_address")
-        %dt.col-sm-4 OS Image
-        %dd.col-sm-8= vm_resource.dig("values", "storage_image_reference", 0, "offer")
-        %dt.col-sm-4 Disks
-        %dd.col-sm-8
-          - (vm_resource.dig("values", "storage_data_disk")||[]).each do |disk|
-            %li.pt-0
-              %span= disk.dig("name")
-              %span= "(#{disk.dig("disk_size_gb")}GB)"
+    = plan_section_header "HANA nodes", "node"
+    %div.row
+      - resources.select { |address| address =~ /module\.bluehorizon\.module\.hana_node\.azurerm_virtual_machine\.hana/ }.each_with_index do |(address, vm_resource),index|
+        %div.col
+          %dl.row{id: address}
+            %dt.col-4 Name
+            %dd.col-8= vm_resource.dig("values", "name")
+            %dt.col-4 Private IP address
+            %dd.col-8= resources.dig("module.bluehorizon.module.hana_node.azurerm_network_interface.hana[#{index}]", "values", "ip_configuration", 0, "private_ip_address")
+            %dt.col-4 OS Image
+            %dd.col-8= vm_resource.dig("values", "storage_image_reference", 0, "offer")
+            %dt.col-4 Disks
+            %dd.col-8.mb-0
+              - (vm_resource.dig("values", "storage_data_disk")||[]).each do |disk|
+                %li.py-0
+                  %span= disk.dig("name")
+                  %span= "(#{disk.dig("disk_size_gb")}GB)"
 
-  %div.col-sm
+%div.row
 
-    %h4 Virtual networks
+  %div.col
+
+    = plan_section_header "Virtual networks", "ip"
     %dl.row
-      %dt.col-sm-4 Name
-      %dd.col-sm-8= resources.dig("module.bluehorizon.azurerm_virtual_network.mynet[0]", "values", "name")
-      %dt.col-sm-4 Address range
-      %dd.col-sm-8= resources.dig("module.bluehorizon.azurerm_virtual_network.mynet[0]", "values", "address_space", 0)
+      %dt.col-4 Name
+      %dd.col-8= resources.dig("module.bluehorizon.azurerm_virtual_network.mynet[0]", "values", "name")
+      %dt.col-4 Address range
+      %dd.col-8= resources.dig("module.bluehorizon.azurerm_virtual_network.mynet[0]", "values", "address_space", 0)
     %dl.row
-      %dt.col-sm-4 Name
-      %dd.col-sm-8= resources.dig("module.bluehorizon.azurerm_subnet.mysubnet[0]", "values", "name")
-      %dt.col-sm-4 Address range
-      %dd.col-sm-8= resources.dig("module.bluehorizon.azurerm_subnet.mysubnet[0]", "values", "address_prefix")
+      %dt.col-4 Name
+      %dd.col-8= resources.dig("module.bluehorizon.azurerm_subnet.mysubnet[0]", "values", "name")
+      %dt.col-4 Address range
+      %dd.col-8= resources.dig("module.bluehorizon.azurerm_subnet.mysubnet[0]", "values", "address_prefix")
 
-    %h4 Monitoring server
+  %div.col
+
+    = plan_section_header "Monitoring server", "node"
     %dl.row
-      %dt.col-sm-4 Name
-      %dd.col-sm-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]","values", "name")
-      %dt.col-sm-4 Private IP address
-      %dd.col-sm-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_network_interface.monitoring[0]", "values", "ip_configuration", 0, "private_ip_address")
-      %dt.col-sm-4 OS Image
-      %dd.col-sm-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]", "values", "storage_image_reference", 0, "offer")
-      %dt.col-sm-4 Disks
-      %dd.col-sm-8
+      %dt.col-4 Name
+      %dd.col-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]","values", "name")
+      %dt.col-4 Private IP address
+      %dd.col-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_network_interface.monitoring[0]", "values", "ip_configuration", 0, "private_ip_address")
+      %dt.col-4 OS Image
+      %dd.col-8= resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]", "values", "storage_image_reference", 0, "offer")
+      %dt.col-4 Disks
+      %dd.col-8.mb-0
         - (resources.dig("module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]", "values", "storage_data_disk")||[]).each do |disk|
-          %li.pt-0
+          %li.py-0
             %span= disk.dig("name")
             %span= "(#{disk.dig("disk_size_gb")}GB)"
 
-%h4 Security group
+
+= plan_section_header "Security group", "security"
 %dl.row
-  %dt.col-sm-2 Name
-  %dd.col-sm-10= resources.dig("module.bluehorizon.azurerm_network_security_group.mysecgroup","values", "name")
-  %dt.col-sm-2 Rules
-  %dd.col-sm-10
-    %table.table.table-sm
+  %dt.col-2 Name
+  %dd.col-10= resources.dig("module.bluehorizon.azurerm_network_security_group.mysecgroup","values", "name")
+  %dt.col-12 Rules
+  %dd.col-12
+    %table.table.table
       %thead
         %th Name
         %th Access
