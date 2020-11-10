@@ -43,12 +43,10 @@ module PlanHelper
   private
 
   def find_resources_recursively(tf_module)
-    resources = {}
-
     # ignore data and null resources and convert the resources array to a hash, allowing lookup by address
-    (tf_module['resources'] || [])
+    resources = (tf_module['resources'] || [])
       .select { |tf_resource| tf_resource['type'] != 'null_resource' && tf_resource['mode'] == 'managed' }
-      .each { |tf_resource| resources[tf_resource['address']] = tf_resource }
+      .map { |tf_resource| [tf_resource['address'], tf_resource] }.to_h
 
     (tf_module['child_modules'] || [])
       .each { |tf_child_module| resources = resources.merge(find_resources_recursively(tf_child_module)) }
