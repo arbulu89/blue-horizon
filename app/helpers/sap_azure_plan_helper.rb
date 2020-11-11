@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 # helper for rendering `terraform show` output as a plan
-module PlanHelper
-  def terraform_plan(plan)
-    return '' if plan.blank?
+module SapAzurePlanHelper
+  def sap_azure_resources(plan)
+    return {} if plan.blank?
 
-    resources = find_resources_recursively(plan.dig('planned_values', 'root_module'))
-
-    render 'plans/sap_azure', { plan: plan, resources: resources }
+    find_resources_recursively(plan.dig('planned_values', 'root_module'))
   end
 
   def plan_section_header(title, icon='abstract')

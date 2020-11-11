@@ -1,1 +1,1 @@
-= terraform_plan(plan)
+= render 'plans/sap_azure', { plan: plan, resources: sap_azure_resources(plan) }
