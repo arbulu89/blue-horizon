@@ -7,7 +7,7 @@ module PlanHelper
 
     resources = find_resources_recursively(plan.dig('planned_values', 'root_module'))
 
-    render 'plans/sap-azure', { plan: plan, resources: resources }
+    render 'plans/sap_azure', { plan: plan, resources: resources }
   end
 
   def plan_section_header(title, icon='abstract')
