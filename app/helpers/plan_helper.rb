@@ -2,13 +2,12 @@
 
 # helper for rendering `terraform show` output as a plan
 module PlanHelper
-  def terraform_plan(show_output)
-    return '' if show_output.blank?
+  def terraform_plan(plan)
+    return '' if plan.blank?
 
-    plan = JSON.parse(show_output)
     resources = find_resources_recursively(plan.dig('planned_values', 'root_module'))
 
-    render Rails.configuration.x.terraform_plan_view, { plan: plan, resources: resources }
+    render 'plans/sap-azure', { plan: plan, resources: resources }
   end
 
   def plan_section_header(title, icon='abstract')

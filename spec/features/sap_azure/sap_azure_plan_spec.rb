@@ -6,7 +6,7 @@ describe 'sap azure plan', type: :feature do
   before do
     copy_plan_fixture
     copy_sources
-    Rails.configuration.x.terraform_plan_view = 'plans/sap_azure'
+    Rails.configuration.x.override_views = true
   end
 
   it 'displays various sections of the plan' do

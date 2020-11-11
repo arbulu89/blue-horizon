@@ -38,17 +38,4 @@ describe 'planning', type: :feature do
       expect(find('#plan code.output')).to have_content(current_plan)
     end
   end
-
-  context 'with the dynamic plan view' do
-    let!(:current_plan) { current_plan_fixture }
-
-    before do
-      Rails.configuration.x.terraform_plan_view = 'plans/dynamic'
-    end
-
-    it 'displays the current plan' do
-      visit(plan_path)
-      expect(find('#plan')).to have_selector('table.table')
-    end
-  end
 end
