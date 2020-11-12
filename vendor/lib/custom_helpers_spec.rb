@@ -3,13 +3,15 @@
 require 'rails_helper'
 
 describe CustomHelpers do
+  subject(:helper) { Class.new.include(described_class).new }
+
   describe 'plan_resources' do
     context 'with empty input' do
       let!(:input) { [nil, '', {}, []] }
 
       it 'returns an empty hash' do
         input.each do |i|
-          expect(CustomHelpers.plan_resources(i)).to eq({})
+          expect(helper.plan_resources(i)).to eq({})
         end
       end
     end
@@ -35,7 +37,7 @@ describe CustomHelpers do
     resource_type_icon_map.each do |type, icon|
       it "returns the '#{icon}' icon for the '#{type}' type" do
         resource = { 'type' => type }
-        expect(CustomHelpers.resource_icon(resource)).to eq icon
+        expect(helper.resource_icon(resource)).to eq icon
       end
     end
   end

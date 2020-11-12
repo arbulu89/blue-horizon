@@ -6,7 +6,7 @@ describe 'plan', type: :feature do
   before do
     copy_plan_fixture
     copy_sources
-    # Rails.configuration.x.override_views = true
+    Rails.configuration.x.override_views = true
   end
 
   it 'displays various sections' do
