@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-describe 'sap azure plan', type: :feature do
+describe 'plan', type: :feature do
   before do
     copy_plan_fixture
     copy_sources
-    Rails.configuration.x.override_views = true
+    # Rails.configuration.x.override_views = true
   end
 
-  it 'displays various sections of the plan' do
+  it 'displays various sections' do
     visit plan_path
 
     expect(page).to have_selector '#plan'

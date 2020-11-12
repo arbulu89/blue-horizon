@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # helper for rendering `terraform show` output as a plan
-module SapAzurePlanHelper
-  def sap_azure_resources(plan)
+module CustomHelpers
+  def plan_resources(plan)
     return {} if plan.blank?
 
     find_resources_recursively(plan.dig('planned_values', 'root_module'))

@@ -2,13 +2,15 @@
 
 require 'rails_helper'
 
-describe SapAzurePlanHelper do
-  context 'with empty input' do
-    let!(:input) { [nil, '', {}, []] }
+describe CustomHelpers do
+  describe 'plan_resources' do
+    context 'with empty input' do
+      let!(:input) { [nil, '', {}, []] }
 
-    it 'returns an empty hash' do
-      input.each do |i|
-        expect(helper.sap_azure_resources(i)).to eq({})
+      it 'returns an empty hash' do
+        input.each do |i|
+          expect(CustomHelpers.plan_resources(i)).to eq({})
+        end
       end
     end
   end
@@ -33,7 +35,7 @@ describe SapAzurePlanHelper do
     resource_type_icon_map.each do |type, icon|
       it "returns the '#{icon}' icon for the '#{type}' type" do
         resource = { 'type' => type }
-        expect(helper.resource_icon(resource)).to eq icon
+        expect(CustomHelpers.resource_icon(resource)).to eq icon
       end
     end
   end
