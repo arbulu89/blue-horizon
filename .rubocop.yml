@@ -5,7 +5,7 @@ require:
 AllCops:
   Exclude:
     - "bin/*"
-    - "vendor/**/*"
+    - !ruby/regexp /vendor\/(?!lib).*/
     - "packaging/*"
   NewCops: enable
 
@@ -72,7 +72,7 @@ Style/Documentation:
 
 Metrics/BlockLength:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "**/*_spec.rb"
     - "config/initializers/*.rb"
     - "lib/tasks/*.rake"
 

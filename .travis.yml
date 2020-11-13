@@ -14,3 +14,6 @@ jobs:
       script:
         - "bundle exec rubocop -v"
         - "bundle exec rubocop"
+    - name: "custom specs"
+      script:
+        - "bundle exec rspec vendor/lib"

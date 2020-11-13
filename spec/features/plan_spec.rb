@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'planning', type: :feature do
-  let(:plan_button) { I18n.t('plan') }
-
   before do
     populate_sources(include_mocks: false)
   end
