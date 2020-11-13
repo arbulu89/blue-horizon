@@ -74,5 +74,13 @@ describe 'plan', type: :feature do
     security_group = plan_block.find '.security-group'
     expect(security_group).to have_text 'Name: nsg-test'
     expect(security_group).to have_selector '.rules .rule'
+
+    iscsi_server = plan_block.find '.iscsi-server'
+    expect(iscsi_server).to have_text 'Name: vmiscsisrv01'
+    expect(iscsi_server).to have_text 'Size: Standard_D2s_v3'
+    expect(iscsi_server).to have_text 'Private IP address: 10.74.1.4'
+    expect(iscsi_server).to have_text 'OS Image: sles-sap-15-sp2'
+    expect(iscsi_server).to have_selector '.disk', count: 1
+    expect(iscsi_server.find('.disk')).to have_text 'disk-iscsisrv01-Data01 (10GB)'
   end
 end
