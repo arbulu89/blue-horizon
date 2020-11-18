@@ -114,6 +114,21 @@ See `config/locales/custom-en.yml` for a sample/template with keys defined.
 
 To use a different path, set the environment variable `BLUE_HORIZON_LOCALIZERS` with the directory where custom internationalization files are stored.
 
+#### Markdown
+
+The internationalization content `description` and `next_steps`, shown on the first and last pages, respectively, allow _markdown_ content. It is recommended for readability and maintenance, to define these as multiline YAML. The following special features are supported:
+
+* **inline HTML**: in the event that _markdown_ is insufficient for content, raw HTML may be defined. Please be sure to parse any inline HTML as valid with an external parser.
+* **images**: images may be included using the standard _markdown_ format. Image files should be placed in `vendor/assets/images` and referred to in _mardown_ with the path `/vendor/NAME_OF_IMAGE`. For example, given an image stored as `vendor/assets/images/design.png`, the _markdown_ syntax to include it is:
+
+  ```
+  ![design](/vendor/design.png)
+  ```
+
+  ⚠ *Images included in markdown will not be versioned by the Rails asset pipeline, so be aware of possible caching issues.*
+
+Please see https://www.markdownguide.org/basic-syntax for more _markdown_ examples.
+
 #### Including *terraform* output in *Next steps*
 
 The `next_steps` content, presented on the last page after deployment, can include terraform outputs. Put a placeholder in the content in the format `%{OUTPUT_NAME}`.
@@ -143,6 +158,12 @@ It would render as:
 See `config/initializers/customization.rb` for an explanation of the available keys and options.
 
 To use a different path, set the environment variable `BLUE_HORIZON_CUSTOMIZER` with the full path of the customization JSON file to load.
+
+#### Style
+
+`vendor/assets/stylesheets/custom.scss` can be added to provide custom styles (CSS, SCSS) to the application.
+
+💡 *[SCSS](https://sass-lang.com/guide) is a supercet of CSS, so valid CSS is valid SCSS.*
 
 #### View overrides
 
