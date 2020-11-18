@@ -1,0 +1,27 @@
+summary.welcome {
+  background: #333;
+  color: #FFF;
+  border-radius: 3px;
+  padding: 5px 10px;
+  outline: none;
+}
+
+/* Style the summary when details box is open */
+details[open] summary.welcome {
+  background: #30ba78;
+  color: #333;
+}
+
+table td, table td * {
+    vertical-align: top;
+}
+
+.right {
+  border-right: thin solid;
+  border-color: black;
+  padding: 15px;
+}
+
+.left {
+  padding: 15px;
+}

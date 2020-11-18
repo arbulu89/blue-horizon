@@ -23,10 +23,10 @@ vendor/locales/*
 !vendor/locales/.keep
 vendor/sources/*
 !vendor/sources/.keep
-vendor/assets/images/*
-!vendor/assets/images/.keep
+!vendor/assets/images/*
 vendor/assets/stylesheets/*
 !vendor/assets/stylesheets/.keep
+!vendor/assets/stylesheets/custom.scss
 vendor/views/*
 !vendor/views/.keep
 
