@@ -39,54 +39,66 @@ en:
 
     **Please be aware that it may require a high amount of resources, therefore an increase of your quota could be necessary**.
 
+    Read the **Pre-requirements** and **Setting up the Storage account** chapters to understand how to use the SAP installation software.
+
     For a more advanced customization you will need to get your hands dirty and work directly with the source project: https://github.com/SUSE/ha-sap-terraform-deployments
 
-    ## Pre-requirements
-    1. You need to have ssh-keys to be able to access the deployed machines.
+    <details>
+    <summary class="welcome">Pre-requirements</summary>
 
-    2. The SAP software must be available in Azure, in order to be installed by the solution.
+    <ol>
+    <li><span>You need to have ssh-keys to be able to access the deployed machines.</span></li>
+    <li><p>The SAP software must be available in Azure, in order to be installed by the solution.</p>
 
-        The SAP software can be downloaded from https://launchpad.support.sap.com/#/softwarecenter
+    <span>The SAP software can be downloaded from <a href="https://launchpad.support.sap.com/#/softwarecenter">https://launchpad.support.sap.com/#/softwarecenter</a></span></li>
+    <li><p>In order to provide the SAP software in Azure, please create a storage account in your Azure subscription and upload the downloaded format to a file share.
+    See Microsoft documentation
+    <a href="https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-create-file-share?tabs=azure-portal#create-a-storage-account">Howto create a storage account</a></p>
 
-    3. In order to provide the SAP software in Azure, please create a storage account in your Azure subscription and upload the downloaded format to a file share.
-       See Microsoft documentation
-       [Howto create a storage account](https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-create-file-share?tabs=azure-portal#create-a-storage-account)
+    <p><strong>This storage account has an account name and key. Store them as they are needed in the next steps.</strong> They can be collected from the Azure portal.</p></li>
+    </ol>
+    </details>
+    </p class="clearfix">
+    <details>
+    <summary class="welcome">Setting up the Storage account</summary>
+    <h3>Download SAP HANA platform</h3>
 
-        **This storage account has an account name and key. Store them as they are needed in the next steps.** They can be collected from the Azure portal.
+    <span>The project uses the SAP HANA platform achive to install the database. Follow the next instructions to download it</span>
 
-    ### SAP Software
-    The SAP software is available in different formats from the SAP Software Download Center.
+    <ol>
+    <li><span>Access the <a href="https://launchpad.support.sap.com/#/softwarecenter">SAP download center</a></span>
+    <li><p>Find the SAP HANA Platform edition. Follow the next path: <b>Installation & Upgrades > By Alphabetical Index (A-Z) > H > SAP HANA PLATFORM EDITION > SAP HANA PLATFORM EDITION 2.0</b></p>
+    <img src="vendor/download_center.png" alt="download center" width="600px"></li>
+    <li><span>Download the desired version</span></li>
+    </ol>
 
-    1. Installation & Upgrades
+    <h3>Create the storage account</h3>
 
-        Provides the software in `.zip` or multipart `.rar` archive format.
+    <span>Follow the next instructions to create and setup the Storage account/span>
 
-    2. Support Packages & Patches
+    <ol>
+    <li><p>Create a new storage account</p>
+    <table><tr>
+    <td class="right"><img src="vendor/storage_account_create.png" alt="add storage account" width="400px"></td>
+    <td class="left"><img src="vendor/storage_account_create_2.png" alt="add storage account" width="300px"></td>
+    </tr></table></li>
 
-        Provides the software mostly in `.SAR` format.
+    <li><p>Create a File shares in the Storage account with a new File share</p>
+    <table><tr>
+    <td><img src="vendor/storage_account_create_3.png" alt="create file share" width="800px">
+    <img src="vendor/storage_account_create_4.png" alt="create file share" width="500px"></td>
+    </tr></table></li>
 
-    ##### SAP HANA Example
+    <li><p>Upload the previously downloaded SAP HANA Platform edition ZIP file</p>
+    <img src="vendor/storage_account_create_5.png" alt="create file share"></li>
 
-    1. Installation & Upgrades
+    <li><p>Get the access key that will be used later during the configuration</p>
+    <table><tr>
+    <td class="right"><img src="vendor/storage_account_create_6.png" alt="access keys"></td>
+    <td><img src="vendor/storage_account_create_7.png" alt="access keys" width="600px"></td>
+    </tr></table></li>
 
-        The HANA platform edition contains all HANA components like HANA Database, Client, Studio, XS Engine etc.
-        The multipart `rar` archive consists of a group of `.exe` and `.rar` files.
-        To use an archive for the installation, it can be uploaded as it is (uploading all the files to the storage)
-        or after extracting the contents. Find more information about how to extract in: https://launchpad.support.sap.com/#/notes/0001791258.
-        The extracted HANA platform can be recognized checking the `LABEL.ASC` file in the main folder.
-        It should look like (it can be a different version): `HDB:HANA:2.0:LINUX_X86_64:SAP HANA PLATFORM EDITION 2.0::BD51054084`
-
-        Example: `51053381_part1.exe`, `51053381_part2.rar`, `51053381_part3.rar` and `51053381_part4.rar`
-
-    2. Support Packages & Patches
-
-        The archive consist of only the HANA Database Server component.
-        It contains a particular patch level or revision of only the database component of HANA platform.
-        To extract this option, the SAP `SAPCAR` utility is mandatory, which must be downloaded too.
-
-        Example: `IMDB_SERVER_2_00_037_05.SAR` and `SAPCAR_1311_80000935.EXE`
-
-    Upload the downloaded SAP files (or the extracted) version to the file share under a _new_ subfolder (`hana` as example). **This folder name is used later in the configuration.**
+    </details>
 
   # Long-form description of steps to take after deployment
   # Markdown syntax is accepted - see https://daringfireball.net/projects/markdown/syntax

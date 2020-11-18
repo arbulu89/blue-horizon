@@ -20,11 +20,11 @@
     },
     "storage_account_name": {
       "type": "string",
-      "description": "Azure storage account where the file share with the SAP installation software is located<!-- [group:Azure_configuration] -->"
+      "description": "Azure storage account where the file share with the SAP installation software is located. Check **Setting up the Storage account** in the initial page for more information<!-- [group:Azure_configuration] -->"
     },
     "storage_account_key": {
       "type": "string",
-      "description": "Azure storage account access key<!-- password_key [group:Azure_configuration] -->"
+      "description": "Azure storage account access key. Check **Setting up the Storage account** in the initial page for more information<!-- password_key [group:Azure_configuration] -->"
     },
     "instance_type": {
       "type": "string",
@@ -52,7 +52,7 @@
     },
     "hana_installation_software_path": {
       "type": "string",
-      "description": "Path to the folder where the SAP HANA installation software is uploaded in the Storage account. It is composed of the file share name and the uploaded HANA folder or archive file. For example: myshare/51053381_part1.exe or myshare/51053381<!-- [group:HANA_configuration] -->"
+      "description": "Path to the folder where the SAP HANA installation software is uploaded in the Storage account. It is composed by the File share and the file name. Example: **bluehorizon/51054084.ZIP**. Check **Setting up the Storage account** in the initial page for more information<!-- [group:HANA_configuration] -->"
     }
   }
 }
