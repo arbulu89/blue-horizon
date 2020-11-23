@@ -7,7 +7,7 @@ Rails.application.configure do
   custom_config_path = ENV['BLUE_HORIZON_CUSTOMIZER']
   custom_config_path ||= Rails.root.join('vendor', 'customization.json')
 
-  config.x = if File.exist?(custom_config_path) && ENV['RAILS_ENV'] != 'test'
+  config.x = if File.exist? custom_config_path
     JSON.parse(IO.read(custom_config_path), object_class: OpenStruct)
   else
     OpenStruct.new
