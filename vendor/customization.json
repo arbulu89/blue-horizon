@@ -2,5 +2,16 @@
     "allow_custom_instance_type": false,
     "show_instance_type_tip": false,
     "cloud_framework": "Azure",
-    "override_views": "true"
+    "override_views": "true",
+    "top_menu_items": [
+    {
+        "key": "tuning",
+        "url": "/dashboards/tuning"
+    },
+    {
+        "key": "monitor",
+        "url": "/dashboards/monitor"
+    }
+]
+
 }

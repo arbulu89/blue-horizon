@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   # Deploy
   resource :deploy, only: [:update, :destroy]
 
+  resources :dashboards, only: [:show]
+
   resource :deploy do
     get 'send_current_status', on: :member
   end
