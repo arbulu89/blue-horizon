@@ -12,8 +12,6 @@ describe 'variable editing', type: :feature do
     ]
   end
   let(:fake_data) { Faker::Crypto.sha256 }
-  let(:terra) { Terraform }
-  let(:instance_terra) { instance_double(Terraform) }
   let(:mock_location) { Faker::Internet.slug }
 
   before { mock_metadata_location(mock_location) }
@@ -23,8 +21,6 @@ describe 'variable editing', type: :feature do
     let(:variables) { Variable.new(Source.variables.pluck(:content)) }
 
     before do
-      allow(terra).to receive(:new).and_return(instance_terra)
-      allow(instance_terra).to receive(:validate)
       populate_sources
       visit('/variables')
     end
@@ -145,9 +141,6 @@ describe 'variable editing', type: :feature do
   end
 
   it 'notifies that no variables are defined' do
-    allow(terra).to receive(:new).and_return(instance_terra)
-    allow(instance_terra).to receive(:validate)
-
     visit('/variables')
     expect(page).to have_content('No variables are defined!')
   end
