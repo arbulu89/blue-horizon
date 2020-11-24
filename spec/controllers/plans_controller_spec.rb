@@ -20,7 +20,7 @@ RSpec.describe PlansController, type: :controller do
     end
 
     it 'sets the configuration' do
-      allow(instance_terra).to receive(:validate).and_return('')
+      allow(instance_terra).to receive(:saved_plan_path)
       allow(instance_terra).to receive(:plan).and_return(error: 'error')
       allow(controller.instance_variable_set(:@exported_vars, 'foo'))
       allow(File).to receive(:exist?).and_return(true)

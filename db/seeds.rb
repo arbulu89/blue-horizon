@@ -12,3 +12,4 @@ Rails.logger.level = Logger::INFO
 sources_path = ENV['TERRAFORM_SOURCES_PATH']
 sources_path ||= Rails.root.join('vendor', 'sources')
 Source.import_dir(sources_path, validate: false)
+Terraform.new.validate(true)
