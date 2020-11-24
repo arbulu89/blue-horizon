@@ -10,6 +10,7 @@ RSpec.describe Source, type: :model do
   before do
     allow(terra).to receive(:new).and_return(instance_terra)
     allow(instance_terra).to receive(:validate)
+    allow_any_instance_of(SourceValidator).to receive(:terraform).and_return(instance_terra)
   end
 
   it 'has unique filenames' do
@@ -28,11 +29,6 @@ RSpec.describe Source, type: :model do
     let(:short_path) { File.join(source_dir, filename) }
     let(:long_path) { File.join(source_dir, subdir, filename) }
     let(:content) { Faker::Lorem.paragraph }
-
-    before do
-      allow_any_instance_of(described_class)
-        .to receive(:terraform_validation).and_return(true)
-    end
 
     it 'stores the filename without any path if no additional path specified' do
       allow(File).to receive(:read).with(short_path).and_return(content)

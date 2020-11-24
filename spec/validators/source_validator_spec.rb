@@ -12,6 +12,19 @@ describe SourceValidator do
     allow(terraform).to receive(:new).and_return(terraform_instance)
   end
 
+  context 'with terraform accessors' do
+    it 'can retrieve the terraform instance' do
+      expect(validator.terraform).to be terraform_instance
+    end
+
+    it 'can set the terraform instance' do
+      another_terraform_instance = instance_double(Terraform)
+      validator.terraform = another_terraform_instance
+      expect(validator.terraform).not_to be terraform_instance
+      expect(validator.terraform).to be another_terraform_instance
+    end
+  end
+
   context 'when calling validate multiple times' do
     it 'initializes Terraform once only' do
       allow(terraform_instance).to receive(:validate)
