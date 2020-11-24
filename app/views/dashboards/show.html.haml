@@ -1,0 +1,9 @@
+%div#flash.alert.alert-danger.alert-dismissable.fade.show{style: 'display: none;'}
+  %span#error_message
+  %button.close{ type: 'button' }
+    %i.eos-icons close
+%div.card
+  %h3.card-header= t('page_title.dashboards')
+  %div.card-body
+    %p= markdown(t('page_subtitle.deploy_info'))
+%p.clearfix
