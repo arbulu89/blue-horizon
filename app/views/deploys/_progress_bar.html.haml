@@ -3,3 +3,9 @@
   %div.progress-bar#infra-bar{ :style => "width:0%;height:30px" }
     %span 0%
 %p.clearfix
+- @provisioners.each do |provisioner|
+  %label{ :for => provisioner }= titleize_provisioner(provisioner)
+  %div.progress{ :style => "height:30px" }
+    %div.progress-bar{ :id => provisioner, :style => "width:0%;height:30px" }
+      %span 0%
+  %p.clearfix
