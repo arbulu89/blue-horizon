@@ -55,12 +55,6 @@ describe 'wrapup', type: :feature do
       Rails.configuration.x.top_menu_items = nil
     end
 
-    it 'shows the `deploy` menu' do
-      selector = '.submenu .main-submenu.visible a.submenu-item.selected'
-      expect(page).to have_selector(selector)
-      expect(find(selector)).to have_content('Deploy')
-    end
-
     it 'includes custom menu items' do
       expect(find('a.submenu-item#monitor')).to have_content('Monitor')
       expect(page).to have_link('Monitor', href: monitoring_url)

@@ -29,6 +29,10 @@ describe 'welcome', type: :feature do
         {
           key: 'monitor',
           url: '%{monitoring_url}'
+        }.with_indifferent_access,
+        {
+          key: 'tuning',
+          url: '%{tuning_url}'
         }.with_indifferent_access
       ]
 
@@ -39,15 +43,12 @@ describe 'welcome', type: :feature do
       Rails.configuration.x.top_menu_items = nil
     end
 
-    it 'shows the `deploy` menu' do
-      selector = '.submenu .main-submenu.visible a.submenu-item.selected'
-      expect(page).to have_selector(selector)
-      expect(find(selector)).to have_content('Deploy')
-    end
-
     it 'includes disabled custom menu items' do
       expect(find('a.submenu-item.disabled#monitor')).to have_content('Monitor')
       expect(page).to have_link('Monitor', href: '#')
+
+      expect(find('a.submenu-item.disabled#tuning')).to have_content('Tuning')
+      expect(page).to have_link('Tuning', href: '#')
     end
   end
 end
