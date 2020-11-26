@@ -24,8 +24,10 @@
             %i.eos-icons.js-sidebar-tooltip.js-tooltip{ data: { placement: 'bottom' } } menu
         %div.nav-wrap
           %ul.menu-togglable.no-list-style
-            - sidebar_menu_items.each do |key|
-              = render('layouts/sidebar_menu_item', path_key: key)
+            - if using_console?
+              = render('layouts/console_sidebar_menu_items')
+            - else
+              = render('layouts/sidebar_menu_items')
       %footer.footer-side-menu
         %ul.footer-list
           %li.footer-list-item
@@ -42,15 +44,16 @@
       %nav.display-nav
         %div.nav-wrap
           %ul.menu-togglable.no-list-style
-            - sidebar_menu_items.each do |key|
-              = render('layouts/sidebar_menu_item', path_key: key)
+            - if using_console?
+              = render('layouts/console_sidebar_menu_items')
+            - else
+              = render('layouts/sidebar_menu_items')
     %section.content#content
       - if Rails.configuration.x.top_menu_items.present?
         %div.submenu
           %nav.main-submenu.visible
-            %a.submenu-item.selected{ href: '#' }= t('menu.deploy')
-            = top_menu_items(@outputs)
-      %div.container
+            = top_menu_items(@request_id, @outputs)
+      %div{ class: (using_console? ? 'grafana-container' : 'container') }
         = bootstrap_flash
         = yield
     %footer.footer-content.js-footer-content

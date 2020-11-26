@@ -87,14 +87,22 @@ module ApplicationHelper
     ''
   end
 
-  def top_menu_items(format_values=nil)
+  def top_menu_item_class(menu_item, request_id, format_values)
+    (url = menu_item['url'] % format_values) if format_values
+    (selected = get_dashboard_url(request_id, menu_item).present?) if request_id
+    "submenu-item#{' disabled' unless url}#{' selected' if selected}"
+  end
+
+  def top_menu_items(request_id=nil, format_values=nil)
     tags = Rails.configuration.x.top_menu_items.collect do |menu_item|
       (url = menu_item['url'] % format_values) if format_values
       link_to(
         t("menu_item.#{menu_item['key']}"),
         (url || '#'),
         id:     menu_item['key'],
-        class:  "submenu-item#{' disabled' unless url}",
+        # The selected class must be obtained using code, as we don't follow the
+        # the hierarchical address logic in the submenu items
+        class:  top_menu_item_class(menu_item, request_id, format_values),
         target: ('_blank' if menu_item['target_new_window'])
       )
     end
