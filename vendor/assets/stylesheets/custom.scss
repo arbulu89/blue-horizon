@@ -33,3 +33,13 @@ table td, table td * {
   min-height: 100vh;
   overflow: hidden;
 }
+
+.dropdown-menu.show > li {
+    padding: 0;
+}
+
+.dropdown-header {
+    font-size: .875rem;
+    color: #6c757d;
+    white-space: nowrap;
+}

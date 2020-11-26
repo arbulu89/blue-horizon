@@ -46,4 +46,18 @@ module DashboardsHelper
     end
     return
   end
+
+  ##############
+
+  def grafana_url(outputs)
+    return '#' unless outputs
+
+    "http://#{outputs[:bastion_ip]}:3000"
+  end
+
+  def azure_portal_url(outputs)
+    return '#' unless outputs
+
+    outputs[:resource_group_url]
+  end
 end

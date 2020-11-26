@@ -53,6 +53,7 @@
         %div.submenu
           %nav.main-submenu.visible
             = top_menu_items(@request_id, @outputs)
+          =render('layouts/more_info')
       %div{ class: (using_console? ? 'grafana-container' : 'container') }
         = bootstrap_flash
         = yield

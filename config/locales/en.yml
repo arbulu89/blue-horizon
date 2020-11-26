@@ -72,6 +72,8 @@ en:
     main_tenant: "%{sid}"
     systemdb: "SYSTEMDB"
     tuning: "Tuning"
+    grafana: "Grafana"
+    azure_portal_url: "Azure portal"
 
   menu:
     deploy: "Deploy"
