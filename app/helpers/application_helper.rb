@@ -97,7 +97,7 @@ module ApplicationHelper
     tags = Rails.configuration.x.top_menu_items.collect do |menu_item|
       (url = menu_item['url'] % format_values) if format_values
       link_to(
-        t("menu_item.#{menu_item['key']}"),
+        t("menu.#{menu_item['key']}"),
         (url || '#'),
         id:     menu_item['key'],
         # The selected class must be obtained using code, as we don't follow the

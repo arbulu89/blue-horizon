@@ -15,7 +15,7 @@ en:
     deploy: "Deploy"
     wrapup: "Finish"
   # Menu translation
-  menu_item:
+  menu:
     monitor: Monitoring
     tuning: Tuning
   # Brief tag line shown below the title
