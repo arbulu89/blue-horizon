@@ -15,7 +15,7 @@ en:
     deploy: "Deploy"
     wrapup: "Finish"
   # Menu translation
-  menu:
+  menu_item:
     monitor: Monitoring
     tuning: Tuning
   # Brief tag line shown below the title
@@ -118,5 +118,4 @@ en:
     To access the machines the next command can be used:<br>
     ```terraform output # get the addresses```
 
-    ```ssh -o ProxyCommand="ssh -W %h:%p cloudadmin@{bastion_ip} -i {your_ssh_key} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" cloudadmin@{hana_ip} -i {your_ssh_key} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no```
   footer: "© 2019-2020 SUSE, all rights reserved."

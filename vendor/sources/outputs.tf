@@ -10,8 +10,20 @@ output "hana_ips" {
   value = join(",", module.bluehorizon.cluster_nodes_ip)
 }
 
-output "monitoring_server" {
-  value = "http://${module.bluehorizon.monitoring_public_ip}:3000"
+output "ssh_authorized_key_file" {
+  value = var.ssh_authorized_key_file
+}
+
+output "hana_ip" {
+  value = module.bluehorizon.hana_ip
+}
+
+output "sid" {
+  value = var.system_identifier
+}
+
+output "instance_number" {
+  value = var.instance_number
 }
 
 data "azurerm_subscription" "current" {
