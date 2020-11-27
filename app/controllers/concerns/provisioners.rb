@@ -2,15 +2,20 @@
 
 # module to manage all the provisioners logic in the deploy controller
 module Provisioners
+  include I18n
+
+  # Interanl syntax used to identify the provisioner, E.g. hana_provision_1
   PROVISIONER_NAME_PATTERN = /(.*)_(\d+)/.freeze
+  # EXCLUDED_PATTERN filters the terraform entries that won't go in the general
+  # infrastructure creation bar, as they are the provisioning resources
   EXCLUDED_PATTERN = /.*\.(.*_provision).*\.provision\[(\d+)\]?/.freeze
   PROVISIONING_STATES = {
-    not_started:    'Not started',
-    initializing:   'Initializing machine...',
-    configuring_os: 'Configuring operative system...',
-    provisioning:   'Provisioning machine...',
-    failed:         'Failed',
-    finished:       'Finished'
+    not_started:    I18n.t('provisioning_states.not_started'),
+    initializing:   I18n.t('provisioning_states.initializing'),
+    configuring_os: I18n.t('provisioning_states.configuring_os'),
+    provisioning:   I18n.t('provisioning_states.provisioning'),
+    failed:         I18n.t('provisioning_states.failed'),
+    finished:       I18n.t('provisioning_states.finished')
   }.freeze
 
   def find_provisioners
