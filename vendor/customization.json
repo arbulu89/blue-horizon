@@ -4,14 +4,20 @@
     "cloud_framework": "Azure",
     "override_views": "true",
     "top_menu_items": [
-    {
-        "key": "tuning",
-        "url": "/dashboards/tuning"
-    },
-    {
-        "key": "monitor",
-        "url": "/dashboards/monitor"
+      {
+          "key": "tuning",
+          "url": "/dashboards/tuning"
+      },
+      {
+          "key": "monitor",
+          "url": "/dashboards/monitor"
+      }
+    ],
+    "provisioning_patterns": {
+      "planned_states_count": ".*Total planned states count: (\\d+)$",
+      "deployment_failed": ".*::Deployment failed$",
+      "configuring_os": ".*Configuring operative system...$",
+      "provisioning": ".*Provisioning system...$"
     }
-]
 
 }

@@ -18,6 +18,19 @@ module Provisioners
     finished:       I18n.t('provisioning_states.finished')
   }.freeze
 
+  PROVISIONING_PATTERNS = {
+    planned_states_count: Rails.configuration.x.provisioning_patterns['planned_states_count'],
+    deployment_failed:    Rails.configuration.x.provisioning_patterns['deployment_failed'],
+    configuring_os:       Rails.configuration.x.provisioning_patterns['configuring_os'],
+    provisioning:         Rails.configuration.x.provisioning_patterns['provisioning'],
+    # The next patterns are terraform/salt generic, so they are hardcoded here
+    completed_state:      '.*Completed state.*',
+    executing_mod_watch:  '.*Executing state.*mod_watch.*',
+    retrying_state:       '.*State result does not match retry until value.*',
+    creation_complete:    '.*Creation complete after.*',
+    creating:             '.*Creating...$'
+  }.freeze
+
   def find_provisioners
     provisioners = []
     terra = Terraform.new
@@ -47,20 +60,20 @@ module Provisioners
 
   def provisioner_get_completed_count(provisioner, content)
     salt_completed_pattern = provisioner_pattern(
-      provisioner, '.*Completed state.*'
+      provisioner, PROVISIONING_PATTERNS[:completed_state]
     )
     total_completed = content.scan(salt_completed_pattern).size
 
     # States with mod.watch repeat run an additional states
     # that is not shown in the highstate output
     salt_mod_watch_pattern = provisioner_pattern(
-      provisioner, '.*Executing state.*mod_watch.*'
+      provisioner, PROVISIONING_PATTERNS[:executing_mod_watch]
     )
     mod_watch_completed = content.scan(salt_mod_watch_pattern).size
 
     # Retried states
     salt_retry_pattern = provisioner_pattern(
-      provisioner, '.*State result does not match retry until value.*'
+      provisioner, PROVISIONING_PATTERNS[:retrying_state]
     )
     salt_retries = content.scan(salt_retry_pattern).size
     return total_completed - mod_watch_completed - salt_retries
@@ -68,7 +81,7 @@ module Provisioners
 
   def provisioner_get_planned_states(provisioner, content)
     salt_states_count_pattern = provisioner_pattern(
-      provisioner, '.*Total planned states count: (\d+)$'
+      provisioner, PROVISIONING_PATTERNS[:planned_states_count]
     )
     return unless (match = content.match(salt_states_count_pattern))
 
@@ -77,21 +90,21 @@ module Provisioners
 
   def provisioner_check_completed(provisioner, content)
     completed_pattern = provisioner_pattern(
-      provisioner, '.*Creation complete after.*'
+      provisioner, PROVISIONING_PATTERNS[:creation_complete]
     )
     content.scan(completed_pattern).size == 1
   end
 
   def provisioner_check_failed(provisioner, content)
     failed_pattern = provisioner_pattern(
-      provisioner, '.*::Deployment failed$'
+      provisioner, PROVISIONING_PATTERNS[:deployment_failed]
     )
     content.scan(failed_pattern).size == 1
   end
 
   def wait_until_created(provisioner, content)
     salt_result_pattern = provisioner_pattern(
-      provisioner, '.*Creating...$'
+      provisioner, PROVISIONING_PATTERNS[:creating]
     )
     if content.scan(salt_result_pattern).size.zero?
       PROVISIONING_STATES[:not_started]
@@ -103,7 +116,7 @@ module Provisioners
 
   def wait_until_configuring_os(provisioner, content)
     salt_result_pattern = provisioner_pattern(
-      provisioner, '.*Configuring operative system...$'
+      provisioner, PROVISIONING_PATTERNS[:configuring_os]
     )
     if content.scan(salt_result_pattern).size.zero?
       PROVISIONING_STATES[:initializing]
@@ -115,7 +128,7 @@ module Provisioners
 
   def wait_until_provisioning(provisioner, content)
     salt_result_pattern = provisioner_pattern(
-      provisioner, '.*Provisioning system...$'
+      provisioner, PROVISIONING_PATTERNS[:provisioning]
     )
     if content.scan(salt_result_pattern).size.zero?
       # This 5 is an arbitrary number to show some progress
