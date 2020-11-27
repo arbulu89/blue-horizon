@@ -63,7 +63,7 @@ class DeploysController < ApplicationController
     unless flash.now[:error]
       flash.now[:notice] = 'Terraform resources have been destroyed.'
     end
-    render :show
+    redirect_to action: 'show'
   end
 
   private
