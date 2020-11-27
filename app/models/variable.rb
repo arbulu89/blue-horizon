@@ -30,10 +30,6 @@ class Variable
   end
 
   def self.load
-    terra = Terraform.new
-    validation = terra.validate(true, file: true)
-    return { error: validation } if validation
-
     new(Source.variables.pluck(:content))
   end
 

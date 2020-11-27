@@ -4,9 +4,10 @@ require 'ruby_terraform'
 # Imported content from terraform sources into an editable format
 class Source < ApplicationRecord
   include Exportable
+  include ActiveModel::Validations
 
   validates :filename, uniqueness: true
-  validate :terraform_validation
+  validates_with SourceValidator
 
   scope :terraform, -> { where('filename LIKE ?', '%.tf') }
   scope :variables, -> { where('filename LIKE ?', 'variable%.tf.json') }
@@ -30,9 +31,5 @@ class Source < ApplicationRecord
       relative_path = filename.to_s.sub("#{source_dir}/", '')
       import(source_dir, relative_path, save_options)
     end
-  end
-
-  def terraform_validation
-    Terraform.new.validate(true)
   end
 end
