@@ -46,6 +46,10 @@ describe 'authorization', type: :feature do
     end
 
     it 'allows access to deploy' do
+      allow(instance_terra).to(
+        receive(:get_planned_resources)
+          .and_return([])
+      )
       visit '/deploy'
       expect(page).to have_current_path(deploy_path)
       expect(page).not_to have_content(auth_message)

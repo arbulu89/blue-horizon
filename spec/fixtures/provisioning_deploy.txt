@@ -1,0 +1,14 @@
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Creating...
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Configuring operative system...
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Total planned states count: 10
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Provisioning system...
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Executing state sdfgsdfg mod_watch
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): State result does not match retry until value
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
+module.bluehorizon.module.hana_node.module.hana_provision.null_resource.provision[0] (remote-exec): Completed state
