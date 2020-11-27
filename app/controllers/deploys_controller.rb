@@ -92,6 +92,10 @@ class DeploysController < ApplicationController
 
     created_resources = content.scan(/Creation complete after/).size
     planned_resources_count = KeyValue.get(:planned_resources_count)
+    # Avoid having more resources than the planned ones
+    if created_resources >= planned_resources_count
+      created_resources = planned_resources_count
+    end
     text = if error.present?
       t('deploy.failed')
     elsif created_resources == planned_resources_count
