@@ -9,3 +9,7 @@
 Metrics/ClassLength:
   Exclude:
     - "app/services/terraform.rb"
+
+Metrics/ModuleLength:
+  Exclude:
+    - "app/controllers/concerns/provisioners.rb"

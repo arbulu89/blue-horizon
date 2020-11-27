@@ -146,6 +146,9 @@ module Provisioners
     planned_states.nil? ? 0 : completed_count * 100 / planned_states
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/BlockLength
   def update_provisioners_progress(content)
     progress_data = {}
     return progress_data if content.blank?
@@ -187,4 +190,7 @@ module Provisioners
     end
     return progress_data
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/BlockLength
 end
