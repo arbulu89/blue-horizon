@@ -190,7 +190,14 @@ The following example custom configuration will provide a static link that opens
     },
     {
         "key": "monitor",
-        "url": "%{monitoring_url}"
+        "url": "%{monitoring_url}",
+        "sidebar": {
+          "ha_cluster": "iframe-url",
+          "hana_dbs": {
+            "prd": "iframe-url",
+            "systemdb": "iframe-url"
+          }
+        }
     }
 ]
 ```
@@ -199,7 +206,8 @@ The `"key"` must match a translation value in the `menu` scope (e.g. `menu.more-
 
 `"target_new_window"` only needs to be set if the value is `true`; `false` is otherwise assumed.
 
-A "*Deploy*" menu entry will be set, first, if any custom menu items are included.
+The `"sidebar"` entry is used to create a new sidebar panel when the link in the top menu items are accessed.
+Each of the entries in the sidebar will render a grafana iframe (the iframe url can be composed with variables coming from `terraform output` using the `%{var}` syntax) in the content container. If the entry has other hash, it will create a dropdown menu in this item with the same functionality (only one nested layer is allowed). The names in the sidebar (like `ha_cluster`, `hana_dbs` or `systemdb`) can be customized in the translation configuration file changing the values in `console_sidebar`.
 
 ### Provisioning bars
 

@@ -172,5 +172,9 @@ module "bluehorizon" {
   monitoring_enabled                 = true
   pre_deployment                     = true
   provisioning_log_level             = "info"
+  provisioning_output_colored        = false
   netweaver_master_password          = "not used"
+  # ha_sap_deployment_repo variable must be removed as soon as all the packages come from official channels
+  # now the saptune_exporter is missing
+  ha_sap_deployment_repo             = "https://download.opensuse.org/repositories/network:ha-clustering:sap-deployments:devel"
 }

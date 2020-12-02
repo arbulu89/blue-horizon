@@ -5,12 +5,22 @@
     "override_views": "true",
     "top_menu_items": [
       {
-          "key": "tuning",
-          "url": "/dashboards/tuning"
+          "key": "monitor",
+          "url": "/dashboards/ha_cluster",
+          "sidebar": {
+            "ha_cluster": "http://%{bastion_ip}:3000/d/Q5YJpwtZk1/clusterlabs-ha-cluster-details?orgId=1&kiosk",
+            "hana_dbs": {
+              "main_tenant": "http://%{bastion_ip}:3000/d/EcC4JDFWz2/sap-hana?orgId=1&var-DS_PROMETHEUS=Prometheus&var-node_ip=%{hana_ip}&var-sid=%{sid}&var-instance_number=%{instance_number}&var-database_name=%{sid}&kiosk",
+              "systemdb": "http://%{bastion_ip}:3000/d/EcC4JDFWz2/sap-hana?orgId=1&var-DS_PROMETHEUS=Prometheus&var-node_ip=%{hana_ip}&var-sid=%{sid}&var-instance_number=%{instance_number}&var-database_name=SYSTEMDB&kiosk"
+            }
+          }
       },
       {
-          "key": "monitor",
-          "url": "/dashboards/monitor"
+          "key": "tuning",
+          "url": "/dashboards/tuning",
+          "sidebar": {
+            "tuning": "http://%{bastion_ip}:3000/d/HzFepKtMz/tuning?orgId=1&kiosk"
+          }
       }
     ],
     "provisioning_patterns": {
@@ -19,5 +29,4 @@
       "configuring_os": ".*Configuring operative system...$",
       "provisioning": ".*Provisioning system...$"
     }
-
 }

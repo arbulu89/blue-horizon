@@ -85,27 +85,6 @@ RSpec.describe Variable, type: :model do
     end
   end
 
-  context 'when loading wrong formatted script' do
-    let(:message) do
-      { error: 'Incorrect JSON value type on script \'foo.tf.json\''\
-               'in line 42: } This error is highly illogical.' }
-    end
-
-    it 'handles parsing errors from JSON' do
-      allow(instance_terra).to(
-        receive(:validate)
-          .and_return(
-            'Incorrect JSON value type on script \'foo.tf.json\''\
-            'in line 42: } This error is highly illogical.'
-          )
-      )
-      allow(Rails.logger).to receive(:error)
-      allow(File).to receive(:open)
-      allow(Logger::LogDevice).to receive(:new)
-      expect(described_class.load).to eq(message)
-    end
-  end
-
   context 'with form handling' do
     let(:expected_params) do
       [

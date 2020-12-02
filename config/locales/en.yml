@@ -66,6 +66,15 @@ en:
     download: "Download"
     simple: "Start setup"
 
+  console_sidebar:
+    ha_cluster: "HA cluster"
+    hana_dbs: "HANA databases"
+    main_tenant: "%{sid}"
+    systemdb: "SYSTEMDB"
+    tuning: "Tuning"
+    grafana: "Grafana"
+    azure_portal_url: "Azure portal"
+
   menu:
     deploy: "Deploy"
     monitor: "Monitor"

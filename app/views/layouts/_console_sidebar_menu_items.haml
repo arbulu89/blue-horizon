@@ -1,0 +1,24 @@
+- console_sidebar_menu_items(@request_id).each_pair do |key, value|
+  - text = key
+  - if value.is_a?(OpenStruct)
+    %li.menu-item.menu-dropdown
+      %input.js-dropdown-toggle{ id: "#{key}-toggle", type: "checkbox"}
+      %label.menu-title{ for: "#{key}-toggle" }
+        %i.eos-icons arrow_drop_down_circle
+        %span.menu-title-content= t("console_sidebar.#{text}")
+        %i.eos-icons.eso-18.float-right.menu-expand keyboard_arrow_down
+      %ul.menu-dropdown-list.menu-element{ style: "bottom: auto; top: 37px; left: 250px" }
+        %li.menu-collapsed-title=t("console_sidebar.#{text}") % @outputs
+        - value.each_pair do |subkey, subvalue|
+          %li
+            = link_to dashboard_path(subkey), id: subkey, class: "menu-title js-select-current" do
+              %i.eos-icons label
+              = t("console_sidebar.#{subkey}") % @outputs
+
+  - else
+    %li.menu-item
+      %div.menu-element
+        %span.main-collapsed-title= t("console_sidebar.#{text}")
+      = link_to dashboard_path(key), id: key, class: "menu-title js-select-current" do
+        %i.eos-icons label
+        %span.menu-title-content= t("console_sidebar.#{text}") % @outputs
