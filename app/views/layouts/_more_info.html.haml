@@ -1,0 +1,10 @@
+%div.dropdown
+  %a.submenu-item.dropdown-toggle{ 'data-toggle': 'dropdown', 'class': (@outputs ? '' : 'disabled') }
+    %i.eos-icons.eos-24.js-tooltip{ 'data-toggle': 'tooltip', 'title': '', 'data-original-title': 'More' } more_horiz
+  %ul.dropdown-menu.dropdown-menu-left.js-submenu-content
+    %li
+      %div.dropdown-header
+      %span.subtitle More
+    %li
+      %a.js-select-current.dropdown-item{ target: '_blank', href: grafana_url(@outputs) }= t('console_sidebar.grafana')
+      %a.js-select-current.dropdown-item{ target: '_blank', href: azure_portal_url(@outputs) }= t('console_sidebar.azure_portal_url')

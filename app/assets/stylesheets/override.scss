@@ -13,10 +13,8 @@
 }
 
 li.menu-item.disabled, a.disabled {
-  * {
-    color: $eos-bc-gray-300 !important;
-    cursor: default;
-  }
+  color: $eos-bc-gray-300 !important;
+  cursor: default;
 
   .menu-title:hover {
     border-left: 5px solid transparent;
