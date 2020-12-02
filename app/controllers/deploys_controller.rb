@@ -3,6 +3,13 @@
 require 'ruby_terraform'
 
 class DeploysController < ApplicationController
+  include Provisioners
+
+  def show
+    @provisioners = find_provisioners
+    init_provisioners(@provisioners)
+  end
+
   def update
     logger.info('Calling run_deploy')
     @apply_args = {
@@ -11,7 +18,9 @@ class DeploysController < ApplicationController
       no_color:     true
     }
     terra = Terraform.new
-    planned_resources = terra.get_planned_resources.count
+    planned_resources = terra.get_planned_resources(
+      Provisioners::EXCLUDED_PATTERN
+    ).count
     KeyValue.set(:planned_resources_count, planned_resources)
     terra.apply(@apply_args)
     logger.info('Deploy finished.')
@@ -31,7 +40,7 @@ class DeploysController < ApplicationController
 
     progress = {}
     if Terraform.stdout.is_a?(StringIO)
-      progress = update_terraform_progress(Terraform.stdout.string, error)
+      progress = update_progress(Terraform.stdout.string, error)
     end
 
     if success
@@ -54,7 +63,7 @@ class DeploysController < ApplicationController
     unless flash.now[:error]
       flash.now[:notice] = 'Terraform resources have been destroyed.'
     end
-    render :show
+    redirect_to action: 'show'
   end
 
   private
@@ -83,6 +92,10 @@ class DeploysController < ApplicationController
 
     created_resources = content.scan(/Creation complete after/).size
     planned_resources_count = KeyValue.get(:planned_resources_count)
+    # Avoid having more resources than the planned ones
+    if created_resources >= planned_resources_count
+      created_resources = planned_resources_count
+    end
     text = if error.present?
       t('deploy.failed')
     elsif created_resources == planned_resources_count
@@ -95,6 +108,16 @@ class DeploysController < ApplicationController
       text:     text,
       success:  error.nil? ? true : false
     }
+    return progress
+  end
+
+  def update_progress(content, error)
+    progress = {}
+    return progress if content.blank?
+
+    progress = update_terraform_progress(content, error)
+    provisioners_progress = update_provisioners_progress(content)
+    progress.merge!(provisioners_progress)
     return progress
   end
 end

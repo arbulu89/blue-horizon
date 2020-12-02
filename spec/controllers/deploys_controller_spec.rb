@@ -62,7 +62,7 @@ RSpec.describe DeploysController, type: :controller do
           .and_return(StringIO.new('Something went wrong'))
       )
       allow(controller).to(
-        receive(:update_terraform_progress)
+        receive(:update_progress)
           .and_return('progress')
       )
 
@@ -85,7 +85,7 @@ RSpec.describe DeploysController, type: :controller do
       )
 
       allow(controller).to(
-        receive(:update_terraform_progress)
+        receive(:update_progress)
           .and_return('progress')
       )
 
@@ -94,7 +94,7 @@ RSpec.describe DeploysController, type: :controller do
       get :send_current_status, format: :json
 
       expect(controller).to(
-        have_received(:update_terraform_progress)
+        have_received(:update_progress)
           .with('hello world! Apply complete!', nil)
             .at_least(:once)
       )
@@ -109,14 +109,14 @@ RSpec.describe DeploysController, type: :controller do
       allow(Terraform).to receive(:stdout).and_return(StringIO.new('Creating'))
 
       allow(controller).to(
-        receive(:update_terraform_progress)
+        receive(:update_progress)
           .and_return('progress')
       )
 
       get :send_current_status, format: :json
 
       expect(controller).to(
-        have_received(:update_terraform_progress)
+        have_received(:update_progress)
           .with('Creating', 'Error')
             .at_least(:once)
       )
@@ -131,7 +131,7 @@ RSpec.describe DeploysController, type: :controller do
     it 'destroys the resources deployed' do
       allow(ruby_terraform).to receive(:destroy)
       allow(File).to receive(:exist?).and_return(true)
-      allow(controller).to receive(:render)
+      allow(controller).to receive(:redirect_to).with(action: 'show')
 
       delete :destroy
 
@@ -147,7 +147,7 @@ RSpec.describe DeploysController, type: :controller do
           .and_raise(RubyTerraform::Errors::ExecutionError)
       )
       allow(File).to receive(:exist?).and_return(true)
-      allow(controller).to receive(:render)
+      allow(controller).to receive(:redirect_to).with(action: 'show')
 
       delete :destroy
 
@@ -158,51 +158,261 @@ RSpec.describe DeploysController, type: :controller do
     end
   end
 
-  it 'updates the terraform progress' do
-    KeyValue.set(:planned_resources_count, 10)
-    progress = example.send(:update_terraform_progress, deploy_output, nil)
+  context 'when updating the terraform progress' do
+    let(:ruby_terraform) { RubyTerraform }
 
-    expect(progress).to eq(
-      'infra-bar' => {
-        progress: 50,
-        text:     'Creating resources...',
+    it 'updates the terraform progress' do
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(:update_terraform_progress, deploy_output, nil)
+
+      expect(progress).to eq(
+        'infra-bar' => {
+          progress: 50,
+          text:     'Creating resources...',
+          success:  true
+        }
+      )
+    end
+
+    it 'updates the terraform progress blank content' do
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(:update_terraform_progress, '', nil)
+      expect(progress).to eq({})
+
+      progress = example.send(:update_terraform_progress, nil, nil)
+      expect(progress).to eq({})
+    end
+
+    it 'updates the terraform progress with failed' do
+      KeyValue.set(:planned_resources_count, 5)
+      progress = example.send(:update_terraform_progress, deploy_output, 'error')
+
+      expect(progress).to eq(
+        'infra-bar' => {
+          progress: 100,
+          text:     'Failed',
+          success:  false
+        }
+      )
+    end
+
+    it 'updates the terraform progress with finished' do
+      KeyValue.set(:planned_resources_count, 5)
+      progress = example.send(:update_terraform_progress, deploy_output, nil)
+
+      expect(progress).to eq(
+        'infra-bar' => {
+          progress: 100,
+          text:     'Finished',
+          success:  true
+        }
+      )
+    end
+
+    it 'updates the terraform progress with finished even with more resources' do
+      KeyValue.set(:planned_resources_count, 4)
+      progress = example.send(:update_terraform_progress, deploy_output, nil)
+
+      expect(progress).to eq(
+        'infra-bar' => {
+          progress: 100,
+          text:     'Finished',
+          success:  true
+        }
+      )
+    end
+  end
+
+  context 'when the provisioners are found' do
+    let(:terra) { Terraform }
+    let(:instance_terra) { instance_double(Terraform) }
+
+    before do
+      allow(terra).to receive(:new).and_return(instance_terra)
+    end
+
+    it 'the provisioners are found' do
+      data = [
+        {
+          'address' => 'data'
+        },
+        {
+          'address' => '.hana_provision.data.provision[0]'
+        },
+        {
+          'address' => '.hana_provision.data.provision[1]'
+        },
+        {
+          'address' => 'data 2'
+        }
+      ]
+      allow(instance_terra).to(
+        receive(:get_planned_resources)
+          .and_return(data)
+      )
+      provisioners = example.send(:find_provisioners)
+      expect(provisioners).to eq(['hana_provision_0', 'hana_provision_1'])
+    end
+
+    it 'the provisioners are initialized' do
+      example.send(
+        :init_provisioners, ['hana_provision_0', 'hana_provision_1']
+      )
+
+      expect(KeyValue.get('hana_provision_0')).to eq(:not_started)
+      expect(KeyValue.get('hana_provision_1')).to eq(:not_started)
+    end
+  end
+
+  context 'when updating the provisioners progress' do
+    it 'updates the provisioner progress - not started' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :not_started)
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(
+        :update_progress, 'data', nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(
+        progress: 0,
+        text:     'Not started',
         success:  true
-      }
-    )
-  end
+      )
+    end
 
-  it 'updates the terraform progress blank content' do
-    KeyValue.set(:planned_resources_count, 10)
-    progress = example.send(:update_terraform_progress, '', nil)
-    expect(progress).to eq({})
+    it 'updates the provisioner progress - initializing' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :not_started)
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(
+        :update_progress, provisioning_deploy_output, nil
+      )
 
-    progress = example.send(:update_terraform_progress, nil, nil)
-    expect(progress).to eq({})
-  end
+      expect(progress['hana_provision_0']).to eq(
+        progress: 0,
+        text:     'Initializing machine...',
+        success:  true
+      )
+    end
 
-  it 'updates the terraform progress with failed' do
-    KeyValue.set(:planned_resources_count, 5)
-    progress = example.send(:update_terraform_progress, deploy_output, 'error')
+    it 'updates the provisioner progress - still initializing' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :initializing)
+      KeyValue.set(:planned_resources_count, 10)
+      data = provisioning_deploy_output.gsub('Configuring operative', '')
+      progress = example.send(
+        :update_progress, data, nil
+      )
 
-    expect(progress).to eq(
-      'infra-bar' => {
-        progress: 100,
+      expect(progress['hana_provision_0']).to eq(
+        progress: 0,
+        text:     'Initializing machine...',
+        success:  true
+      )
+    end
+
+    it 'updates the provisioner progress - start configuring os' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :initializing)
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(
+        :update_progress, provisioning_deploy_output, nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(
+        progress: 0,
+        text:     'Configuring operative system...',
+        success:  true
+      )
+    end
+
+    it 'updates the provisioner progress - finished configuring os' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :configuring_os)
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(
+        :update_progress, provisioning_deploy_output, nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(
+        progress: 60,
+        text:     'Provisioning machine...',
+        success:  true
+      )
+    end
+
+    it 'updates the provisioner progress - start provisioning' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :configuring_os)
+      KeyValue.set(:planned_resources_count, 10)
+      data = provisioning_deploy_output.gsub('Provisioning system', '')
+      progress = example.send(
+        :update_progress, data, nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(
+        progress: 5,
+        text:     'Configuring operative system...',
+        success:  true
+      )
+    end
+
+    it 'updates the provisioner progress - provisioning' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :provisioning)
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(
+        :update_progress, provisioning_deploy_output, nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(
+        progress: 60,
+        text:     'Provisioning machine...',
+        success:  true
+      )
+    end
+
+    it 'updates the provisioner progress - failed' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :provisioning)
+      KeyValue.set(:planned_resources_count, 10)
+      data = "#{provisioning_deploy_output}.hana_provision.provision[0] (remote-exec): Error::Deployment failed"
+      progress = example.send(
+        :update_progress, data, nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(
+        progress: 60,
         text:     'Failed',
         success:  false
-      }
-    )
-  end
+      )
+    end
 
-  it 'updates the terraform progress with finished' do
-    KeyValue.set(:planned_resources_count, 5)
-    progress = example.send(:update_terraform_progress, deploy_output, nil)
+    it 'updates the provisioner progress - completed' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :not_started)
+      KeyValue.set(:planned_resources_count, 10)
+      data = "#{provisioning_deploy_output}.hana_provision.provision[0] (remote-exec): Creation complete after"
+      progress = example.send(
+        :update_progress, data, nil
+      )
 
-    expect(progress).to eq(
-      'infra-bar' => {
+      expect(progress['hana_provision_0']).to eq(
         progress: 100,
         text:     'Finished',
         success:  true
-      }
-    )
+      )
+    end
+
+    it 'updates the provisioner progress - already done' do
+      KeyValue.set(:provisioners, ['hana_provision_0'])
+      KeyValue.set(:hana_provision_0, :finished)
+      KeyValue.set(:planned_resources_count, 10)
+      progress = example.send(
+        :update_progress, provisioning_deploy_output, nil
+      )
+
+      expect(progress['hana_provision_0']).to eq(nil)
+    end
   end
 end

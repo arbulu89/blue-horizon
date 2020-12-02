@@ -135,3 +135,18 @@ en:
     creating: "Creating resources..."
     finished: "Finished"
     failed: "Failed"
+
+  provisioning_bars:
+    hana_provision_0: "First HANA database server provisioning"
+    hana_provision_1: "Second HANA database server provisioning"
+    bastion_provision_0: "Bastion server provisioning"
+    iscsi_provision_0: "iSCSI server provisioning"
+    monitoring_provision_0: "Monitoring server provisioning"
+
+  provisioning_states:
+    not_started: "Not started"
+    initializing: "Initializing machine..."
+    configuring_os: "Configuring operative system..."
+    provisioning: "Provisioning machine..."
+    failed: "Failed"
+    finished: "Finished"

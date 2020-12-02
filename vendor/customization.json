@@ -22,5 +22,11 @@
             "tuning": "http://%{bastion_ip}:3000/d/HzFepKtMz/tuning?orgId=1&kiosk"
           }
       }
-    ]
+    ],
+    "provisioning_patterns": {
+      "planned_states_count": ".*Total planned states count: (\\d+)$",
+      "deployment_failed": ".*::Deployment failed$",
+      "configuring_os": ".*Configuring operative system...$",
+      "provisioning": ".*Provisioning system...$"
+    }
 }

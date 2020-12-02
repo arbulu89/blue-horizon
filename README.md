@@ -202,12 +202,27 @@ The following example custom configuration will provide a static link that opens
 ]
 ```
 
-The `"key"` must match a translation value in the `menu` scope (e.g. `menu.more-info`, `menu.monitor`). Some common values are provided for convenience, but may be overriden or extended via localization.
+The `"key"` must match a translation value in the `menu` scope (e.g. `menu.more-info`, `menu.monitor`). Some common values are provided for convenience, but may be overridden or extended via localization.
 
 `"target_new_window"` only needs to be set if the value is `true`; `false` is otherwise assumed.
 
 The `"sidebar"` entry is used to create a new sidebar panel when the link in the top menu items are accessed.
 Each of the entries in the sidebar will render a grafana iframe (the iframe url can be composed with variables coming from `terraform output` using the `%{var}` syntax) in the content container. If the entry has other hash, it will create a dropdown menu in this item with the same functionality (only one nested layer is allowed). The names in the sidebar (like `ha_cluster`, `hana_dbs` or `systemdb`) can be customized in the translation configuration file changing the values in `console_sidebar`.
+
+### Provisioning bars
+
+The provisioning bars used in the deployment show the progress of each of the individuals provisioning. The provisioning progress is based in the terraform output (that includes salt output) and it looks for certain patterns to know which is the current state of the execution.
+
+Certain patters are hard-coded as they belong natively to terraform and salt. Others can be configured in the `customization.json` file. The next example shows how it can be configured. All of the entries must be configured, and they must be populated with regex patterns. This patterns are used to look for specific text in the terraform output to know if there is a state change.
+
+```
+"provisioning_patterns": {
+  "planned_states_count": ".*Total planned states count: (\\d+)$",
+  "deployment_failed": ".*::Deployment failed$",
+  "configuring_os": ".*Configuring operative system...$",
+  "provisioning": ".*Provisioning system...$"
+}
+```
 
 ## Packaging
 

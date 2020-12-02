@@ -66,6 +66,10 @@ module Helpers
     File.read(Rails.root.join('spec', 'fixtures', 'deploy.txt'))
   end
 
+  def provisioning_deploy_output
+    File.read(Rails.root.join('spec', 'fixtures', 'provisioning_deploy.txt'))
+  end
+
   def metadata_fixture(name)
     File.read(Rails.root.join('spec', 'fixtures', 'metadata', name))
   end
