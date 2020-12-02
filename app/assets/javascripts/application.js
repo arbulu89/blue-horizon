@@ -24,3 +24,5 @@
 //= require utility.js
 //= require layout.js
 //= require variables.js
+// Custom
+//= require custom.js
