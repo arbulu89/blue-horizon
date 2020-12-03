@@ -4,7 +4,7 @@
 
   %div.col.system-settings
 
-    = plan_section_header 'System settings', 'settings'
+    %h3 System settings
     %dl.row
       %dt.col-4 System identifier:
       %dd.col-8= plan.dig('variables', 'system_identifier', 'value').upcase
@@ -17,7 +17,7 @@
 
   %div.col.resource-group
 
-    = plan_section_header 'Resource group', 'namespace'
+    %h3 Resource group
     %dl.row
       %dt.col-4 Name:
       %dd.col-8= resources.dig('module.bluehorizon.azurerm_resource_group.myrg[0]', 'values', 'name')
@@ -28,7 +28,7 @@
 
   %div.col-6.virtual-networks
 
-    = plan_section_header 'Virtual networks', 'ip'
+    %h3 Virtual networks
     %dl.row.network
       %dt.col-4 Name:
       %dd.col-8= resources.dig 'module.bluehorizon.azurerm_virtual_network.mynet[0]', 'values', 'name'
@@ -43,7 +43,7 @@
   - if plan.dig('variables', 'hana_ha_enabled', 'value') == true
     %div.col-6.iscsi-server
 
-      = plan_section_header 'ISCSI server', 'storage'
+      %h3 ISCSI server
       %dl.row
         %dt.col-4 Name:
         %dd.col-8= resources.dig 'module.bluehorizon.module.iscsi_server.azurerm_virtual_machine.iscsisrv[0]','values', 'name'
@@ -64,7 +64,7 @@
 
   %div.col.hana-nodes
 
-    = plan_section_header 'HANA nodes', 'node'
+    %h3 HANA nodes
     %div.row
       - node_pattern = /module\.bluehorizon\.module\.hana_node\.azurerm_virtual_machine\.hana/
       - resources.select { |address| address =~ node_pattern }.each_with_index do |(address, vm_resource),index|
@@ -89,7 +89,7 @@
 
   %div.col.bastion
 
-    = plan_section_header 'Bastion', 'security'
+    %h3 Bastion
     %dl.row
       %dt.col-4 Name:
       %dd.col-8= resources.dig 'module.bluehorizon.module.bastion.azurerm_virtual_machine.bastion[0]', 'values', 'name'
@@ -102,7 +102,7 @@
 
   %div.col.monitoring-server
 
-    = plan_section_header 'Monitoring server', 'monitoring'
+    %h3 Monitoring server
     %dl.row
       %dt.col-4 Name:
       %dd.col-8= resources.dig 'module.bluehorizon.module.monitoring.azurerm_virtual_machine.monitoring[0]','values', 'name'
@@ -123,7 +123,7 @@
 
   %div.col.security-group
 
-    = plan_section_header 'Security group', 'network_policy'
+    %h3 Security group
     %dl.row
       %dt.col-2 Name:
       %dd.col-10= resources.dig 'module.bluehorizon.azurerm_network_security_group.mysecgroup', 'values', 'name'
