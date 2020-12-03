@@ -43,3 +43,10 @@ table td, table td * {
     color: #6c757d;
     white-space: nowrap;
 }
+
+.plan-icon-append {
+    cursor: pointer;
+    position: absolute;
+    display: inline;
+    padding-left: 20px;
+}

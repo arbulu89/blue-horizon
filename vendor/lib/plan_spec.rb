@@ -30,7 +30,9 @@ describe 'plan', type: :feature do
     expect(system_settings).to have_text 'System identifier: PRD'
     expect(system_settings).to have_text 'Instance number: 00'
     expect(system_settings).to have_text 'Admin user: prdadm'
-    expect(system_settings).to have_text 'Admin password: .Password1'
+    expect(system_settings).to have_text "Admin password:\n●●●●●●●●●●"
+    expect(system_settings.find('span.unpeek')).to have_content '●●●●●●●●●●'
+    expect(system_settings).to have_css('span.peek', visible: :hidden, text: '.Password1')
 
     resource_group = plan_block.find '.resource-group'
     expect(resource_group).to have_text 'Name: rg-ha-sap-test'

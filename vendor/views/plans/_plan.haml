@@ -13,7 +13,14 @@
       %dt.col-4 Admin user:
       %dd.col-8= plan.dig('variables', 'system_identifier', 'value').downcase.concat('adm')
       %dt.col-4 Admin password:
-      %dd.col-8= plan.dig('variables', 'sap_admin_password', 'value')
+      %dd.col-8.mb-0
+        %div#admin-password
+          %span.peek{ style: "display: none;" }= plan.dig('variables', 'sap_admin_password', 'value')
+          %span.unpeek ●●●●●●●●●●
+          %div.plan-icon-append.peek{ data: { toggle: 'tooltip' }, title: t(:password_hide), style: "display: none;" }
+            %i.eos-icons.eos-24 visibility
+          %div.plan-icon-append.unpeek{ data: { toggle: 'tooltip' }, title: t(:password_show) }
+            %i.eos-icons.eos-24 visibility_off
 
   %div.col.resource-group
 
