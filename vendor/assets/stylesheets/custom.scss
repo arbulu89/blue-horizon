@@ -50,3 +50,27 @@ table td, table td * {
     display: inline;
     padding-left: 20px;
 }
+
+.task-list {
+  padding-left: 15px;
+}
+
+.task-list div {
+  display: flex;
+}
+
+span.task-description {
+  padding-right: 10px;
+}
+
+span.task-progress {
+  font-weight: bold;
+}
+
+i.green {
+  color: #30BA78; // $eos-bc-green-500
+}
+
+i.red {
+  color: #C5161F; // $eos-bc-red-900
+}

@@ -106,11 +106,8 @@ module Provisioners
     salt_result_pattern = provisioner_pattern(
       provisioner, PROVISIONING_PATTERNS[:creating]
     )
-    if content.scan(salt_result_pattern).size.zero?
-      PROVISIONING_STATES[:not_started]
-    else
+    unless content.scan(salt_result_pattern).size.zero?
       KeyValue.set(provisioner, :initializing)
-      PROVISIONING_STATES[:initializing]
     end
   end
 
@@ -158,11 +155,13 @@ module Provisioners
       progress = 0
       result = true
       text = ''
+      # When the provisioner is in finished, failed or not_started, the progress is not sent
       case KeyValue.get(provisioner)
       when :finished || :failed
         next
       when :not_started
-        text = wait_until_created(provisioner, content)
+        wait_until_created(provisioner, content)
+        next
       when :initializing
         text = wait_until_configuring_os(provisioner, content)
       when :configuring_os

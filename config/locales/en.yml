@@ -132,7 +132,9 @@ en:
   deploy:
     details: "Installation details"
     infra_label: "Infrastructure creation"
+    not_started: "Not started"
     creating: "Creating resources..."
+    in_progress: "Installation in progress..."
     finished: "Finished"
     failed: "Failed"
 

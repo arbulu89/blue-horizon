@@ -22,6 +22,10 @@ class DeploysController < ApplicationController
       Provisioners::EXCLUDED_PATTERN
     ).count
     KeyValue.set(:planned_resources_count, planned_resources)
+    # +1 adds the infrastructure creation that happens always
+    KeyValue.set(:total_steps, find_provisioners.size + 1)
+    KeyValue.set(:completed_steps, 0)
+    KeyValue.set(:resource_creation_state, :not_started)
     terra.apply(@apply_args)
     logger.info('Deploy finished.')
   end
@@ -90,34 +94,75 @@ class DeploysController < ApplicationController
     progress = {}
     return progress if content.blank?
 
+    state = KeyValue.get(:resource_creation_state)
+    return progress if state == :finished
+
     created_resources = content.scan(/Creation complete after/).size
     planned_resources_count = KeyValue.get(:planned_resources_count)
-    # Avoid having more resources than the planned ones
-    if created_resources >= planned_resources_count
-      created_resources = planned_resources_count
+
+    progress_number = if created_resources >= planned_resources_count
+      KeyValue.set(:resource_creation_state, :finished)
+      100
+    else
+      created_resources * 100 / planned_resources_count
     end
+
     text = if error.present?
       t('deploy.failed')
-    elsif created_resources == planned_resources_count
+    elsif created_resources >= planned_resources_count
       t('deploy.finished')
     else
       t('deploy.creating')
     end
-    progress['infra-bar'] = {
-      progress: created_resources * 100 / planned_resources_count,
+
+    progress['infra-task'] = {
+      progress: progress_number,
       text:     text,
       success:  error.nil? ? true : false
     }
     return progress
   end
 
+  def update_total_progress(tasks_progress, error)
+    '''
+    The methods depends on that once the progress has reached 100 in any of the tasks, the
+    data is not sent again
+    '''
+    total_steps = KeyValue.get(:total_steps).to_i
+    completed_steps = KeyValue.get(:completed_steps).to_i
+    tasks_progress.each_value do |task|
+      if task[:progress] == 100
+        completed_steps += 1
+        KeyValue.set(:completed_steps, completed_steps)
+      end
+    end
+
+    text = if error.present?
+      t('deploy.failed')
+    elsif total_steps == completed_steps
+      t('deploy.finished')
+    else
+      t('deploy.in_progress')
+    end
+
+    progress = {
+      progress: completed_steps * 100 / total_steps,
+      text: text
+    }
+    return progress
+  end
+
   def update_progress(content, error)
     progress = {}
+    tasks_progress = {}
     return progress if content.blank?
 
-    progress = update_terraform_progress(content, error)
-    provisioners_progress = update_provisioners_progress(content)
-    progress.merge!(provisioners_progress)
+    terraform_progress = update_terraform_progress(content, error)
+    tasks_progress = update_provisioners_progress(content)
+    tasks_progress.merge!(terraform_progress)
+
+    progress['tasks_progress'] = tasks_progress
+    progress['total_progress'] = update_total_progress(tasks_progress, error)
     return progress
   end
 end

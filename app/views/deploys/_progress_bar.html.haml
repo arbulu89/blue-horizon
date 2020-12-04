@@ -1,11 +1,20 @@
-%label{ :for => "infra-bar" }= t('deploy.infra_label').titleize
-%div.progress{ :style => "height:30px" }
-  %div.progress-bar#infra-bar{ :style => "width:0%;height:30px" }
+%h4 Task list
+%ul.task-list
+  %li
+    %div
+      %span.task-description #{t("deploy.infra_label")}...
+      %i.eos-icons.eos-18{ :id => "infra-task" } schedule
+      = task_loading_icon("infra-task")
+      %span.task-progress{ :id => "infra-task" } 0% - #{t("provisioning_states.not_started")}
+  - @provisioners.each do |provisioner|
+    %li
+      %div
+        %span.task-description= titleize_provisioner(provisioner)
+        %i.eos-icons.eos-18{ :id => provisioner } schedule
+        = task_loading_icon(provisioner)
+        %span.task-progress{ :id => provisioner } 0% - #{t("provisioning_states.not_started")}
+%hr
+%div.progress{ :style => "height:40px" }
+  %div.progress-bar#progress-bar{ :style => "width:0%;height:40px" }
     %span 0%
-%p.clearfix
-- @provisioners.each do |provisioner|
-  %label{ :for => provisioner }= titleize_provisioner(provisioner)
-  %div.progress{ :style => "height:30px" }
-    %div.progress-bar{ :id => provisioner, :style => "width:0%;height:30px" }
-      %span 0%
-  %p.clearfix
+%label#progress-bar{ :for => "progress-bar", :style => "text-align:center" }= t("deploy.not_started")
