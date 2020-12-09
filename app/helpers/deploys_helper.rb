@@ -3,7 +3,7 @@
 # Helpers used in deploy page
 module DeploysHelper
   def titleize_provisioner(provisioner)
-    title = t("provisioning_bars.#{provisioner}")
+    title = t("deploy.task_list.#{provisioner}")
     "#{title}..."
   end
 

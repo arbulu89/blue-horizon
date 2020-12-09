@@ -10,12 +10,12 @@ module Provisioners
   # infrastructure creation bar, as they are the provisioning resources
   EXCLUDED_PATTERN = /.*\.(.*_provision).*\.provision\[(\d+)\]?/.freeze
   PROVISIONING_STATES = {
-    not_started:    I18n.t('provisioning_states.not_started'),
-    initializing:   I18n.t('provisioning_states.initializing'),
-    configuring_os: I18n.t('provisioning_states.configuring_os'),
-    provisioning:   I18n.t('provisioning_states.provisioning'),
-    failed:         I18n.t('provisioning_states.failed'),
-    finished:       I18n.t('provisioning_states.finished')
+    not_started:    I18n.t('deploy.task_states.not_started'),
+    initializing:   I18n.t('deploy.task_states.initializing'),
+    configuring_os: I18n.t('deploy.task_states.configuring_os'),
+    provisioning:   I18n.t('deploy.task_states.provisioning'),
+    failed:         I18n.t('deploy.task_states.failed'),
+    finished:       I18n.t('deploy.task_states.finished')
   }.freeze
 
   PROVISIONING_PATTERNS = {

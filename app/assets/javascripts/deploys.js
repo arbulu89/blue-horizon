@@ -54,11 +54,8 @@ function update_progress_bar(progress_data, error) {
 function update_tasks(progress_data) {
   Object.entries(progress_data).forEach(entry=>{
     const [task_id, task_data] = entry;
-    if ("text" in task_data) {
-      progress_text = task_data.progress + "% - " + task_data.text;
-    } else {
-      progress_text = task_data.progress + "%";
-    }
+    progress_text = task_data.progress + "% - " + task_data.text;
+
     $("span#" + task_id).html(progress_text);
     if (task_data.success) {
       if (task_data.progress < 100) {

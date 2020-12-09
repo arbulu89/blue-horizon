@@ -108,11 +108,11 @@ class DeploysController < ApplicationController
     end
 
     text = if error.present?
-      t('deploy.failed')
+      t('deploy.task_states.failed')
     elsif created_resources >= planned_resources_count
-      t('deploy.finished')
+      t('deploy.task_states.finished')
     else
-      t('deploy.creating')
+      t('deploy.task_states.creating')
     end
 
     progress['infra-task'] = {
@@ -125,13 +125,13 @@ class DeploysController < ApplicationController
 
   def update_total_progress(tasks_progress, error)
     '''
-    The methods depends on that once the progress has reached 100 in any of the tasks, the
+    The methods depends on that once the task is finished in any of the tasks, the
     data is not sent again
     '''
     total_steps = KeyValue.get(:total_steps).to_i
     completed_steps = KeyValue.get(:completed_steps).to_i
     tasks_progress.each_value do |task|
-      if task[:progress] == 100
+      if task[:text] == Provisioners::PROVISIONING_STATES[:finished]
         completed_steps += 1
         KeyValue.set(:completed_steps, completed_steps)
       end

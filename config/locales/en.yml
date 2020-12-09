@@ -129,26 +129,25 @@ en:
   variable_groups:
     ungrouped: Additional data
 
+  # Deployment view and progress bar texts
   deploy:
     details: "Installation details"
-    infra_label: "Infrastructure creation"
     not_started: "Not started"
-    creating: "Creating resources..."
     in_progress: "Installation in progress..."
     finished: "Finished"
     failed: "Failed"
-
-  provisioning_bars:
-    hana_provision_0: "First HANA database server provisioning"
-    hana_provision_1: "Second HANA database server provisioning"
-    bastion_provision_0: "Bastion server provisioning"
-    iscsi_provision_0: "iSCSI server provisioning"
-    monitoring_provision_0: "Monitoring server provisioning"
-
-  provisioning_states:
-    not_started: "Not started"
-    initializing: "Initializing machine..."
-    configuring_os: "Configuring operative system..."
-    provisioning: "Provisioning machine..."
-    failed: "Failed"
-    finished: "Finished"
+    task_list:
+      infra_label: "Infrastructure creation"
+      hana_provision_0: "First HANA database server provisioning"
+      hana_provision_1: "Second HANA database server provisioning"
+      bastion_provision_0: "Bastion server provisioning"
+      iscsi_provision_0: "iSCSI server provisioning"
+      monitoring_provision_0: "Monitoring server provisioning"
+    task_states:
+      not_started: "Not started"
+      creating: "Creating resources..."
+      initializing: "Initializing machine..."
+      configuring_os: "Configuring operative system..."
+      provisioning: "Provisioning machine..."
+      failed: "Failed"
+      finished: "Finished"
