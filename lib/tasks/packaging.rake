@@ -51,7 +51,8 @@ namespace :obs do
       'Gemfile.production',
       'lib',
       'public',
-      'Rakefile'
+      'Rakefile',
+      'vendor'
     ]
     docs = ['LICENSE', 'README.md']
     db_setup = ['db/schema.rb', 'db/seeds.rb']
@@ -74,7 +75,7 @@ def gemspecs(gemfile)
 end
 
 def name_version
-  "blue-horizon-#{version}"
+  "blue-horizon-for-sap-#{version}"
 end
 
 def version

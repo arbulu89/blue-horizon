@@ -17,8 +17,7 @@
 #
 
 Name:      blue-horizon-for-sap
-# version will be set by set_version source service
-Version:   0
+Version:   0.1.0
 Release:   0
 License:   GPL-3.0
 Summary:   Web server interface for terraforming SAP workloads on Microsoft Azure
