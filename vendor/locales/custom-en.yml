@@ -3,9 +3,9 @@
 
 en:
   # Application title - shown on the home page
-  title: "Blue Horizon for SLES4SAP"
+  title: "SUSE SAP Console"
   # Abbreviated title for use in navigation
-  short_title: "BlueHorizon"
+  short_title: "SUSE SAP Console"
   # Sidebar
   sidebar:
     welcome: "Deployment"
@@ -107,15 +107,10 @@ en:
   # Long-form description of steps to take after deployment
   # Markdown syntax is accepted - see https://daringfireball.net/projects/markdown/syntax
   next_steps: |
-    To destroy the currently created deployment run the following commands in the folder extracted from the downloaded file:
+    # Welcome to your SAP environment!
+    Your SAP environment has been created successfully.
+    You can find the created resources <a href="%{resource_group_url}" target="_blank">clicking here</a>.
 
-    ```terraform init```
-
-    ```terraform workspace select $used_workspace```
-
-    ```terraform destroy -auto-approve```
-
-    To access the machines the next command can be used:<br>
-    ```terraform output # get the addresses```
+    Now, you can continue using the SAP console to monitor and tune the created machines using the top menu.
 
   footer: "© 2019-2020 SUSE, all rights reserved."
