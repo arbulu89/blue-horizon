@@ -3,32 +3,39 @@
 .instance-type-selector {
   //background-color: $panel-default-heading-bg;
 
+  .instance-size {
+    padding-top: 10px;
+  }
+
   .instance-types {
     border-right: 1px solid $table-border-color;
+  }
 
-    .form-group {
-      margin-bottom: 0;
-    }
+  .card-deck {
+    padding-right: 30px;
   }
 
   label.instance-type {
     display: inline-block;
+    padding-top: 10px;
 
     input[type="radio"] {
       display: none;
 
       &:checked + .instance-type-box {
-        background-color: $success;
-        color: $white;
         box-shadow: none;
+        .card-header {
+          color: $white;
+          background-color: $success;
+        }
       }
     }
 
     .instance-type-box {
       display: inline-block;
       overflow: hidden;
-      width: 140px;
-      height: 140px;
+      width: 150px;
+      height: 150px;
 
       @media screen and (max-width: 1335px) {
         width: 120px;
@@ -41,21 +48,27 @@
       }
 
       border: 1px solid $table-border-color;
-      border-radius: 5px;
-      box-shadow: 1px 1px 6px 1px $table-border-color;
+      border-radius: 10px;
+      box-shadow: 3px 3px 8px 3px $table-border-color;
 
       background: $white;
-      color: $success;
 
       cursor: pointer;
 
       margin: 10px;
-      padding: 10px;
 
       font-size: 14pt;
-      text-align: center;
+      text-align: left;
       font-weight: normal;
       word-wrap: break-word;
+
+      .card-body {
+        padding-top: 0.10rem !important;
+      }
+
+      .card-header {
+          background-color: white;
+      }
 
       &.double {
         width: 316px;
