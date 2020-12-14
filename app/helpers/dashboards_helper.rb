@@ -3,7 +3,7 @@
 # Helpers used in dashboard vies
 module DashboardsHelper
   def using_console?
-    controller_name == 'dashboards'
+    ['dashboards', 'resources'].include? controller_name
   end
 
   def first_item

@@ -74,6 +74,7 @@ en:
     tuning: "Tuning"
     grafana: "Grafana"
     azure_portal_url: "Azure portal"
+    resources: "Resources"
 
   menu:
     deploy: "Deploy"
@@ -96,6 +97,7 @@ en:
     download_plan: "Get the current plan"
     attached: "File attached"
     loading: "Loading..."
+    copy: "Copy to clipboard"
 
   page_title:
     cluster: "SAP System size"
@@ -103,6 +105,7 @@ en:
     deploy: "Deploy your cluster"
     wrapup: "Next steps after deployment"
     source: "Working directly with deployment source scripts"
+    resources: "Additional resources"
 
   page_subtitle:
     hana_ha_info: |
@@ -118,6 +121,8 @@ en:
     wrapup_info: |
       Your application has been deployed, here's how to use it.
       [Download](/download) your results and follow the instructions below.
+    resources_info: |
+      Find here additional resources to use the project.
 
   content:
     explain_duplicate_session: |
@@ -141,17 +146,10 @@ en:
     finished: "Finished"
     failed: "Failed"
 
-  provisioning_bars:
-    hana_provision_0: "First HANA database server provisioning"
-    hana_provision_1: "Second HANA database server provisioning"
-    bastion_provision_0: "Bastion server provisioning"
-    iscsi_provision_0: "iSCSI server provisioning"
-    monitoring_provision_0: "Monitoring server provisioning"
-
-  provisioning_states:
-    not_started: "Not started"
-    initializing: "Initializing machine..."
-    configuring_os: "Configuring operative system..."
-    provisioning: "Provisioning machine..."
-    failed: "Failed"
-    finished: "Finished"
+  resources:
+    ssh:
+      bastion: Bastion server
+      monitoring: Monitoring server
+      iscsi: iSCSI server
+      hana_0: First HANA node
+      hana_1: Second HANA node

@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   end
   get '/wrapup', to: 'wrapup#index'
   get '/download', to: 'download#download'
+  get '/resources', to: 'resources#index'
 end

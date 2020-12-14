@@ -108,4 +108,12 @@ module ApplicationHelper
     end
     tags.join.html_safe
   end
+
+  def container_type
+    if ['dashboards'].include? controller_name
+      'grafana-container'
+    else
+      'container'
+    end
+  end
 end

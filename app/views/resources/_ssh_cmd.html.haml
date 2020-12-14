@@ -1,0 +1,7 @@
+%div.ssh-command.input-group
+  - if output_name == :bastion_ip
+    %input.form-control{ value: ssh_cmd_bastion(outputs), readonly: true }
+  - else
+    %input.form-control{ value: ssh_cmd(outputs, output_name, index), readonly: true }
+  %div.input-group-button
+    %i.eos-icons.eos-18{ data: { toggle: 'tooltip' }, title: t('tooltips.copy'), 'data-copied-hint': 'Copied' } content_copy
