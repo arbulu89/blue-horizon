@@ -92,8 +92,6 @@ class DeploysController < ApplicationController
 
   def update_terraform_progress(content, error)
     progress = {}
-    return progress if content.blank?
-
     state = KeyValue.get(:resource_creation_state)
     return progress if state == :finished
 
@@ -124,10 +122,8 @@ class DeploysController < ApplicationController
   end
 
   def update_total_progress(tasks_progress, error)
-    '''
-    The methods depends on that once the task is finished in any of the tasks, the
-    data is not sent again
-    '''
+    # The methods depends on that once the task is finished in any of the tasks, the
+    # data is not sent again
     total_steps = KeyValue.get(:total_steps).to_i
     completed_steps = KeyValue.get(:completed_steps).to_i
     tasks_progress.each_value do |task|
@@ -147,14 +143,13 @@ class DeploysController < ApplicationController
 
     progress = {
       progress: completed_steps * 100 / total_steps,
-      text: text
+      text:     text
     }
     return progress
   end
 
   def update_progress(content, error)
     progress = {}
-    tasks_progress = {}
     return progress if content.blank?
 
     terraform_progress = update_terraform_progress(content, error)

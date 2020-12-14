@@ -106,9 +106,9 @@ module Provisioners
     salt_result_pattern = provisioner_pattern(
       provisioner, PROVISIONING_PATTERNS[:creating]
     )
-    unless content.scan(salt_result_pattern).size.zero?
-      KeyValue.set(provisioner, :initializing)
-    end
+    return if content.scan(salt_result_pattern).size.zero?
+
+    KeyValue.set(provisioner, :initializing)
   end
 
   def wait_until_configuring_os(provisioner, content)
@@ -144,12 +144,9 @@ module Provisioners
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/BlockLength
   def update_provisioners_progress(content)
     progress_data = {}
-    return progress_data if content.blank?
-
     provisioners = KeyValue.get(:provisioners)
     provisioners.each do |provisioner|
       progress = 0
@@ -190,6 +187,5 @@ module Provisioners
     return progress_data
   end
   # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
   # rubocop:enable Metrics/BlockLength
 end
