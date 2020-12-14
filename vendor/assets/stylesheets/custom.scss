@@ -50,3 +50,8 @@ table td, table td * {
     display: inline;
     padding-left: 20px;
 }
+
+.custom-switch .custom-control-label {
+    cursor: pointer;
+    display: inline-block;
+}

@@ -47,7 +47,7 @@
     },
     "hana_ha_enabled": {
       "type": "bool",
-      "default": true,
+      "default": false,
       "description": "<!-- [group:HANA_configuration] -->"
     },
     "hana_installation_software_path": {
