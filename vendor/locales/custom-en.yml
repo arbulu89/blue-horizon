@@ -3,9 +3,9 @@
 
 en:
   # Application title - shown on the home page
-  title: "SUSE SAP console"
+  title: "SUSE SAP Console"
   # Abbreviated title for use in navigation
-  short_title: "SUSE SAP console"
+  short_title: "SUSE SAP Console"
   # Sidebar
   sidebar:
     welcome: "Deployment"
@@ -107,9 +107,9 @@ en:
   # Long-form description of steps to take after deployment
   # Markdown syntax is accepted - see https://daringfireball.net/projects/markdown/syntax
   next_steps: |
-    # Welcome to you SUSE SAP console!
+    # Welcome to your SAP console!
     Your SAP environment has been created successfully.
-    You can find the created resources [clicking here](%{resource_group_url}).
+    You can find the created resources <a href="%{resource_group_url}" target="_blank">clicking here</a>.
 
     Now, you can continue using the SAP console to monitor and tune the created machines using the top menu.
 

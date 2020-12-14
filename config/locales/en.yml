@@ -98,14 +98,19 @@ en:
     loading: "Loading..."
 
   page_title:
+    cluster: "SAP System size"
     plan: "Plan your deployment"
     deploy: "Deploy your cluster"
     wrapup: "Next steps after deployment"
     source: "Working directly with deployment source scripts"
 
   page_subtitle:
-    hana_ha_enabled_info: |
-      Enable HA clustering and System Replication
+    hana_ha_info: |
+      High Available clustering and system replication option creates a clustered environment with 2 SAP HANA nodes, providing a resilient landscape that reduces downtime but increases cost.
+    hana_ha_enabled_label: |
+      HA clustering and System Replication
+    cluster_info: |
+      Select the High Availability options and size of the SAP environment.
     plan_info: |
       In this step an execution plan is generated. The plan shows what *terraform* will do when you deploy, so you know exactly what to expect.
     deploy_info: |

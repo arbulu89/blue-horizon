@@ -1,5 +1,5 @@
 #
-# spec file for package blue-horizon
+# spec file for package blue-horizon-for-sap
 # this code base is under development
 #
 # Copyright (c) 2020 SUSE LLC
@@ -16,12 +16,12 @@
 # Please submit bugfixes or comments via http://bugzilla.suse.com/
 #
 
-Name:      blue-horizon
-Version:   1.3.0
+Name:      blue-horizon-for-sap
+Version:   0.1.0
 Release:   0
 License:   GPL-3.0
-Summary:   Web server interface for terraforming in a public cloud
-URL:       http://www.github.com/suse-enceladus/blue-horizon
+Summary:   Web server interface for terraforming SAP workloads on Microsoft Azure
+URL:       http://www.github.com/suse/blue-horizon
 Source0:   %{name}-%{version}.tar.bz2
 # requirements generated via `rake gems:rpmspec:requires`
 BuildRequires:  ruby-macros >= 5
@@ -163,7 +163,7 @@ bundle lock --local
 
 %install
 install -m 0755 -d %{buildroot}/srv/www/%{name}
-cp -r app bin config db lib public config.ru Gemfile* Rakefile %{buildroot}/srv/www/%{name}/
+cp -r app bin config db lib public config.ru Gemfile* Rakefile vendor %{buildroot}/srv/www/%{name}/
 
 %files
 %defattr(-,root,root,-)

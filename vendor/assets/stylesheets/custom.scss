@@ -9,7 +9,7 @@ summary.welcome {
 /* Style the summary when details box is open */
 details[open] summary.welcome {
   background: #30ba78;
-  color: #333;
+  color: white;
 }
 
 table td, table td * {
@@ -73,4 +73,9 @@ i.green {
 
 i.red {
   color: #C5161F; // $eos-bc-red-900
+}
+  
+.custom-switch .custom-control-label {
+    cursor: pointer;
+    display: inline-block;
 }
