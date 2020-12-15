@@ -41,9 +41,10 @@ describe 'deploy', type: :feature do
 
       visit(deploy_path)
 
-      expect(page).to have_selector('div.progress-bar#infra-bar')
-      expect(page).to have_selector('div.progress-bar#hana_provision_0')
-      expect(page).to have_selector('div.progress-bar#hana_provision_1')
+      expect(page).to have_selector('span#infra-task')
+      expect(page).to have_selector('span#hana_provision_0')
+      expect(page).to have_selector('span#hana_provision_1')
+      expect(page).to have_selector('div.progress-bar#progress-bar')
     end
   end
 end
