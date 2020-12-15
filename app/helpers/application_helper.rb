@@ -87,9 +87,25 @@ module ApplicationHelper
     ''
   end
 
+  def get_url(request_id)
+    if controller_name == 'dashboards'
+      dashboard_path(request_id)
+    elsif controller_name == 'resources'
+      resources_path
+    end
+  end
+
+  def get_url_from_menu(request_id, menu_item)
+    if controller_name == 'dashboards'
+      get_dashboard_url(request_id, menu_item).present? if request_id
+    elsif controller_name == 'resources'
+      '/resources' if menu_item['key'] == 'resources'
+    end
+  end
+
   def top_menu_item_class(menu_item, request_id, format_values)
     (url = menu_item['url'] % format_values) if format_values
-    (selected = get_dashboard_url(request_id, menu_item).present?) if request_id
+    selected = get_url_from_menu(request_id, menu_item)
     "submenu-item#{' disabled' unless url}#{' selected' if selected}"
   end
 
