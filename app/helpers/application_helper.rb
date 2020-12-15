@@ -88,17 +88,19 @@ module ApplicationHelper
   end
 
   def get_url(request_id)
-    if controller_name == 'dashboards'
+    case controller_name
+    when 'dashboards'
       dashboard_path(request_id)
-    elsif controller_name == 'resources'
+    when 'resources'
       resources_path
     end
   end
 
   def get_url_from_menu(request_id, menu_item)
-    if controller_name == 'dashboards'
+    case controller_name
+    when 'dashboards'
       get_dashboard_url(request_id, menu_item).present? if request_id
-    elsif controller_name == 'resources'
+    when 'resources'
       '/resources' if menu_item['key'] == 'resources'
     end
   end
