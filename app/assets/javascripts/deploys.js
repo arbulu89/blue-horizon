@@ -36,43 +36,55 @@ $(function() {
 
 function update_progress_bar(progress_data, error) {
   const bar_id = "#progress-bar";
-  const progress_bar_id = "div" + bar_id;
+  const $progress_bar = $("div" + bar_id);
 
-  $(progress_bar_id).css("width", progress_data.progress + "%");
-  $(progress_bar_id).find("span").html(progress_data.progress + "%");
+  $progress_bar
+    .css("width", progress_data.progress + "%")
+    .find("span").html(progress_data.progress + "%");
   $("label" + bar_id).html(progress_data.text);
-  if (progress_data.progress == 100) {
-    $(progress_bar_id).removeClass("progress-bar-striped progress-bar-animated");
-  } else {
-    $(progress_bar_id).addClass("progress-bar-striped progress-bar-animated");
-  }
+
   if (error !== null) {
-    $(progress_bar_id).addClass("bg-danger");
+    $progress_bar.addClass("bg-danger");
   }
+
+  if (progress_data.progress == 100) {
+    $progress_bar.removeClass("progress-bar-striped progress-bar-animated");
+    return;
+  }
+
+  $progress_bar.addClass("progress-bar-striped progress-bar-animated");
 }
 
 function update_tasks(progress_data) {
   Object.entries(progress_data).forEach(entry=>{
     const [task_id, task_data] = entry;
-    progress_text = task_data.progress + "% - " + task_data.text;
+    const $img_task_id = $("img#" + task_id);
+    const $i_task_id = $("i#" + task_id);
+    const $span_task_id = $("span#" + task_id);
 
-    $("span#" + task_id).html(progress_text);
-    if (task_data.success) {
-      if (task_data.progress < 100) {
-        $("img#" + task_id).show();
-        $("i#" + task_id).hide();
-      } else {
-        $("img#" + task_id).hide();
-        $("i#" + task_id).show();
-        $("i#" + task_id).html("check");
-        $("i#" + task_id).addClass("green");
-      }
-    } else {
-      $("img#" + task_id).hide();
-      $("i#" + task_id).show();
-      $("i#" + task_id).html("close");
-      $("i#" + task_id).addClass("red");
+    progress_text = task_data.progress + "% - " + task_data.text;
+    $span_task_id.html(progress_text);
+
+    if (!task_data.success) {
+      $img_task_id.hide();
+      $i_task_id
+        .show()
+        .html("close")
+        .addClass("red");
+      return;
     }
+
+    if (task_data.progress < 100) {
+      $img_task_id.show();
+      $i_task_id.hide();
+      return;
+    }
+
+    $img_task_id.hide();
+    $i_task_id
+      .show()
+      .html("check")
+      .addClass("green");
   });
 }
 
