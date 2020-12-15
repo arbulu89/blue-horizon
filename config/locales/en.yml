@@ -149,6 +149,10 @@ en:
 
   resources:
     ssh:
+      summary: Accessing the machines through SSH
+      info: |
+        The created machines can be accessed using SSH using the next commands.
+        **The used SSH key must be replaced by an absolute path**.
       bastion: Bastion server
       monitoring: Monitoring server
       iscsi: iSCSI server
