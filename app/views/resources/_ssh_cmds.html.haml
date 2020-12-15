@@ -1,0 +1,18 @@
+%details
+  %summary.welcome Accessing the machines through SSH
+  %p
+    The created machines can be accessed using SSH using the next commands.
+    %strong The used SSH key must be replaced by an absolute path
+  %dl
+    %dt= t('resources.ssh.bastion')
+    = render('ssh_cmd_block', outputs: @outputs, output_name: :bastion_ip, index: 0)
+    %dt Monitoring server
+    = render('ssh_cmd_block', outputs: @outputs, output_name: :monitoring_ip, index: 0)
+    - if ha_enabled?(@outputs)
+      %dt iSCSI server
+      = render('ssh_cmd_block', outputs: @outputs, output_name: :iscsi_ip, index: 0)
+    %dt 1st HANA
+    = render('ssh_cmd_block', outputs: @outputs, output_name: :hana_ips, index: 0)
+    - if ha_enabled?(@outputs)
+      %dt 2nd HANA
+      = render('ssh_cmd_block', outputs: @outputs, output_name: :hana_ips, index: 1)
