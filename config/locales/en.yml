@@ -98,6 +98,7 @@ en:
     attached: "File attached"
     loading: "Loading..."
     copy: "Copy to clipboard"
+    copied: "Copied!"
 
   page_title:
     cluster: "SAP System size"
