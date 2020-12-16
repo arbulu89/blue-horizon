@@ -10,12 +10,12 @@ module Provisioners
   # infrastructure creation bar, as they are the provisioning resources
   EXCLUDED_PATTERN = /.*\.(.*_provision).*\.provision\[(\d+)\]?/.freeze
   PROVISIONING_STATES = {
-    not_started:    I18n.t('provisioning_states.not_started'),
-    initializing:   I18n.t('provisioning_states.initializing'),
-    configuring_os: I18n.t('provisioning_states.configuring_os'),
-    provisioning:   I18n.t('provisioning_states.provisioning'),
-    failed:         I18n.t('provisioning_states.failed'),
-    finished:       I18n.t('provisioning_states.finished')
+    not_started:    I18n.t('deploy.task_states.not_started'),
+    initializing:   I18n.t('deploy.task_states.initializing'),
+    configuring_os: I18n.t('deploy.task_states.configuring_os'),
+    provisioning:   I18n.t('deploy.task_states.provisioning'),
+    failed:         I18n.t('deploy.task_states.failed'),
+    finished:       I18n.t('deploy.task_states.finished')
   }.freeze
 
   PROVISIONING_PATTERNS = {
@@ -106,12 +106,9 @@ module Provisioners
     salt_result_pattern = provisioner_pattern(
       provisioner, PROVISIONING_PATTERNS[:creating]
     )
-    if content.scan(salt_result_pattern).size.zero?
-      PROVISIONING_STATES[:not_started]
-    else
-      KeyValue.set(provisioner, :initializing)
-      PROVISIONING_STATES[:initializing]
-    end
+    return if content.scan(salt_result_pattern).size.zero?
+
+    KeyValue.set(provisioner, :initializing)
   end
 
   def wait_until_configuring_os(provisioner, content)
@@ -147,22 +144,21 @@ module Provisioners
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/BlockLength
   def update_provisioners_progress(content)
     progress_data = {}
-    return progress_data if content.blank?
-
     provisioners = KeyValue.get(:provisioners)
     provisioners.each do |provisioner|
       progress = 0
       result = true
       text = ''
+      # When the provisioner is in finished, failed or not_started, the progress is not sent
       case KeyValue.get(provisioner)
       when :finished || :failed
         next
       when :not_started
-        text = wait_until_created(provisioner, content)
+        wait_until_created(provisioner, content)
+        next
       when :initializing
         text = wait_until_configuring_os(provisioner, content)
       when :configuring_os
@@ -191,6 +187,5 @@ module Provisioners
     return progress_data
   end
   # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
   # rubocop:enable Metrics/BlockLength
 end

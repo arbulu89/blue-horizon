@@ -34,27 +34,57 @@ $(function() {
     });
 });
 
-function update_progress_bar(progress_data) {
+function update_progress_bar(progress_data, error) {
+  const bar_id = "#progress-bar";
+  const $progress_bar = $("div" + bar_id);
+
+  $progress_bar
+    .css("width", progress_data.progress + "%")
+    .find("span").html(progress_data.progress + "%");
+  $("label" + bar_id).html(progress_data.text);
+
+  if (error !== null) {
+    $progress_bar.addClass("bg-danger");
+  }
+
+  if (progress_data.progress == 100) {
+    $progress_bar.removeClass("progress-bar-striped progress-bar-animated");
+    return;
+  }
+
+  $progress_bar.addClass("progress-bar-striped progress-bar-animated");
+}
+
+function update_tasks(progress_data) {
   Object.entries(progress_data).forEach(entry=>{
-    const [id, bar_data] = entry;
-    const bar_id = "#" + id;
-    if ("text" in bar_data) {
-      progress_text = bar_data.progress + "% - " + bar_data.text;
-    } else {
-      progress_text = bar_data.progress + "%";
+    const [task_id, task_data] = entry;
+    const $img_task_id = $("img#" + task_id);
+    const $i_task_id = $("i#" + task_id);
+    const $span_task_id = $("span#" + task_id);
+
+    progress_text = task_data.progress + "% - " + task_data.text;
+    $span_task_id.html(progress_text);
+
+    if (!task_data.success) {
+      $img_task_id.hide();
+      $i_task_id
+        .show()
+        .html("close")
+        .addClass("red");
+      return;
     }
-    $(bar_id).css("width", bar_data.progress + "%");
-    $(bar_id).find("span").html(progress_text);
-    if (bar_data.success) {
-      if (bar_data.progress < 100) {
-        $(bar_id).addClass("progress-bar-striped progress-bar-animated");
-      } else {
-        $(bar_id).removeClass("progress-bar-striped progress-bar-animated");
-      }
-    } else {
-      $(bar_id).removeClass("progress-bar-striped progress-bar-animated");
-      $(bar_id).addClass("bg-danger");
+
+    if (task_data.progress < 100) {
+      $img_task_id.show();
+      $i_task_id.hide();
+      return;
     }
+
+    $img_task_id.hide();
+    $i_task_id
+      .show()
+      .html("check")
+      .addClass("green");
   });
 }
 
@@ -92,7 +122,13 @@ function fetch_output(finished, intervalId) {
       }
       // update progress bar
       if ("progress" in data) {
-        update_progress_bar(data.progress)
+        if ("total_progress" in data.progress) {
+          update_progress_bar(
+              data.progress.total_progress, data.error)
+        }
+        if ("tasks_progress" in data.progress) {
+          update_tasks(data.progress.tasks_progress)
+        }
       }
     },
     error: function(data) {

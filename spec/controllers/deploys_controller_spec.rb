@@ -17,6 +17,9 @@ RSpec.describe DeploysController, type: :controller do
 
     before do
       allow(terra).to receive(:new).and_return(instance_terra)
+      allow_any_instance_of(Provisioners).to(
+        receive(:find_provisioners).and_return([1, 2, 3])
+      )
     end
 
     it 'deploys a plan successfully' do
@@ -32,6 +35,8 @@ RSpec.describe DeploysController, type: :controller do
       get :update, format: :json
 
       expect(KeyValue.get(:planned_resources_count)).to eq(3)
+      expect(KeyValue.get(:total_steps)).to eq(4)
+      expect(KeyValue.get(:completed_steps)).to eq(0)
       expect(instance_terra).to(
         have_received(:apply)
           .with(
@@ -166,7 +171,7 @@ RSpec.describe DeploysController, type: :controller do
       progress = example.send(:update_terraform_progress, deploy_output, nil)
 
       expect(progress).to eq(
-        'infra-bar' => {
+        'infra-task' => {
           progress: 50,
           text:     'Creating resources...',
           success:  true
@@ -174,21 +179,12 @@ RSpec.describe DeploysController, type: :controller do
       )
     end
 
-    it 'updates the terraform progress blank content' do
-      KeyValue.set(:planned_resources_count, 10)
-      progress = example.send(:update_terraform_progress, '', nil)
-      expect(progress).to eq({})
-
-      progress = example.send(:update_terraform_progress, nil, nil)
-      expect(progress).to eq({})
-    end
-
     it 'updates the terraform progress with failed' do
       KeyValue.set(:planned_resources_count, 5)
       progress = example.send(:update_terraform_progress, deploy_output, 'error')
 
       expect(progress).to eq(
-        'infra-bar' => {
+        'infra-task' => {
           progress: 100,
           text:     'Failed',
           success:  false
@@ -201,7 +197,7 @@ RSpec.describe DeploysController, type: :controller do
       progress = example.send(:update_terraform_progress, deploy_output, nil)
 
       expect(progress).to eq(
-        'infra-bar' => {
+        'infra-task' => {
           progress: 100,
           text:     'Finished',
           success:  true
@@ -214,7 +210,7 @@ RSpec.describe DeploysController, type: :controller do
       progress = example.send(:update_terraform_progress, deploy_output, nil)
 
       expect(progress).to eq(
-        'infra-bar' => {
+        'infra-task' => {
           progress: 100,
           text:     'Finished',
           success:  true
@@ -265,46 +261,56 @@ RSpec.describe DeploysController, type: :controller do
   end
 
   context 'when updating the provisioners progress' do
-    it 'updates the provisioner progress - not started' do
+    before do
       KeyValue.set(:provisioners, ['hana_provision_0'])
-      KeyValue.set(:hana_provision_0, :not_started)
       KeyValue.set(:planned_resources_count, 10)
+      KeyValue.set(:completed_steps, 1)
+      KeyValue.set(:total_steps, 5)
+    end
+
+    it 'updates the provisioner progress - terraform error' do
+      KeyValue.set(:hana_provision_0, :not_started)
+      progress = example.send(
+        :update_progress, 'data', 'error'
+      )
+
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(nil)
+      expect(progress['total_progress']).to eq(
+        progress: 20,
+        text:     'Failed'
+      )
+    end
+
+    it 'updates the provisioner progress - not started' do
+      KeyValue.set(:hana_provision_0, :not_started)
       progress = example.send(
         :update_progress, 'data', nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
-        progress: 0,
-        text:     'Not started',
-        success:  true
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(nil)
+      expect(progress['total_progress']).to eq(
+        progress: 20,
+        text:     'Installation in progress...'
       )
     end
 
     it 'updates the provisioner progress - initializing' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :not_started)
-      KeyValue.set(:planned_resources_count, 10)
       progress = example.send(
         :update_progress, provisioning_deploy_output, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
-        progress: 0,
-        text:     'Initializing machine...',
-        success:  true
-      )
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(nil)
     end
 
     it 'updates the provisioner progress - still initializing' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :initializing)
-      KeyValue.set(:planned_resources_count, 10)
       data = provisioning_deploy_output.gsub('Configuring operative', '')
       progress = example.send(
         :update_progress, data, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 0,
         text:     'Initializing machine...',
         success:  true
@@ -312,14 +318,12 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'updates the provisioner progress - start configuring os' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :initializing)
-      KeyValue.set(:planned_resources_count, 10)
       progress = example.send(
         :update_progress, provisioning_deploy_output, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 0,
         text:     'Configuring operative system...',
         success:  true
@@ -327,14 +331,12 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'updates the provisioner progress - finished configuring os' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :configuring_os)
-      KeyValue.set(:planned_resources_count, 10)
       progress = example.send(
         :update_progress, provisioning_deploy_output, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 60,
         text:     'Provisioning machine...',
         success:  true
@@ -342,15 +344,13 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'updates the provisioner progress - start provisioning' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :configuring_os)
-      KeyValue.set(:planned_resources_count, 10)
       data = provisioning_deploy_output.gsub('Provisioning system', '')
       progress = example.send(
         :update_progress, data, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 5,
         text:     'Configuring operative system...',
         success:  true
@@ -358,14 +358,12 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'updates the provisioner progress - provisioning' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :provisioning)
-      KeyValue.set(:planned_resources_count, 10)
       progress = example.send(
         :update_progress, provisioning_deploy_output, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 60,
         text:     'Provisioning machine...',
         success:  true
@@ -373,15 +371,13 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'updates the provisioner progress - failed' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :provisioning)
-      KeyValue.set(:planned_resources_count, 10)
       data = "#{provisioning_deploy_output}.hana_provision.provision[0] (remote-exec): Error::Deployment failed"
       progress = example.send(
         :update_progress, data, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 60,
         text:     'Failed',
         success:  false
@@ -389,30 +385,31 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'updates the provisioner progress - completed' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
-      KeyValue.set(:hana_provision_0, :not_started)
-      KeyValue.set(:planned_resources_count, 10)
+      KeyValue.set(:hana_provision_0, :provisioning)
+      KeyValue.set(:completed_steps, 4)
       data = "#{provisioning_deploy_output}.hana_provision.provision[0] (remote-exec): Creation complete after"
       progress = example.send(
         :update_progress, data, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(
         progress: 100,
         text:     'Finished',
         success:  true
       )
+      expect(progress['total_progress']).to eq(
+        progress: 100,
+        text:     'Finished'
+      )
     end
 
     it 'updates the provisioner progress - already done' do
-      KeyValue.set(:provisioners, ['hana_provision_0'])
       KeyValue.set(:hana_provision_0, :finished)
-      KeyValue.set(:planned_resources_count, 10)
       progress = example.send(
         :update_progress, provisioning_deploy_output, nil
       )
 
-      expect(progress['hana_provision_0']).to eq(nil)
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(nil)
     end
   end
 end
