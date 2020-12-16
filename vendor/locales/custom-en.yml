@@ -112,7 +112,9 @@ en:
     Your SAP environment has been created successfully.
     You can find the created resources <a href="%{resource_group_url}" target="_blank">clicking here</a>.
 
-    Now, you can continue using the SAP console to monitor and tune the created machines using the top menu.
+    Now, you can continue using the SAP console to **monitor** and **tune** the created machines using the top menu.
+
+    Besides that, you can download the files created during the deployment. Check for more options in the **resources** tab.
 
   resources_content: |
 
