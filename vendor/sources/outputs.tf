@@ -6,16 +6,29 @@ output "bastion_ip" {
   value = module.bluehorizon.bastion_public_ip
 }
 
+output "monitoring_ip" {
+  value = module.bluehorizon.monitoring_ip
+}
+
+output "iscsi_ip" {
+  value = module.bluehorizon.iscsi_srv_ip
+}
+
 output "hana_ips" {
   value = join(",", module.bluehorizon.cluster_nodes_ip)
 }
+
+output "hana_ip" {
+  value = module.bluehorizon.hana_ip
+}
+
 
 output "ssh_authorized_key_file" {
   value = var.ssh_authorized_key_file
 }
 
-output "hana_ip" {
-  value = module.bluehorizon.hana_ip
+output "hana_ha_enabled" {
+  value = var.hana_ha_enabled
 }
 
 output "sid" {

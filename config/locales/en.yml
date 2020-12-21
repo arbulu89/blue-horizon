@@ -74,6 +74,7 @@ en:
     tuning: "Tuning"
     grafana: "Grafana"
     azure_portal_url: "Azure portal"
+    resources: "Resources"
 
   menu:
     deploy: "Deploy"
@@ -96,6 +97,8 @@ en:
     download_plan: "Get the current plan"
     attached: "File attached"
     loading: "Loading..."
+    copy: "Copy to clipboard"
+    copied: "Copied!"
 
   page_title:
     cluster: "SAP System size"
@@ -103,6 +106,7 @@ en:
     deploy: "Deploy your cluster"
     wrapup: "Next steps after deployment"
     source: "Working directly with deployment source scripts"
+    resources: "Additional resources"
 
   page_subtitle:
     hana_ha_info: |
@@ -117,7 +121,8 @@ en:
       In this step you can apply your plan. This may take some time. The *terraform* log will display below as it is generated.
     wrapup_info: |
       Your application has been deployed, here's how to use it.
-      [Download](/download) your results and follow the instructions below.
+    resources_info: |
+      Find here additional resources to use the project. [Download](/download) your results and follow the instructions below.
 
   content:
     explain_duplicate_session: |
@@ -156,3 +161,15 @@ en:
       provisioning: "Provisioning machine..."
       failed: "Failed"
       finished: "Finished"
+
+  resources:
+    ssh:
+      summary: Accessing the machines through SSH
+      info: |
+        The created machines can be accessed using SSH using the next commands.
+        **The used SSH key must be replaced by an absolute path**.
+      bastion: Bastion server
+      monitoring: Monitoring server
+      iscsi: iSCSI server
+      hana_0: First HANA node
+      hana_1: Second HANA node

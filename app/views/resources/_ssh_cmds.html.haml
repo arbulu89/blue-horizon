@@ -1,0 +1,10 @@
+%h3= t('resources.ssh.summary')
+%p= markdown(t('resources.ssh.info'))
+%dl
+  = render('ssh_cmd_block', id: 'bastion', outputs: @outputs, output_name: :bastion_ip, index: 0)
+  = render('ssh_cmd_block', id: 'monitoring', outputs: @outputs, output_name: :monitoring_ip, index: 0)
+  - if ha_enabled?(@outputs)
+    = render('ssh_cmd_block', id: 'iscsi', outputs: @outputs, output_name: :iscsi_ip, index: 0)
+  = render('ssh_cmd_block', id: 'hana_0', outputs: @outputs, output_name: :hana_ips, index: 0)
+  - if ha_enabled?(@outputs)
+    = render('ssh_cmd_block', id: 'hana_1', outputs: @outputs, output_name: :hana_ips, index: 1)

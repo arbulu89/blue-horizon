@@ -11,7 +11,7 @@
         %li.menu-collapsed-title=t("console_sidebar.#{text}") % @outputs
         - value.each_pair do |subkey, subvalue|
           %li
-            = link_to dashboard_path(subkey), id: subkey, class: "menu-title js-select-current" do
+            = link_to get_url(subkey), id: subkey, class: "menu-title js-select-current" do
               %i.eos-icons label
               = t("console_sidebar.#{subkey}") % @outputs
 
@@ -19,6 +19,6 @@
     %li.menu-item
       %div.menu-element
         %span.main-collapsed-title= t("console_sidebar.#{text}")
-      = link_to dashboard_path(key), id: key, class: "menu-title js-select-current" do
+      = link_to get_url(key), id: key, class: "menu-title js-select-current" do
         %i.eos-icons label
         %span.menu-title-content= t("console_sidebar.#{text}") % @outputs

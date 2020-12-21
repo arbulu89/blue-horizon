@@ -18,6 +18,7 @@ en:
   menu:
     monitor: Monitoring
     tuning: Tuning
+    resources: Resources
   # Brief tag line shown below the title
   lead: "Deploy your SAP Landscapes using SLES4SAP in Azure"
   # Long-form description of the application
@@ -111,6 +112,39 @@ en:
     Your SAP environment has been created successfully.
     You can find the created resources <a href="%{resource_group_url}" target="_blank">clicking here</a>.
 
-    Now, you can continue using the SAP console to monitor and tune the created machines using the top menu.
+    Now, you can continue using the SAP console to **monitor** and **tune** the created machines using the top menu.
+
+    Besides that, you can download the files created during the deployment. Check for more options in the **resources** tab.
+
+  resources_content: |
+    <h3>Destroying the deployment</h3>
+    <p>Destroy the created deployment following the next steps:<p>
+    <ol>
+    <li><span>Download and install terraform v0.13.4 locally. Find the package <a href="https://releases.hashicorp.com/terraform/0.13.4/terraform_0.13.4_linux_amd64.zip" target="_blank">here</a></span></li>
+    <li><span>Download and extract the archive provided at the top of this page</span></li>
+    <li><span>Access to the extracted folder</span></li>
+    <li><span>Destroy the resources running the next commands:</span></li>
+    <ul>
+    <li><code>terraform init</code></li>
+    <li><code>terraform destroy -auto-approve</code></li>
+    </ul>
+    </ol>
+    </details>
+    </p class="clearfix">
+    <hr>
+    <h3>Automating the deployment</h3>
+    <p>The deployment performed using this tool can be automated to add it to any other process. Follow the next steps for that:<p>
+    <ol>
+    <li><span>Download and install terraform v0.13.4 locally. Find the package <a href="https://releases.hashicorp.com/terraform/0.13.4/terraform_0.13.4_linux_amd64.zip" target="_blank">here</a></span></li>
+    <li><span>Download and extract the archive provided at the top of this page</span></li>
+    <li><span>Access to the extracted folder</span></li>
+    <li><span>Update the desired parameters in the <i>terraform.tfvars.json</i> file (<b>Remember that the deployment name must be unique</b>)</span></li>
+    <li><span>Remove the <i>terraform.tfstate</i> file to reset to a new deployment</span></li>
+    <li><span>Execute the deployment running the next commands:</span></li>
+    <ul>
+    <li><code>terraform init</code></li>
+    <li><code>terraform apply -auto-approve</code></li>
+    </ul>
+    </ol>
 
   footer: "© 2019-2020 SUSE, all rights reserved."

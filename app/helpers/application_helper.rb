@@ -87,9 +87,27 @@ module ApplicationHelper
     ''
   end
 
+  def get_url(request_id)
+    case controller_name
+    when 'dashboards'
+      dashboard_path(request_id)
+    when 'resources'
+      resources_path
+    end
+  end
+
+  def get_url_from_menu(request_id, menu_item)
+    case controller_name
+    when 'dashboards'
+      get_dashboard_url(request_id, menu_item).present? if request_id
+    when 'resources'
+      '/resources' if menu_item['key'] == 'resources'
+    end
+  end
+
   def top_menu_item_class(menu_item, request_id, format_values)
     (url = menu_item['url'] % format_values) if format_values
-    (selected = get_dashboard_url(request_id, menu_item).present?) if request_id
+    selected = get_url_from_menu(request_id, menu_item)
     "submenu-item#{' disabled' unless url}#{' selected' if selected}"
   end
 
@@ -107,5 +125,13 @@ module ApplicationHelper
       )
     end
     tags.join.html_safe
+  end
+
+  def container_type
+    if ['dashboards'].include? controller_name
+      'grafana-container'
+    else
+      'container'
+    end
   end
 end

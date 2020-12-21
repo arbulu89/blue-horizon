@@ -1,0 +1,11 @@
+%div.card
+  %h3.card-header= t('page_title.resources')
+  %div.card-body
+    %p= markdown(t('page_subtitle.resources_info'))
+    %hr
+    %p.clearfix
+    = render('ssh_cmds')
+    %hr
+    %p.clearfix
+    = markdown(@content, escape_html: false)
+%p.clearfix

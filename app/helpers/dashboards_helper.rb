@@ -3,7 +3,7 @@
 # Helpers used in dashboard vies
 module DashboardsHelper
   def using_console?
-    controller_name == 'dashboards'
+    ['dashboards', 'resources'].include? controller_name
   end
 
   def first_item
@@ -15,7 +15,7 @@ module DashboardsHelper
       next if menu_item['sidebar'].blank?
 
       sidebar = menu_item['sidebar']
-      return sidebar if get_dashboard_url(request_id, menu_item).present?
+      return sidebar if get_url_from_menu(request_id, menu_item).present?
     end
     return OpenStruct.new
   end

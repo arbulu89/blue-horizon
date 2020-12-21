@@ -79,3 +79,25 @@ i.red {
     cursor: pointer;
     display: inline-block;
 }
+
+div.ssh-command {
+  background-color: #FAFBFC; // $eos-bc-gray-50;
+  border: 1px solid #E0DFDF; // $eos-bc-gray-100;
+  border-radius: 5px;
+  margin-bottom: 10px;
+
+  input {
+    padding-left: 10px;
+    border-bottom: 0px !important;
+    background-color: #FAFBFC !important;
+    border-right: 1px solid #E0DFDF;
+    border-radius: 5px;
+  }
+
+  i {
+    cursor: pointer;
+    padding-top: 10px;
+    padding-left: 12px;
+    padding-right: 15px;
+  }
+}
