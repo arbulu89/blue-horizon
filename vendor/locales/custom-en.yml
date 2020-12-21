@@ -117,9 +117,7 @@ en:
     Besides that, you can download the files created during the deployment. Check for more options in the **resources** tab.
 
   resources_content: |
-
-    <details>
-    <summary class="welcome">Destroying the deployment</summary>
+    <h3>Destroying the deployment</h3>
     <p>Destroy the created deployment following the next steps:<p>
     <ol>
     <li><span>Download and install terraform v0.13.4 locally. Find the package <a href="https://releases.hashicorp.com/terraform/0.13.4/terraform_0.13.4_linux_amd64.zip" target="_blank">here</a></span></li>
@@ -133,8 +131,8 @@ en:
     </ol>
     </details>
     </p class="clearfix">
-    <details>
-    <summary class="welcome">Automating the deployment</summary>
+    <hr>
+    <h3>Automating the deployment</h3>
     <p>The deployment performed using this tool can be automated to add it to any other process. Follow the next steps for that:<p>
     <ol>
     <li><span>Download and install terraform v0.13.4 locally. Find the package <a href="https://releases.hashicorp.com/terraform/0.13.4/terraform_0.13.4_linux_amd64.zip" target="_blank">here</a></span></li>
@@ -148,6 +146,5 @@ en:
     <li><code>terraform apply -auto-approve</code></li>
     </ul>
     </ol>
-    </details>
 
   footer: "© 2019-2020 SUSE, all rights reserved."
