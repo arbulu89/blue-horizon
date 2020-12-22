@@ -85,6 +85,8 @@ BuildRequires:  %{rubygem tilt}
 BuildRequires:  %{rubygem tzinfo}
 BuildRequires:  %{rubygem websocket-driver}
 BuildRequires:  %{rubygem websocket-extensions}
+BuildRequires:  %{rubygem uglifier}
+BuildRequires:  nodejs14
 Requires:  %{ruby}
 Requires: %{rubygem bundler}
 Requires:  %{rubygem actioncable}
@@ -145,6 +147,8 @@ Requires:  %{rubygem tilt}
 Requires:  %{rubygem tzinfo}
 Requires:  %{rubygem websocket-driver}
 Requires:  %{rubygem websocket-extensions}
+Requires:  %{rubygem uglifier}
+Requires:  nodejs14
 # end generated requirements
 Requires: terraform = 0.13.4
 
