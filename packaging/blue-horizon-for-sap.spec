@@ -159,6 +159,17 @@ BuildArch: noarch
 A customizable web interface for setting variables and executing a predefined
 terraform script in a supported cloud service provider (CSP) environment.
 
+%package deployment
+Summary:        Package with the configuration used in the cloud deployments
+Requires:       %{name}
+Requires:       git
+Requires:       nginx
+Requires:       python3-cloudinstancecredentials
+BuildRequires:  nginx
+
+%description deployment
+This package adds the configuration files to deploy %{name} in the cloud
+
 %prep
 %setup
 
@@ -169,9 +180,18 @@ bundle lock --local
 install -m 0755 -d %{buildroot}/srv/www/%{name}
 cp -r app bin config db lib public config.ru Gemfile* Rakefile vendor %{buildroot}/srv/www/%{name}/
 
+# Install deployment files
+install -D -m 0644 deployment/%{name}-http.conf %{buildroot}/%{_sysconfdir}/nginx/vhosts.d/%{name}-http.conf
+install -D -m 0644 deployment/%{name}.service %{buildroot}/%{_unitdir}/%{name}.service
+
 %files
 %defattr(-,root,root,-)
 %doc README.md LICENSE
 /srv/www/%{name}
+
+%files deployment
+%defattr(-,root,root,-)
+%config %{_sysconfdir}/nginx/vhosts.d/%{name}-http.conf
+%{_unitdir}/%{name}.service
 
 %changelog
