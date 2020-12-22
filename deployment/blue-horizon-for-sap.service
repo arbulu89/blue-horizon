@@ -1,0 +1,15 @@
+[Unit]
+Description=blue-horizon-for-sap server
+Wants=nginx.service
+
+[Service]
+Type=simple
+User=root
+PrivateTmp=yes
+Environment="LANG=en CLOUD_FRAMEWORK=azure"
+WorkingDirectory=/srv/www/blue-horizon-for-sap
+ExecStart=/srv/www/blue-horizon-for-sap/bin/rails server -e production -b 127.0.0.1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

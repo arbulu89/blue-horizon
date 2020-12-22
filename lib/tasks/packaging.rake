@@ -52,7 +52,8 @@ namespace :obs do
       'lib',
       'public',
       'Rakefile',
-      'vendor'
+      'vendor',
+      'deployment'
     ]
     docs = ['LICENSE', 'README.md']
     db_setup = ['db/schema.rb', 'db/seeds.rb']
