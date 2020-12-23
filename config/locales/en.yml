@@ -75,18 +75,22 @@ en:
     grafana: "Grafana"
     azure_portal_url: "Azure portal"
     resources: "Resources"
+    home: "Home"
 
   menu:
     deploy: "Deploy"
     monitor: "Monitor"
     maintain: "Maintain"
     tune: "Tune"
+    home: "Home"
 
   flash:
     export_failure: "One or more sources or variables failed to export!"
     unauthorized: "Sorry, you can't do that, yet."
     terraform_is_running: "You cannot make any changes while terraform is running."
     invalid_variables: "Variable definitions are invalid! Please check the deployment scripts."
+    deployment_finished: "The deployment has already been executed. It cannot be repeated."
+    console_not_ready: "The console is not ready yet. The deployment must be completed first."
 
   tooltips:
     prior_step: "Go back without saving changes"
@@ -104,7 +108,7 @@ en:
     cluster: "SAP System size"
     plan: "Plan your deployment"
     deploy: "Deploy your cluster"
-    wrapup: "Next steps after deployment"
+    wrapup: "Welcome to your SAP console!"
     source: "Working directly with deployment source scripts"
     resources: "Additional resources"
 

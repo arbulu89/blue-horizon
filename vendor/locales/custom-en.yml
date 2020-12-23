@@ -108,7 +108,6 @@ en:
   # Long-form description of steps to take after deployment
   # Markdown syntax is accepted - see https://daringfireball.net/projects/markdown/syntax
   next_steps: |
-    # Welcome to your SAP console!
     Your SAP environment has been created successfully.
     You can find the created resources <a href="%{resource_group_url}" target="_blank">clicking here</a>.
 

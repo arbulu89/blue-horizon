@@ -2,10 +2,6 @@
 
 # Helpers used in dashboard vies
 module DashboardsHelper
-  def using_console?
-    ['dashboards', 'resources'].include? controller_name
-  end
-
   def first_item
     Rails.configuration.x.top_menu_items[0][:sidebar].to_h.keys[0]
   end

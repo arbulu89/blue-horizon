@@ -9,7 +9,6 @@ Rails.application.configure do
     variables: 'playlist_add',
     plan:      'organization',
     deploy:    'play_arrow',
-    wrapup:    'enhancement',
     download:  'archive'
   }
 
@@ -19,8 +18,7 @@ Rails.application.configure do
     :cluster,
     :variables,
     :plan,
-    :deploy,
-    :wrapup
+    :deploy
   ]
 
   config.x.external_instance_types_link = {

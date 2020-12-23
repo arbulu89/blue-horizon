@@ -2,6 +2,10 @@
 
 # General view helpers
 module ApplicationHelper
+  def using_console?
+    ['dashboards', 'resources', 'wrapup', 'download'].include? controller_name
+  end
+
   def sidebar_menu_items
     Rails.configuration.x.menu_items
   end
@@ -93,6 +97,8 @@ module ApplicationHelper
       dashboard_path(request_id)
     when 'resources'
       resources_path
+    when 'wrapup'
+      wrapup_path
     end
   end
 
@@ -102,6 +108,8 @@ module ApplicationHelper
       get_dashboard_url(request_id, menu_item).present? if request_id
     when 'resources'
       '/resources' if menu_item['key'] == 'resources'
+    when 'wrapup'
+      '/wrapup' if menu_item['key'] == 'home'
     end
   end
 

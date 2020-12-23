@@ -48,6 +48,7 @@ class DeploysController < ApplicationController
     end
 
     if success
+      KeyValue.set(:deployment_finished, true)
       write_output(content, success)
       set_default_logger_config
     end

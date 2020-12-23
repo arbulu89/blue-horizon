@@ -12,9 +12,14 @@ module AuthorizationHelper
   end
 
   def check_and_alert(path)
-    session_check_flash(path) &&
-      terraform_action_check_flash(path) &&
-      flow_restriction_checks_flash(path)
+    if deployment_finished_checks
+      deployment_finished_checks_flash
+    else
+      deployment_pending_checks_flash &&
+        session_check_flash(path) &&
+        terraform_action_check_flash(path) &&
+        flow_restriction_checks_flash(path)
+    end
   end
 
   def active_session?
@@ -36,6 +41,10 @@ module AuthorizationHelper
   def set_session!
     KeyValue.set(:active_session_id, session[:session_id])
     KeyValue.set(:active_session_ip, request.remote_ip)
+  end
+
+  def deployment_finished_checks
+    KeyValue.get(:deployment_finished)
   end
 
   private
@@ -89,6 +98,20 @@ module AuthorizationHelper
     return true if flow_restriction_checks(path)
 
     flash[:error] = t('flash.unauthorized')
+    false
+  end
+
+  def deployment_pending_checks_flash
+    return true unless using_console?
+
+    flash[:error] = t('flash.console_not_ready')
+    false
+  end
+
+  def deployment_finished_checks_flash
+    return true if using_console?
+
+    flash[:error] = t('flash.deployment_finished')
     false
   end
 
