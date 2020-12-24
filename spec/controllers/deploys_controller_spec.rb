@@ -372,7 +372,7 @@ RSpec.describe DeploysController, type: :controller do
 
     it 'updates the provisioner progress - failed' do
       KeyValue.set(:hana_provision_0, :provisioning)
-      data = "#{provisioning_deploy_output}.hana_provision.provision[0] (remote-exec): Error::Deployment failed"
+      data = "#{provisioning_deploy_output}.hana_provision.provision[0] (remote-exec): Failed:  3\n--------"
       progress = example.send(
         :update_progress, data, nil
       )
