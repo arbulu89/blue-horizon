@@ -34,7 +34,7 @@ $(function() {
     });
 });
 
-function update_progress_bar(progress_data, error) {
+function update_progress_bar(progress_data, error, finished) {
   const bar_id = "#progress-bar";
   const $progress_bar = $("div" + bar_id);
 
@@ -47,7 +47,7 @@ function update_progress_bar(progress_data, error) {
     $progress_bar.addClass("bg-danger");
   }
 
-  if (progress_data.progress == 100) {
+  if (finished) {
     $progress_bar.removeClass("progress-bar-striped progress-bar-animated");
     return;
   }
@@ -55,7 +55,7 @@ function update_progress_bar(progress_data, error) {
   $progress_bar.addClass("progress-bar-striped progress-bar-animated");
 }
 
-function update_tasks(progress_data) {
+function update_tasks(progress_data, finished) {
   Object.entries(progress_data).forEach(entry=>{
     const [task_id, task_data] = entry;
     const $img_task_id = $("img#" + task_id);
@@ -65,7 +65,7 @@ function update_tasks(progress_data) {
     progress_text = task_data.progress + "% - " + task_data.text;
     $span_task_id.html(progress_text);
 
-    if (!task_data.success) {
+    if (!task_data.success || (task_data.progress < 100 && finished)) {
       $img_task_id.hide();
       $i_task_id
         .show()
@@ -88,6 +88,18 @@ function update_tasks(progress_data) {
   });
 }
 
+function update_progress(data, finished) {
+  if ("progress" in data) {
+    if ("total_progress" in data.progress) {
+      update_progress_bar(
+          data.progress.total_progress, data.error, finished)
+    }
+    if ("tasks_progress" in data.progress) {
+      update_tasks(data.progress.tasks_progress, finished)
+    }
+  }
+}
+
 function fetch_output(finished, intervalId) {
   $.ajax({
     type: "GET",
@@ -104,6 +116,7 @@ function fetch_output(finished, intervalId) {
         clearTimeout(intervalId);
         $(".steps-container .btn.disabled").removeClass("disabled");
         $("#loading").hide();
+        finished = true;
       } else {
         // update scrollable
         $(".pre-scrollable").html(data.new_html);
@@ -118,18 +131,10 @@ function fetch_output(finished, intervalId) {
         } else {
           $(".steps-container .btn.disabled").removeClass("disabled");
           $("#loading").hide();
+          finished = true;
         }
       }
-      // update progress bar
-      if ("progress" in data) {
-        if ("total_progress" in data.progress) {
-          update_progress_bar(
-              data.progress.total_progress, data.error)
-        }
-        if ("tasks_progress" in data.progress) {
-          update_tasks(data.progress.tasks_progress)
-        }
-      }
+      update_progress(data, finished);
     },
     error: function(data) {
       var endIndex = data.responseText.indexOf("#");
@@ -138,6 +143,7 @@ function fetch_output(finished, intervalId) {
       $("#flash").show();
       $(".steps-container .btn.disabled").removeClass("disabled");
       $("#loading").hide();
+      update_progress(data, true);
     }
   });
 
