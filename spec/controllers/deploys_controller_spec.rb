@@ -410,6 +410,13 @@ RSpec.describe DeploysController, type: :controller do
       )
 
       expect(progress['tasks_progress']['hana_provision_0']).to eq(nil)
+
+      KeyValue.set(:hana_provision_0, :failed)
+      progress = example.send(
+        :update_progress, provisioning_deploy_output, nil
+      )
+
+      expect(progress['tasks_progress']['hana_provision_0']).to eq(nil)
     end
   end
 end
