@@ -33,7 +33,7 @@
     ],
     "provisioning_patterns": {
       "planned_states_count": ".*Total planned states count: (\\d+)$",
-      "deployment_failed": ".*::Deployment failed$",
+      "deployment_failed": ".*Failed:.*[1-9]+\\n.*----",
       "configuring_os": ".*Configuring operative system...$",
       "provisioning": ".*Provisioning system...$"
     }
