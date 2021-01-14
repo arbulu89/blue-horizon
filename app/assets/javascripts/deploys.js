@@ -89,14 +89,15 @@ function update_tasks(progress_data, finished) {
 }
 
 function update_progress(data, finished) {
-  if ("progress" in data) {
-    if ("total_progress" in data.progress) {
-      update_progress_bar(
-          data.progress.total_progress, data.error, finished)
-    }
-    if ("tasks_progress" in data.progress) {
-      update_tasks(data.progress.tasks_progress, finished)
-    }
+  if (!("progress" in data)) {
+    return;
+  }
+  if ("total_progress" in data.progress) {
+    update_progress_bar(
+      data.progress.total_progress, data.error, finished);
+  }
+  if ("tasks_progress" in data.progress) {
+    update_tasks(data.progress.tasks_progress, finished);
   }
 }
 
