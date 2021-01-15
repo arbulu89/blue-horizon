@@ -52,6 +52,13 @@ en:
     <summary class="welcome">Pre-requirements</summary>
 
     <ol>
+    <li><span>Create an Azure Service Principal. This can be done either by using the Azure portal or the <code>az</code> CLI.</span>
+    <ul>
+    <li><span>Follow the instrucions in <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret">this link</a> in order to create the Service Principal using the Azure portal.</span></li>
+    <li><span>Use the <code>az ad sp create-for-rbac</code> command. Find more information <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli">here.</a>The data provided as output from this function will be required in the next steps.</span></li>
+    </ul>
+    <span>Note the SP must have sufficient privileges, the created account must have at least Contributor.
+    </li>
     <li><span>You need to have ssh-keys to be able to access the deployed machines.</span></li>
     <li><p>The SAP software must be available in Azure, in order to be installed by the solution.</p>
 

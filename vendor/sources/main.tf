@@ -1,9 +1,3 @@
-# Configure the Azure Provider
-provider "azurerm" {
-  version = "~> 2.32.0"
-  features {}
-}
-
 locals {
   hana_sizes = {
     demo_sap_hana = {
@@ -169,6 +163,11 @@ module "bluehorizon" {
   hana_archive_file                  = local.hana_archive_file
   storage_account_name               = var.storage_account_name
   storage_account_key                = var.storage_account_key
+  # The next 4 variables are only introduced to enalbe the Service Principal usage
+  subscription_id                    = var.subscription_id
+  client_id                          = var.client_id
+  client_secret                      = var.client_secret
+  tenant_id                          = var.tenant_id
   monitoring_enabled                 = true
   pre_deployment                     = true
   provisioning_log_level             = "info"
