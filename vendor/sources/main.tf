@@ -1,3 +1,7 @@
+provider "tls" {
+  version = "3.0.0"
+}
+
 locals {
   hana_sizes = {
     demo_sap_hana = {
