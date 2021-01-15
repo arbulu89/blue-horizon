@@ -1,7 +1,5 @@
-# Configure the Azure Provider
-provider "azurerm" {
-  version = "~> 2.32.0"
-  features {}
+provider "tls" {
+  version = "3.0.0"
 }
 
 locals {
