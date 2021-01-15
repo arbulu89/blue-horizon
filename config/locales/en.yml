@@ -40,6 +40,7 @@ en:
   password_show: "Show password"
   password_hide: "Hide password"
   autoscroll: "Autoscroll"
+  unsupported: "Unsupported view"
 
   #password key is used to check whether a form field should be of type
   # "password" rather than "text"
@@ -99,6 +100,7 @@ en:
     loading: "Loading..."
     copy: "Copy to clipboard"
     copied: "Copied!"
+    unsupported: "Current view is not under a supported license"
 
   page_title:
     cluster: "SAP System size"

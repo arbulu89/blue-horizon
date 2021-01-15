@@ -17,6 +17,15 @@ module ApplicationHelper
     end.join.html_safe
   end
 
+  def bootstrap_unsupported(request_id=nil)
+    Rails.configuration.x.top_menu_items.collect do |menu_item|
+      if menu_item['key'].to_s == request_id.to_s && menu_item['unsupported'].present?
+        return render('layouts/unsupported').html_safe
+      end
+    end
+    return
+  end
+
   def custom_image_exists?(filename)
     base_path = Rails.root.join('vendor', 'assets', 'images')
     File.exist?(File.join(base_path, "#{filename}.svg"))   ||

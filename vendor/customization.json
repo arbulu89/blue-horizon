@@ -18,6 +18,7 @@
       {
           "key": "tuning",
           "url": "/dashboards/tuning",
+          "unsupported": true,
           "sidebar": {
             "tuning": "http://%{bastion_ip}:3000/d/HzFepKtMz/tuning?orgId=1&kiosk"
           }
