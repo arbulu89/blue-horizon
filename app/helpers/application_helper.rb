@@ -18,9 +18,9 @@ module ApplicationHelper
   end
 
   def bootstrap_unsupported(sidebar_key)
-    if Rails.configuration.x.unsupported_sidebar_items.include?(sidebar_key.to_s)
-      return render('layouts/unsupported').html_safe
-    end
+    return unless Rails.configuration.x.unsupported_sidebar_items.include?(sidebar_key.to_s)
+
+    return render('layouts/unsupported').html_safe
   end
 
   def custom_image_exists?(filename)

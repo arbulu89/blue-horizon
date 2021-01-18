@@ -34,6 +34,7 @@ describe 'dashboards', type: :feature do
       )
 
       Rails.configuration.x.top_menu_items = top_menu_data
+      Rails.configuration.x.unsupported_sidebar_items = ['ha_cluster']
 
       allow_any_instance_of(Terraform).to receive(:outputs).and_return(
         {
@@ -58,6 +59,9 @@ describe 'dashboards', type: :feature do
 
       nav = find('div.mm-navigation-container').find('div.nav-wrap')
       dropdown = nav.find('li.menu-dropdown')
+
+      ha_cluster = nav.find('a#ha_cluster')
+      expect(ha_cluster).to have_content('Beta*')
 
       expect(nav).to have_link('HA cluster', href: ha_cluster_url)
       expect(dropdown).to have_link('PRD', href: main_tenant_url)
