@@ -100,7 +100,7 @@ en:
     loading: "Loading..."
     copy: "Copy to clipboard"
     copied: "Copied!"
-    unsupported: "Current view is not under a supported license. Provided as on-preview mode"
+    unsupported: "Beta features are not covered by SUSE Enterprise Support licenses and are only provided as a technical preview"
 
   page_title:
     cluster: "SAP System size"
