@@ -18,7 +18,6 @@
       {
           "key": "tuning",
           "url": "/dashboards/tuning",
-          "unsupported": true,
           "sidebar": {
             "tuning": "http://%{bastion_ip}:3000/d/HzFepKtMz/tuning?orgId=1&kiosk"
           }
@@ -31,6 +30,9 @@
             "resources": "/resources"
           }
       }
+    ],
+    "unsupported_sidebar_items": [
+      "tuning"
     ],
     "provisioning_patterns": {
       "planned_states_count": ".*Total planned states count: (\\d+)$",
