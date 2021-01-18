@@ -55,10 +55,8 @@
             = top_menu_items(@request_id, @outputs)
           =render('layouts/more_info')
       %div{ class: container_type }
-        = bootstrap_unsupported(@request_id)
         = bootstrap_flash
         = yield
-
     %footer.footer-content.js-footer-content
       %ul.footer-list
         %li.footer-list-item= source_footer
