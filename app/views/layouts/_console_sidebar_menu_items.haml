@@ -14,6 +14,7 @@
             = link_to get_url(subkey), id: subkey, class: "menu-title js-select-current" do
               %i.eos-icons label
               = t("console_sidebar.#{subkey}") % @outputs
+              = bootstrap_unsupported(subkey)
 
   - else
     %li.menu-item
@@ -22,3 +23,4 @@
       = link_to get_url(key), id: key, class: "menu-title js-select-current" do
         %i.eos-icons label
         %span.menu-title-content= t("console_sidebar.#{text}") % @outputs
+        = bootstrap_unsupported(key)

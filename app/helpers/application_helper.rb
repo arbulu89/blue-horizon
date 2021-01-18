@@ -17,6 +17,12 @@ module ApplicationHelper
     end.join.html_safe
   end
 
+  def bootstrap_unsupported(sidebar_key)
+    return unless Rails.configuration.x.unsupported_sidebar_items.include?(sidebar_key.to_s)
+
+    return render('layouts/unsupported').html_safe
+  end
+
   def custom_image_exists?(filename)
     base_path = Rails.root.join('vendor', 'assets', 'images')
     File.exist?(File.join(base_path, "#{filename}.svg"))   ||

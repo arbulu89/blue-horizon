@@ -31,6 +31,9 @@
           }
       }
     ],
+    "unsupported_sidebar_items": [
+      "tuning"
+    ],
     "provisioning_patterns": {
       "planned_states_count": ".*Total planned states count: (\\d+)$",
       "deployment_failed": ".*Failed:.*[1-9]+\\n.*----",

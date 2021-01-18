@@ -40,6 +40,7 @@ en:
   password_show: "Show password"
   password_hide: "Hide password"
   autoscroll: "Autoscroll"
+  unsupported: "Beta*"
 
   #password key is used to check whether a form field should be of type
   # "password" rather than "text"
@@ -99,6 +100,7 @@ en:
     loading: "Loading..."
     copy: "Copy to clipboard"
     copied: "Copied!"
+    unsupported: "Beta features are not covered by SUSE Enterprise Support licenses and are only provided as a technical preview"
 
   page_title:
     cluster: "SAP System size"
