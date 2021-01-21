@@ -28,12 +28,8 @@ module BlueHorizon
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    begin
-      # SQLite databases have used 't' and 'f' to serialize boolean values
-      config.active_record.sqlite3.represent_boolean_as_integer = true
-    rescue NoMethodError
-      # This option is not available on Rails 5.1
-    end
+    # SQLite databases have used 't' and 'f' to serialize boolean values
+    config.active_record.sqlite3.represent_boolean_as_integer = true
 
     # Let sprockets handle fonts in the asset pipeline
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
