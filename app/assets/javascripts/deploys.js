@@ -45,12 +45,10 @@ $(function () {
 });
 
 function update_progress_bar(progress_data, error, finished) {
-  const bar_id = "#progress-bar";
-  const $progress_bar = $("div" + bar_id);
+  var bar_id = "#progress-bar";
+  var $progress_bar = $("div" + bar_id);
 
-  $progress_bar
-    .css("width", progress_data.progress + "%")
-    .find("span").html(progress_data.progress + "%");
+  $progress_bar.css("width", progress_data.progress + "%").find("span").html(progress_data.progress + "%");
   $("label" + bar_id).html(progress_data.text);
 
   if (error !== null) {
@@ -66,21 +64,21 @@ function update_progress_bar(progress_data, error, finished) {
 }
 
 function update_tasks(progress_data, finished) {
-  Object.entries(progress_data).forEach(entry=>{
-    const [task_id, task_data] = entry;
-    const $img_task_id = $("img#" + task_id);
-    const $i_task_id = $("i#" + task_id);
-    const $span_task_id = $("span#" + task_id);
+  Object.entries(progress_data).forEach(function (entry) {
+    var _entry = _slicedToArray(entry, 2),
+        task_id = _entry[0],
+        task_data = _entry[1];
+
+    var $img_task_id = $("img#" + task_id);
+    var $i_task_id = $("i#" + task_id);
+    var $span_task_id = $("span#" + task_id);
 
     progress_text = task_data.progress + "% - " + task_data.text;
     $span_task_id.html(progress_text);
 
     if (!task_data.success || (task_data.progress < 100 && finished)) {
       $img_task_id.hide();
-      $i_task_id
-        .show()
-        .html("close")
-        .addClass("red");
+      $i_task_id.show().html("close").addClass("red");
       return;
     }
 
@@ -91,10 +89,7 @@ function update_tasks(progress_data, finished) {
     }
 
     $img_task_id.hide();
-    $i_task_id
-      .show()
-      .html("check")
-      .addClass("green");
+    $i_task_id.show().html("check").addClass("green");
   });
 }
 
@@ -103,8 +98,7 @@ function update_progress(data, finished) {
     return;
   }
   if ("total_progress" in data.progress) {
-    update_progress_bar(
-      data.progress.total_progress, data.error, finished);
+    update_progress_bar(data.progress.total_progress, data.error, finished);
   }
   if ("tasks_progress" in data.progress) {
     update_tasks(data.progress.tasks_progress, finished);
