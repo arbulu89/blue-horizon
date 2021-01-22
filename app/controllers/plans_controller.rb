@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require 'ruby_terraform'
+require 'storage_account'
 require 'fileutils'
 
 class PlansController < ApplicationController
   include FileUtils
+  include I18n
   before_action :variables
 
   def show
@@ -39,19 +41,10 @@ class PlansController < ApplicationController
     prep
     return unless @exported_vars
 
-    terra = Terraform.new
-    args = {
-      directory: Rails.configuration.x.source_export_dir,
-      plan:      terra.saved_plan_path,
-      no_color:  true,
-      var_file:  Variable.load.export_path
-    }
-    result = terra.plan(args)
-
+    result = sanity_check
     if result.is_a?(Hash)
       @trigger_update = false
       @error = result[:error]
-      File.delete(path_to_file) if File.exist?(terra.saved_plan_path)
       respond_to do |format|
         format.html do
           flash[:error] = result[:error][:message]
@@ -104,5 +97,40 @@ class PlansController < ApplicationController
     cleanup
     read_exported_vars
     read_exported_sources
+  end
+
+  def sanity_check
+    # Check storage account values sanity
+    unless (result = check_storage_account) == true
+      return result
+    end
+
+    # Check terraform plan sanity
+    plan_result = check_terraform_plan
+    return plan_result if plan_result.is_a?(Hash)
+  end
+
+  def check_storage_account
+    attributes = @variables.attributes
+    StorageAccount.new.check_resource(
+      attributes['storage_account_name'],
+      attributes['storage_account_key'],
+      attributes['hana_installation_software_path']
+    )
+  end
+
+  def check_terraform_plan
+    terra = Terraform.new
+    args = {
+      directory: Rails.configuration.x.source_export_dir,
+      plan:      terra.saved_plan_path,
+      no_color:  true,
+      var_file:  Variable.load.export_path
+    }
+    result = terra.plan(args)
+    if result.is_a?(Hash)
+      File.delete(path_to_file) if File.exist?(terra.saved_plan_path)
+    end
+    return result
   end
 end

@@ -41,6 +41,9 @@ en:
   password_hide: "Hide password"
   autoscroll: "Autoscroll"
   unsupported: "Beta*"
+  storage_account_error: |
+    The provided storage account name or key are not valid. Update the <b>Storage account name</b>,
+    <b>Storage account key</b> or <b>Hana installation software path</b> variables.
 
   #password key is used to check whether a form field should be of type
   # "password" rather than "text"
