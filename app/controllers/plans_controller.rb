@@ -101,9 +101,8 @@ class PlansController < ApplicationController
 
   def sanity_check
     # Check storage account values sanity
-    unless (result = check_storage_account) == true
-      return result
-    end
+    storage_result = check_storage_account
+    return storage_result if storage_result.is_a?(Hash)
 
     # Check terraform plan sanity
     plan_result = check_terraform_plan
@@ -128,8 +127,8 @@ class PlansController < ApplicationController
       var_file:  Variable.load.export_path
     }
     result = terra.plan(args)
-    if result.is_a?(Hash)
-      File.delete(path_to_file) if File.exist?(terra.saved_plan_path)
+    if result.is_a?(Hash) && File.exist?(terra.saved_plan_path)
+      File.delete(terra.saved_plan_path)
     end
     return result
   end

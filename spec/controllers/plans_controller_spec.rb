@@ -6,7 +6,9 @@ RSpec.describe PlansController, type: :controller do
   let(:json_instance) { JSON }
   let(:ruby_terraform) { RubyTerraform }
   let(:terra) { Terraform }
+  let(:storage) { StorageAccount }
   let(:instance_terra) { instance_double(Terraform) }
+  let(:instance_storage) { instance_double(StorageAccount) }
 
   context 'when preparing terraform' do
     let(:variable_instance) { Variable.new('{}') }
@@ -17,11 +19,13 @@ RSpec.describe PlansController, type: :controller do
 
     before do
       allow(terra).to receive(:new).and_return(instance_terra)
+      allow(storage).to receive(:new).and_return(instance_storage)
     end
 
     it 'sets the configuration' do
       allow(instance_terra).to receive(:saved_plan_path)
-      allow(instance_terra).to receive(:plan).and_return(error: 'error')
+      allow(instance_terra).to receive(:plan).and_return(true)
+      allow(instance_storage).to receive(:check_resource).and_return(true)
       allow(controller.instance_variable_set(:@exported_vars, 'foo'))
       allow(File).to receive(:exist?).and_return(true)
 
@@ -66,15 +70,41 @@ RSpec.describe PlansController, type: :controller do
 
     before do
       allow(terra).to receive(:new).and_return(instance_terra)
+      allow(storage).to receive(:new).and_return(instance_storage)
       allow(instance_terra).to receive(:validate)
       allow(instance_terra).to receive(:saved_plan_path)
-      allow(instance_terra).to receive(:plan).and_return('')
     end
 
     it 'redirects to showing the plan' do
+      allow(instance_terra).to receive(:plan).and_return('')
+      allow(instance_storage).to receive(:check_resource).and_return(true)
+
       put :update
 
       expect(controller).to redirect_to action: :show
+    end
+
+    it 'raises a flash error on storage account check' do
+      allow(instance_storage).to receive(:check_resource).and_return(
+        error: { message: 'error checking storage', output: 'storage error' }
+      )
+
+      put :update
+
+      expect(flash[:error]).to match('error checking storage')
+    end
+
+    it 'raises a terraform plan error' do
+      allow(File).to receive(:delete)
+      allow(instance_storage).to receive(:check_resource).and_return(true)
+      allow(instance_terra).to receive(:plan).and_return(
+        error: { message: 'error terraform plan', output: 'terraform error' }
+      )
+      allow(instance_terra).to receive(:saved_plan_path).and_return('')
+
+      put :update
+
+      expect(flash[:error]).to match('error terraform plan')
     end
   end
 
@@ -85,6 +115,8 @@ RSpec.describe PlansController, type: :controller do
     let(:tfvars_file) { Variable.load.export_path }
 
     before do
+      allow(storage).to receive(:new).and_return(instance_storage)
+      allow(instance_storage).to receive(:check_resource).and_return(true)
       allow(Logger::LogDevice).to receive(:new)
       allow(controller).to receive(:cleanup)
 
