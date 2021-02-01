@@ -73,7 +73,9 @@ module AuthorizationHelper
       return all_variables_are_set?
     when deploy_path
       plan_exists?
-    when wrapup_path, download_path
+    when home_path
+      deployment_finished_checks
+    when download_path
       plan_exists? && apply_log_exists?
     else
       true
