@@ -21,6 +21,31 @@ en:
     resources: Resources
   # Brief tag line shown below the title
   lead: "Deploy your SAP Landscapes using SLES4SAP in Azure"
+
+  page_title:
+    cluster: "SAP System size"
+    plan: "Review and Confirm"
+    deploy: "Deploy your SAP environment"
+    wrapup: "Next steps after deployment"
+    source: "Working directly with deployment source scripts"
+    resources: "Additional resources"
+
+  page_subtitle:
+    hana_ha_info: |
+      High Available clustering and system replication option creates a clustered environment with 2 SAP HANA nodes, providing a resilient landscape that reduces downtime but increases cost.
+    hana_ha_enabled_label: |
+      HA clustering and System Replication
+    cluster_info: |
+      Select the High Availability options and size of the SAP environment.
+    plan_info: |
+      Review the planned deployment based in the configuration selected in the previous page.
+    deploy_info: |
+      Deploy your SAP environment. Keep in mind that SAP installation might take a huge amount of time, so be patient. Click **Apply** button when you are ready to start.
+    wrapup_info: |
+      Your application has been deployed, here's how to use it. [Download](/download) your results and follow the instructions below.
+    resources_info: |
+      Find here additional resources to use the project. [Download](/download) your results and follow the instructions below.
+
   # Long-form description of the application
   # Markdown syntax is accepted - see https://daringfireball.net/projects/markdown/syntax
   #
