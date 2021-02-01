@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'root_constraint'
+
 Rails.application.routes.draw do
-  # Welcome
+  root to: redirect('/home'), constraints: RootConstraint.new
   root to: redirect('/welcome')
+
   get '/welcome', to: 'welcome#index'
   # switch paths
   put '/welcome/reset-session', to: 'welcome#reset_session', as: 'reset_session'
