@@ -23,8 +23,8 @@
     = link_to deploy_path, class: "btn btn-outline-primary", id: "submit-deploy", title: t('tooltips.run'), data: { method: :put, remote: true, toggle: 'tooltip', disable_with: t('running') } do
       %i.eos-icons cloud_upload
       = t('apply')
-    = link_to wrapup_path, class: "btn btn-primary #{'disabled' unless can(wrapup_path)}", data: { toggle: 'tooltip' } do
-      = t('sidebar.wrapup')
+    = link_to home_path, class: "btn btn-primary #{'disabled' unless can(home_path)}", data: { toggle: 'tooltip' } do
+      = t('sidebar.home')
 %p.clearfix
 - content_for :page_javascript do
   = javascript_include_tag 'deploys', defer: true

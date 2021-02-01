@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   resource :deploy do
     get 'send_current_status', on: :member
   end
-  get '/wrapup', to: 'wrapup#index'
+  get '/home', to: 'home#index'
   get '/download', to: 'download#download'
   get '/resources', to: 'resources#index'
 end

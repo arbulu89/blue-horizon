@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WrapupController < ApplicationController
+class HomeController < ApplicationController
   def index
     @outputs = Terraform.new.outputs
     @content = t('next_steps') % @outputs

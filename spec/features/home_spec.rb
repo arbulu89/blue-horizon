@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'wrapup', type: :feature do
+describe 'home', type: :feature do
   let(:mock_template) { 'foo_%{greeting}_bar' }
   let(:expected_output) { 'foo_Hello, World._bar' }
 
@@ -13,7 +13,7 @@ describe 'wrapup', type: :feature do
   end
 
   it 'shows the _next steps_ content rendered in markdown' do
-    visit('/wrapup')
+    visit('/home')
     expect(page).to have_content(expected_output)
   end
 
@@ -48,7 +48,7 @@ describe 'wrapup', type: :feature do
         }
       )
 
-      visit('/wrapup')
+      visit('/home')
     end
 
     after do

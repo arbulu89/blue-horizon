@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     return if helpers.check_and_alert(request.path)
 
     if deployment_finished
-      redirect_to(wrapup_path)
+      redirect_to(home_path)
     else
       redirect_to(welcome_path)
     end

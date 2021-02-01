@@ -6,9 +6,9 @@
     "top_menu_items": [
       {
           "key": "home",
-          "url": "/wrapup",
+          "url": "/home",
           "sidebar": {
-            "home": "/wrapup"
+            "home": "/home"
           }
       },
       {

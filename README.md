@@ -179,7 +179,7 @@ Any custom helper methods required by custom views should be defined as methods 
 
 #### Top menu items
 
-A a group of custom top-menu links can be added to application views. If the links use *terraform* outputs, they will only be enabled on the `/wrapup` (*Next steps*) page. Links may open in the same browser context, or request a new tab/window.
+A a group of custom top-menu links can be added to application views. If the links use *terraform* outputs, they will only be enabled on the `/home` (*Next steps*) page. Links may open in the same browser context, or request a new tab/window.
 
 The following example custom configuration will provide a static link that opens in a new tab, as well as an output-driven link that will only be enabled on *next steps*:
 
