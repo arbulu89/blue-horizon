@@ -126,10 +126,6 @@ class PlansController < ApplicationController
       no_color:  true,
       var_file:  Variable.load.export_path
     }
-    result = terra.plan(args)
-    if result.is_a?(Hash) && File.exist?(terra.saved_plan_path)
-      File.delete(terra.saved_plan_path)
-    end
-    return result
+    terra.plan(args)
   end
 end
