@@ -26,6 +26,22 @@
       "type": "string",
       "description": "Azure storage account access key. Check **Setting up the Storage account** in the initial page for more information<!-- password_key [group:Azure_configuration] -->"
     },
+    "subscription_id": {
+      "type": "string",
+      "description": "Azure subscription ID. Check **Pre-requirements** in the initial page for more information<!-- [group:Azure_configuration] -->"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Azure Service Principal 'appId'. Check **Pre-requirements** in the initial page for more information<!-- [group:Azure_configuration] -->"
+    },
+    "client_secret": {
+      "type": "string",
+      "description": "Azure Service Principal 'password'. Check **Pre-requirements** in the initial page for more information<!-- password_key [group:Azure_configuration] -->"
+    },
+    "tenant_id": {
+      "type": "string",
+      "description": "Azure Service Principal 'tenant'. Check **Pre-requirements** in the initial page for more information<!-- [group:Azure_configuration] -->"
+    },
     "instance_type": {
       "type": "string",
       "default": "sap_hana_demo",

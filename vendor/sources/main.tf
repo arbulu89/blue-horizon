@@ -1,7 +1,15 @@
-# Configure the Azure Provider
 provider "azurerm" {
   version = "~> 2.32.0"
   features {}
+
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
+}
+
+provider "tls" {
+  version = "3.0.0"
 }
 
 locals {
@@ -10,11 +18,11 @@ locals {
       vm_size                       = "Standard_E8s_v3"
       enable_accelerated_networking = false
       data_disks_configuration = {
-        disks_type       = "Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS"
-        disks_size       = "128,128,128,128,128,128,128"
-        caching          = "ReadOnly,ReadOnly,None,None,ReadOnly,ReadOnly,ReadOnly"
-        writeaccelerator = "false,false,false,false,false,false,false"
-        luns             = "0,1#2,3#4#5#6#7"
+        disks_type       = "Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS,Premium_LRS"
+        disks_size       = "128,128,128,128,128,128,128,128"
+        caching          = "ReadOnly,ReadOnly,None,None,ReadOnly,ReadOnly,ReadOnly,ReadOnly"
+        writeaccelerator = "false,false,false,false,false,false,false,false"
+        luns             = "0,1#2,3#4#5#6,7"
         names            = "data#log#shared#usrsap#backup"
         lv_sizes         = "100#100#100#100#100"
         paths            = "/hana/data#/hana/log#/hana/shared#/usr/sap#/hana/backup"
@@ -30,8 +38,8 @@ locals {
         writeaccelerator = "false,false,false,false,false,false"
         luns             = "0,1,2#3#4#5"
         names            = "datalog#shared#usrsap#backup"
-        lv_sizes         = "70,100#100#100#100#100"
-        paths            = "/hana/data#/hana/log#/hana/shared#/usr/sap#/hana/backup"
+        lv_sizes         = "70,100#100#100#100"
+        paths            = "/hana/data,/hana/log#/hana/shared#/usr/sap#/hana/backup"
       }
     }
     medium_sap_hana = {
@@ -43,9 +51,9 @@ locals {
         caching          = "ReadOnly,ReadOnly,ReadOnly,ReadOnly,ReadOnly,None"
         writeaccelerator = "false,false,false,false,false,false"
         luns             = "0,1,2#3#4#5"
-        names            = "data#log#shared#usrsap#backup"
+        names            = "datalog#shared#usrsap#backup"
         lv_sizes         = "70,100#100#100#100#100"
-        paths            = "/hana/data#/hana/log#/hana/shared#/usr/sap#/hana/backup"
+        paths            = "/hana/data,/hana/log#/hana/shared#/usr/sap#/hana/backup"
       }
     }
     large_sap_hana = {
@@ -169,6 +177,11 @@ module "bluehorizon" {
   hana_archive_file                  = local.hana_archive_file
   storage_account_name               = var.storage_account_name
   storage_account_key                = var.storage_account_key
+  # The next 4 variables are only introduced to enalbe the Service Principal usage
+  subscription_id                    = var.subscription_id
+  client_id                          = var.client_id
+  client_secret                      = var.client_secret
+  tenant_id                          = var.tenant_id
   monitoring_enabled                 = true
   pre_deployment                     = true
   provisioning_log_level             = "info"

@@ -68,6 +68,8 @@ rubocop
 
 Please be sure to include a screenshot with any view or style changes.
 
+**⚠ NOTE:**  ES6 is not currently usable with this application; please write any JS/ES conforming to ES2015.
+
 ## Customization
 
 _blue-horizon_ is pointless, without a set of terraform scripts to work from, and those scripts represent a "target application", which _blue-horizon_ can adapt to support. The `vendor` path is used by default to host content about the target application.
@@ -208,6 +210,14 @@ The `"key"` must match a translation value in the `menu` scope (e.g. `menu.more-
 
 The `"sidebar"` entry is used to create a new sidebar panel when the link in the top menu items are accessed.
 Each of the entries in the sidebar will render a grafana iframe (the iframe url can be composed with variables coming from `terraform output` using the `%{var}` syntax) in the content container. If the entry has other hash, it will create a dropdown menu in this item with the same functionality (only one nested layer is allowed). The names in the sidebar (like `ha_cluster`, `hana_dbs` or `systemdb`) can be customized in the translation configuration file changing the values in `console_sidebar`.
+
+In order to add the `non-supported/beta` badge to any of the sidebar elements use the `unsupported_sidebar_items` item. This list includes all the items that have this badge. The element must match the id of the added sidebar element. The next example adds the badge in the `ha_cluster` sidebar item.
+
+```
+"unsupported_sidebar_items": [
+  "ha_cluster"
+]
+```
 
 ### Provisioning bars
 

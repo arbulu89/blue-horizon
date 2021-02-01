@@ -74,7 +74,7 @@ i.green {
 i.red {
   color: #C5161F; // $eos-bc-red-900
 }
-  
+
 .custom-switch .custom-control-label {
     cursor: pointer;
     display: inline-block;
@@ -100,4 +100,11 @@ div.ssh-command {
     padding-left: 12px;
     padding-right: 15px;
   }
+}
+
+// Unsupported badge styles
+.unsupported {
+  float: right;
+  margin-right: 15px;
+  margin-top: 3px;
 }

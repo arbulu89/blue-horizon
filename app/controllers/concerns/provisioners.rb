@@ -154,7 +154,9 @@ module Provisioners
       text = ''
       # When the provisioner is in finished, failed or not_started, the progress is not sent
       case KeyValue.get(provisioner)
-      when :finished || :failed
+      when :finished
+        next
+      when :failed
         next
       when :not_started
         wait_until_created(provisioner, content)

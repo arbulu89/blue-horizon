@@ -40,6 +40,12 @@ en:
   password_show: "Show password"
   password_hide: "Hide password"
   autoscroll: "Autoscroll"
+  unsupported: "Beta*"
+  ssh_key_error: |
+    The provided authorized ssh key is not valid. Upload a correct ssh public key in <b>SSH authorized key file</b> (with .pub extension usually).
+  storage_account_error: |
+    The provided storage account name or key are not valid. Update the <b>Storage account name</b>,
+    <b>Storage account key</b> or <b>Hana installation software path</b> variables.
 
   #password key is used to check whether a form field should be of type
   # "password" rather than "text"
@@ -103,6 +109,7 @@ en:
     loading: "Loading..."
     copy: "Copy to clipboard"
     copied: "Copied!"
+    unsupported: "Beta features are not covered by SUSE Enterprise Support licenses and are only provided as a technical preview"
 
   page_title:
     cluster: "SAP System size"
