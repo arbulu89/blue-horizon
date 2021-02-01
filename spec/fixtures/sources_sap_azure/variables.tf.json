@@ -1,0 +1,20 @@
+{
+    "variable": {
+        "ssh_authorized_key_file": {
+            "type": "string",
+            "description": "Public ssh key file"
+        },
+        "storage_account_name": {
+            "type": "string",
+            "description": "Storage account name"
+        },
+        "storage_account_key": {
+            "type": "string",
+            "description": "Storage account key"
+        },
+        "hana_installation_software_path": {
+            "type": "string",
+            "description": "HANA installation path"
+        }
+    }
+}

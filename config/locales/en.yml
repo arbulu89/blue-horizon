@@ -41,6 +41,8 @@ en:
   password_hide: "Hide password"
   autoscroll: "Autoscroll"
   unsupported: "Beta*"
+  ssh_key_error: |
+    The provided authorized ssh key is not valid. Upload a correct ssh public key in <b>SSH authorized key file</b> (with .pub extension usually).
   storage_account_error: |
     The provided storage account name or key are not valid. Update the <b>Storage account name</b>,
     <b>Storage account key</b> or <b>Hana installation software path</b> variables.
