@@ -75,8 +75,6 @@ module AuthorizationHelper
       plan_exists?
     when home_path
       deployment_finished_checks
-    when download_path
-      plan_exists? && apply_log_exists?
     else
       true
     end
@@ -138,10 +136,6 @@ module AuthorizationHelper
 
   def plan_exists?
     export_file_exists?('current_plan')
-  end
-
-  def apply_log_exists?
-    export_file_exists? Terraform.statefilename
   end
 
   def terraform_running?

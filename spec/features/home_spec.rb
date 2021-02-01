@@ -5,16 +5,14 @@ require 'rails_helper'
 describe 'home', type: :feature do
   let(:mock_template) { 'foo_%{greeting}_bar' }
   let(:expected_output) { 'foo_Hello, World._bar' }
+  let(:key_value) { KeyValue }
 
   before do
+    allow(key_value).to receive(:get).and_call_original
+    allow(key_value).to receive(:get).with(:deployment_finished).and_return(true)
     terraform_apply(include_mocks: false)
     I18n.backend.store_translations(:en, next_steps: mock_template)
     authorize!
-  end
-
-  it 'shows the _next steps_ content rendered in markdown' do
-    visit('/home')
-    expect(page).to have_content(expected_output)
   end
 
   context 'with customized top menu items' do
@@ -53,6 +51,11 @@ describe 'home', type: :feature do
 
     after do
       Rails.configuration.x.top_menu_items = nil
+    end
+
+    it 'shows the _next steps_ content rendered in markdown' do
+      visit('/home')
+      expect(page).to have_content(expected_output)
     end
 
     it 'includes custom menu items' do

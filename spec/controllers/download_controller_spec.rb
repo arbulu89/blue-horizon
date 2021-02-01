@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe DownloadController, type: :controller do
   let(:ruby_terraform) { RubyTerraform }
+  let(:key_value) { KeyValue }
   let!(:sources) { populate_sources }
 
   context 'when getting and sending files' do
@@ -17,6 +18,9 @@ RSpec.describe DownloadController, type: :controller do
     end
 
     it 'send zip data' do
+      allow(key_value).to receive(:get).and_call_original
+      allow(key_value).to receive(:get).with(:deployment_finished).and_return(true)
+
       get :download, format: :zip
 
       zip_name = controller.instance_variable_get(:@zip_name)
