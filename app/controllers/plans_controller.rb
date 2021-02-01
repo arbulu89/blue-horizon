@@ -100,6 +100,10 @@ class PlansController < ApplicationController
   end
 
   def sanity_check
+    # Check ssh key sanity
+    ssh_result = check_ssh_pub_key
+    return ssh_result if ssh_result.is_a?(Hash)
+
     # Check storage account values sanity
     storage_result = check_storage_account
     return storage_result if storage_result.is_a?(Hash)
@@ -107,6 +111,28 @@ class PlansController < ApplicationController
     # Check terraform plan sanity
     plan_result = check_terraform_plan
     return plan_result if plan_result.is_a?(Hash)
+  end
+
+  def check_ssh_pub_key
+    ssh_pattern = Regexp.new(
+      '^(ssh-rsa AAAAB3NzaC1yc2|ecdsa-sha2-nistp256 '\
+      'AAAAE2VjZHNhLXNoYTItbmlzdHAyNT|ecdsa-sha2-nistp384 '\
+      'AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzOD|ecdsa-sha2-nistp521 '\
+      'AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1Mj|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5|ssh-dss '\
+      'AAAAB3NzaC1kc3)[0-9A-Za-z+/]+[=]{0,3}( .*)?$'
+    )
+    attributes = @variables.attributes
+    ssh_file = Rails.configuration.x.source_export_dir.join(
+      attributes['ssh_authorized_key_file']
+    )
+    return true if ssh_pattern.match(File.read(ssh_file))
+
+    return {
+      error: {
+        message: 'Error checking the authorized ssh public key',
+        output:  I18n.t('ssh_key_error')
+      }
+    }
   end
 
   def check_storage_account

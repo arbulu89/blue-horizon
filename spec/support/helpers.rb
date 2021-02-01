@@ -3,10 +3,12 @@
 require 'ruby_terraform'
 
 module Helpers
-  def populate_sources(auth_plan: false, include_mocks: true)
+  def populate_sources(auth_plan: false, include_mocks: true, use_sap_azure: false)
     sources_dir =
       if auth_plan
         'sources_auth'
+      elsif use_sap_azure
+        'sources_sap_azure'
       else
         'sources'
       end
