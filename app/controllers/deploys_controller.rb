@@ -48,6 +48,7 @@ class DeploysController < ApplicationController
     end
 
     if success
+      KeyValue.set(:deployment_finished, true)
       write_output(content, success)
       set_default_logger_config
     end
@@ -63,6 +64,7 @@ class DeploysController < ApplicationController
   end
 
   def destroy
+    KeyValue.set(:deployment_finished, nil)
     flash.now[:error] = Terraform.new.destroy
     unless flash.now[:error]
       flash.now[:notice] = 'Terraform resources have been destroyed.'

@@ -1,8 +1,6 @@
 %div.card
-  %h3.card-header= t('page_title.wrapup')
+  %h3.card-header= t('page_title.home')
   %div.card-body
-    %p= markdown(t('page_subtitle.wrapup_info'))
-    %hr
     = markdown(@content, escape_html: false)
 
 %p.clearfix

@@ -14,3 +14,4 @@ Metrics/ModuleLength:
   Exclude:
     - "app/controllers/concerns/provisioners.rb"
     - "app/helpers/application_helper.rb"
+    - "app/helpers/authorization_helper.rb"

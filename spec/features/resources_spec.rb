@@ -5,8 +5,11 @@ require 'rails_helper'
 describe 'resources', type: :feature do
   let(:mock_template) { 'foo_%{greeting}_bar' }
   let(:expected_output) { 'foo_Hello, World._bar' }
+  let(:key_value) { KeyValue }
 
   before do
+    allow(key_value).to receive(:get).and_call_original
+    allow(key_value).to receive(:get).with(:deployment_finished).and_return(true)
     I18n.backend.store_translations(:en, resources_content: mock_template)
   end
 

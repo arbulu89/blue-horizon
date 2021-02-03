@@ -68,7 +68,7 @@ en:
     plan: "Plan"
     download_plan: "Download plan"
     deploy: "Deploy"
-    wrapup: "Next steps"
+    home: "Next steps"
     download: "Download"
     simple: "Start setup"
 
@@ -81,18 +81,22 @@ en:
     grafana: "Grafana"
     azure_portal_url: "Azure portal"
     resources: "Resources"
+    home: "Home"
 
   menu:
     deploy: "Deploy"
     monitor: "Monitor"
     maintain: "Maintain"
     tune: "Tune"
+    home: "Home"
 
   flash:
     export_failure: "One or more sources or variables failed to export!"
     unauthorized: "Sorry, you can't do that, yet."
     terraform_is_running: "You cannot make any changes while terraform is running."
     invalid_variables: "Variable definitions are invalid! Please check the deployment scripts."
+    deployment_finished: "The deployment has already been executed. It cannot be repeated."
+    console_not_ready: "The console is not ready yet. The deployment must be completed first."
 
   tooltips:
     prior_step: "Go back without saving changes"
@@ -111,7 +115,7 @@ en:
     cluster: "SAP System size"
     plan: "Plan your deployment"
     deploy: "Deploy your cluster"
-    wrapup: "Next steps after deployment"
+    home: "Welcome to your SAP console!"
     source: "Working directly with deployment source scripts"
     resources: "Additional resources"
 
@@ -126,7 +130,7 @@ en:
       In this step an execution plan is generated. The plan shows what *terraform* will do when you deploy, so you know exactly what to expect.
     deploy_info: |
       In this step you can apply your plan. This may take some time. The *terraform* log will display below as it is generated.
-    wrapup_info: |
+    home_info: |
       Your application has been deployed, here's how to use it.
     resources_info: |
       Find here additional resources to use the project. [Download](/download) your results and follow the instructions below.

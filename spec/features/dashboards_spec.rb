@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe 'dashboards', type: :feature do
+  let(:key_value) { KeyValue }
+
   context 'with customized top menu items' do
     let(:ha_cluster_url) { '/dashboards/ha_cluster' }
     let(:main_tenant_url) { '/dashboards/main_tenant' }
@@ -10,6 +12,8 @@ describe 'dashboards', type: :feature do
     let(:tuning_url) { '/dashboards/tuning' }
 
     before do
+      allow(key_value).to receive(:get).and_call_original
+      allow(key_value).to receive(:get).with(:deployment_finished).and_return(true)
       top_menu_data = JSON.parse([
         {
           key:     'monitor',

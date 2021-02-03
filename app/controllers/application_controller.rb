@@ -6,11 +6,16 @@ class ApplicationController < ActionController::Base
   before_action :authorize, :customize_views
 
   def authorize
+    deployment_finished = helpers.deployment_finished_checks
     active_session = helpers.active_session?
-    @active_session_ip = KeyValue.get(:active_session_ip) unless active_session
+    @active_session_ip = KeyValue.get(:active_session_ip) unless active_session || deployment_finished
     return if helpers.check_and_alert(request.path)
 
-    redirect_to(welcome_path)
+    if deployment_finished
+      redirect_to(home_path)
+    else
+      redirect_to(welcome_path)
+    end
   end
 
   def customize_views

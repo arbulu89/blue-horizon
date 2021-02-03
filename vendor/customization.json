@@ -5,6 +5,13 @@
     "override_views": "true",
     "top_menu_items": [
       {
+          "key": "home",
+          "url": "/home",
+          "sidebar": {
+            "home": "/home"
+          }
+      },
+      {
           "key": "monitor",
           "url": "/dashboards/ha_cluster",
           "sidebar": {
@@ -21,8 +28,7 @@
           "sidebar": {
             "tuning": "http://%{bastion_ip}:3000/d/HzFepKtMz/tuning?orgId=1&kiosk"
           }
-      }
-      ,
+      },
       {
           "key": "resources",
           "url": "/resources",

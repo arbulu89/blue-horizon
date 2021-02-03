@@ -5,9 +5,11 @@ require 'rails_helper'
 describe 'authorization', type: :feature do
   let(:cloud_framework) { 'azure' }
   let(:auth_message) { I18n.t('flash.unauthorized') }
+  let(:console_auth_message) { I18n.t('flash.console_not_ready') }
   let(:terra) { Terraform }
   let(:instance_terra) { instance_double(Terraform) }
   let(:session_lock_message) { I18n.t('non_active_session') }
+  let(:key_value) { KeyValue }
 
   before do
     allow(terra).to receive(:new).and_return(instance_terra)
@@ -36,7 +38,7 @@ describe 'authorization', type: :feature do
     visit '/download'
 
     expect(page).to have_current_path(welcome_path)
-    expect(page).to have_content(auth_message)
+    expect(page).to have_content(console_auth_message)
   end
 
   describe 'after planning' do
@@ -67,12 +69,42 @@ describe 'authorization', type: :feature do
 
     describe 'after deploy' do
       before do
+        allow(key_value).to receive(:get).and_call_original
+        allow(key_value).to receive(:get).with(:deployment_finished).and_return(true)
         File.open(Terraform.statefilename, 'w') {}
       end
 
       it 'allows access to download' do
         visit '/download'
         expect(page).to have_current_path(download_path)
+      end
+
+      it 'allows access to home' do
+        allow(instance_terra).to(
+          receive(:outputs)
+            .and_return(
+              {
+                resource_group_url: 'url'
+              }
+            )
+        )
+
+        visit '/home'
+        expect(page).to have_current_path(home_path)
+      end
+
+      it 'block access to deployment stages' do
+        allow(instance_terra).to(
+          receive(:outputs)
+            .and_return(
+              {
+                resource_group_url: 'url'
+              }
+            )
+        )
+
+        visit '/deploy'
+        expect(page).to have_current_path(home_path)
       end
     end
   end
