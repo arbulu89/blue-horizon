@@ -138,6 +138,10 @@ module AuthorizationHelper
     export_file_exists?('current_plan')
   end
 
+  def deployment_exists?
+    File.exist?(Terraform.statefilename)
+  end
+
   def terraform_running?
     KeyValue.get(:active_terraform_action).present?
   end

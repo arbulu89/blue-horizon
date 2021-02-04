@@ -9,6 +9,7 @@
 Metrics/ClassLength:
   Exclude:
     - "app/services/terraform.rb"
+    - "app/controllers/deploys_controller.rb"
 
 Metrics/ModuleLength:
   Exclude:

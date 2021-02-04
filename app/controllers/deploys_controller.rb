@@ -4,6 +4,10 @@ require 'ruby_terraform'
 
 class DeploysController < ApplicationController
   include Provisioners
+  include I18n
+
+  APPLY_ACTION = 'apply'
+  DESTROY_ACTION = 'destroy'
 
   def show
     @provisioners = find_provisioners
@@ -26,10 +30,13 @@ class DeploysController < ApplicationController
     KeyValue.set(:total_steps, find_provisioners.size + 1)
     KeyValue.set(:completed_steps, 0)
     KeyValue.set(:resource_creation_state, :not_started)
-    terra.apply(@apply_args)
+    KeyValue.set(:deploy_action, APPLY_ACTION)
+    result = terra.apply(@apply_args)
     logger.info('Deploy finished.')
+    show_flash(result)
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def send_current_status
     if Terraform.stderr.is_a?(StringIO) && !Terraform.stderr.string.empty?
       error = Terraform.stderr.string
@@ -39,16 +46,17 @@ class DeploysController < ApplicationController
     elsif Terraform.stdout.is_a?(StringIO)
       @apply_output = Terraform.stdout.string
       content = @apply_output
-      success = content.include? 'Apply complete!'
+      success = content.match(/(Apply complete!|Destroy complete!)/)
     end
 
+    action = KeyValue.get(:deploy_action)
     progress = {}
-    if Terraform.stdout.is_a?(StringIO)
+    if action == APPLY_ACTION && Terraform.stdout.is_a?(StringIO)
       progress = update_progress(Terraform.stdout.string, error)
     end
 
     if success
-      KeyValue.set(:deployment_finished, true)
+      KeyValue.set(:deployment_finished, true) if action == APPLY_ACTION
       write_output(content, success)
       set_default_logger_config
     end
@@ -62,17 +70,44 @@ class DeploysController < ApplicationController
     end
     return
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def destroy
+    logger.info('Calling destroy')
+    KeyValue.set(:deploy_action, DESTROY_ACTION)
     KeyValue.set(:deployment_finished, nil)
-    flash.now[:error] = Terraform.new.destroy
-    unless flash.now[:error]
-      flash.now[:notice] = 'Terraform resources have been destroyed.'
-    end
-    redirect_to action: 'show'
+    result = Terraform.new.destroy
+    cleanup if result.nil?
+    logger.info('Destroy finished')
+    show_flash(result)
   end
 
   private
+
+  def show_flash(result)
+    action = KeyValue.get(:deploy_action)
+    @flash_data = if result.nil?
+      {
+        message: I18n.t("flash.deploy.#{action}_success"),
+        state:   'alert-success'
+      }
+    else
+      {
+        message: I18n.t("flash.deploy.#{action}_error"),
+        state:   'alert-danger'
+      }
+    end
+    respond_to do |format|
+      format.json { result }
+      format.js { render layout: false, action: 'flash' }
+    end
+  end
+
+  def cleanup
+    statefile = Rails.configuration.x.source_export_dir.join(Terraform.statefilename)
+    Rails.logger.debug("cleaning up #{statefile}")
+    File.delete(statefile) if File.exist?(statefile)
+  end
 
   def set_default_logger_config
     RubyTerraform.configuration.stdout = RubyTerraform.configuration.logger

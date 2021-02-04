@@ -13,7 +13,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 $(function () {
   var intervalId = undefined;
   var finished = false;
-  $("#submit-deploy").bind("ajax:beforeSend", function () {
+  $("#submit-deploy,#submit-destroy").bind("ajax:beforeSend", function () {
+    finished = false;
+    // Cannot bring the text messages from the server
+    if (this.id == "submit-deploy") {
+      $("#message").text("Deployment operation started. Find more details in Installation details box");
+    } else if (this.id == "submit-destroy") {
+      $("#message").text("Rollback operation started. Find more details in Installation details box");
+    }
+    $("#flash").show().removeClass('alert-success alert-danger').addClass("alert-info");
     $("#output").text("");
     $(this).addClass("no-hover");
     $(".float-right.steps-container .btn").addClass("disabled");
@@ -41,6 +49,10 @@ $(function () {
   }).bind("ajax:error", function () {
     $("#loading").hide();
     clearTimeout(intervalId);
+  });
+
+  $("#flash .close").click(function () {
+    $("#flash").hide();
   });
 });
 
@@ -114,9 +126,6 @@ function fetch_output(finished, intervalId) {
       if (data.error !== null) {
         $("#loading").hide(); // show rails flash message
 
-        $("#error_message").text("Deploy operation has failed.");
-        $("#flash").show(); // show terraform error message in output section
-
         $("#output").text($("#output").text() + data.error);
         clearTimeout(intervalId);
         $(".steps-container .btn.disabled").removeClass("disabled");
@@ -139,6 +148,7 @@ function fetch_output(finished, intervalId) {
           }, 5000);
         } else {
           $(".steps-container .btn.disabled").removeClass("disabled");
+          $("#submit-destroy").addClass("disabled");
           $(".nav-wrap .menu-item a").removeClass("disabled");
           $("#loading").hide();
           finished = true;
@@ -149,8 +159,6 @@ function fetch_output(finished, intervalId) {
     error: function error(data) {
       var endIndex = data.responseText.indexOf("#");
       if (endIndex == -1) endIndex = data.responseText.indexOf("\n");
-      $("#error_message").text(data.responseText.substring(0, endIndex));
-      $("#flash").show();
       $(".nav-wrap .menu-item a").removeClass("disabled");
       $(".steps-container .btn.disabled").removeClass("disabled");
       $(".steps-container .btn.btn-primary").addClass("disabled");

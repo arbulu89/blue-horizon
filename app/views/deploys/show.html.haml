@@ -1,5 +1,5 @@
-%div#flash.alert.alert-danger.alert-dismissable.fade.show{style: 'display: none;'}
-  %span#error_message
+%div#flash.alert.alert-dismissable.fade.show{style: 'display: none;'}
+  %span#message
   %button.close{ type: 'button' }
     %i.eos-icons close
 %div.card
@@ -14,7 +14,7 @@
       = render 'details'
 %p.clearfix
   %div.float-left.btn-group.steps-container
-    = link_to deploy_path, class: "btn btn-danger disabled", id: "destroy", title: t('tooltips.run'), data: { method: :delete, toggle: 'tooltip', disable_with: t('running') } do
+    = link_to deploy_path, class: "btn btn-danger #{'disabled' unless deployment_exists?}", id: "submit-destroy", title: t('tooltips.rollback'), data: { method: :delete, remote: true, toggle: 'tooltip', disable_with: t('running') } do
       %i.eos-icons cloud_off
       = t('rollback')
   %div.float-right.btn-group.steps-container

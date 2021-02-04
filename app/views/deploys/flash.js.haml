@@ -1,0 +1,7 @@
+:plain
+  $('#flash')
+    .removeClass('alert-success alert-danger alert-info')
+    .addClass("#{@flash_data[:state]}")
+    .show()
+    .find('span')
+    .html("#{@flash_data[:message]}");

@@ -97,6 +97,11 @@ en:
     invalid_variables: "Variable definitions are invalid! Please check the deployment scripts."
     deployment_finished: "The deployment has already been executed. It cannot be repeated."
     console_not_ready: "The console is not ready yet. The deployment must be completed first."
+    deploy:
+      destroy_success: "Rollback operation successfully executed"
+      destroy_error: "Rollback operation failed. Please, check the logs in the Installation details box"
+      apply_success: "Deployment operation successfully executed. Click in Finish to start using the console"
+      apply_error: "Deployment operation failed. Execute the rollback to destroy the current environment"
 
   tooltips:
     prior_step: "Go back without saving changes"
@@ -110,6 +115,7 @@ en:
     copy: "Copy to clipboard"
     copied: "Copied!"
     unsupported: "Beta features are not covered by SUSE Enterprise Support licenses and are only provided as a technical preview"
+    rollback: "Destroy the current deployment. This action is required if the deployment failed and new retry is intended"
 
   page_title:
     cluster: "SAP System size"
