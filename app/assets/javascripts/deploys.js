@@ -20,6 +20,7 @@ $(function () {
     $(".list-group-flush a").addClass("disabled");
     $("#loading").show();
     $("a[data-toggle]").tooltip("hide");
+    $("#download").addClass("disabled");
     intervalId = setTimeout(function () {
       fetch_output(finished, intervalId);
     }, 5000);
@@ -113,6 +114,7 @@ function fetch_output(finished, intervalId) {
     success: function success(data) {
       if (data.error !== null) {
         $("#loading").hide(); // show rails flash message
+        $("#download").removeClass("disabled");
 
         $("#error_message").text("Deploy operation has failed.");
         $("#flash").show(); // show terraform error message in output section
@@ -136,6 +138,7 @@ function fetch_output(finished, intervalId) {
             fetch_output();
           }, 5000);
         } else {
+          $("#download").removeClass("disabled");
           $(".steps-container .btn.disabled").removeClass("disabled");
           $("#loading").hide();
           finished = true;
@@ -150,6 +153,7 @@ function fetch_output(finished, intervalId) {
       $("#flash").show();
       $(".steps-container .btn.disabled").removeClass("disabled");
       $("#loading").hide();
+      $("#download").removeClass("disabled");
       update_progress(data, true);
     }
   });
@@ -157,3 +161,10 @@ function fetch_output(finished, intervalId) {
     $("#flash").hide();
   });
 }
+
+$("#download").click(function () {
+  var link = document.createElement("a");
+  link.href = "data:text/plain;charset=UTF-8," + escape($("#output").html());
+  link.setAttribute("download", "execution.log");
+  link.click();
+});

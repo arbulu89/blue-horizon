@@ -16,3 +16,9 @@
 .linebreaks {
     white-space: pre-wrap;
 }
+.horizontal {
+    display: flex;
+}
+.download_content {
+    margin-right: 25px;
+}

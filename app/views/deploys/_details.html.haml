@@ -1,4 +1,5 @@
-%div.float-right
+%div.float-right.horizontal
+  %a.download_content#download= t('deploy.download_content')
   %label.form-check-label
     = check_box('deploy_log', 'autoscroll', class: 'form-check-input', checked: true)
     = t('autoscroll')
