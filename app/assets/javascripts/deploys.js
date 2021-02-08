@@ -16,8 +16,8 @@ $(function () {
   $("#submit-deploy").bind("ajax:beforeSend", function () {
     $("#output").text("");
     $(this).addClass("no-hover");
-    $(".float-right .steps-container .btn").addClass("disabled");
-    $(".list-group-flush a").addClass("disabled");
+    $(".float-right.steps-container .btn").addClass("disabled");
+    $(".nav-wrap .menu-item a").addClass("disabled");
     $("#loading").show();
     $("a[data-toggle]").tooltip("hide");
     intervalId = setTimeout(function () {
@@ -120,6 +120,8 @@ function fetch_output(finished, intervalId) {
         $("#output").text($("#output").text() + data.error);
         clearTimeout(intervalId);
         $(".steps-container .btn.disabled").removeClass("disabled");
+        $(".steps-container .btn.btn-primary").addClass("disabled");
+        $(".nav-wrap .menu-item a").removeClass("disabled");
         $("#loading").hide();
         finished = true;
       } else {
@@ -137,6 +139,7 @@ function fetch_output(finished, intervalId) {
           }, 5000);
         } else {
           $(".steps-container .btn.disabled").removeClass("disabled");
+          $(".nav-wrap .menu-item a").removeClass("disabled");
           $("#loading").hide();
           finished = true;
         }
@@ -148,7 +151,9 @@ function fetch_output(finished, intervalId) {
       if (endIndex == -1) endIndex = data.responseText.indexOf("\n");
       $("#error_message").text(data.responseText.substring(0, endIndex));
       $("#flash").show();
+      $(".nav-wrap .menu-item a").removeClass("disabled");
       $(".steps-container .btn.disabled").removeClass("disabled");
+      $(".steps-container .btn.btn-primary").addClass("disabled");
       $("#loading").hide();
       update_progress(data, true);
     }
