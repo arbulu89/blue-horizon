@@ -37,6 +37,7 @@ RSpec.describe DeploysController, type: :controller do
       expect(KeyValue.get(:planned_resources_count)).to eq(3)
       expect(KeyValue.get(:total_steps)).to eq(4)
       expect(KeyValue.get(:completed_steps)).to eq(0)
+      expect(KeyValue.get(:deploy_action)).to eq('apply')
       expect(instance_terra).to(
         have_received(:apply)
           .with(
@@ -45,20 +46,36 @@ RSpec.describe DeploysController, type: :controller do
             no_color:     true
           )
       )
+      expect(controller.instance_variable_get(:@flash_data)).to(
+        eql(
+          {
+            message: 'Deployment operation successfully executed. Click in Finish to start using the console',
+            state:   'alert-success'
+          }
+        )
+      )
     end
 
-    it 'raise exception' do
+    it 'deploys with an error' do
       allow(instance_terra).to(
         receive(:get_planned_resources)
           .and_return(['1', '2', '3'])
       )
       allow(instance_terra).to(
         receive(:apply)
-          .and_raise(RubyTerraform::Errors::ExecutionError)
+          .and_return('error applying terraform')
       )
-      expect do
-        get :update, format: :json
-      end.to raise_exception(RubyTerraform::Errors::ExecutionError)
+
+      get :update, format: :json
+
+      expect(controller.instance_variable_get(:@flash_data)).to(
+        eql(
+          {
+            message: 'Deployment operation failed. Execute the rollback to destroy the current environment',
+            state:   'alert-danger'
+          }
+        )
+      )
     end
 
     it 'writes error in the log' do
@@ -86,6 +103,8 @@ RSpec.describe DeploysController, type: :controller do
     end
 
     it 'can show deploy output' do
+      allow(KeyValue).to receive(:get).and_call_original
+      allow(KeyValue).to receive(:get).with(:deploy_action).and_return('apply')
       allow(Terraform).to(
         receive(:stdout)
           .and_return(
@@ -111,8 +130,32 @@ RSpec.describe DeploysController, type: :controller do
       expect(response).to be_success
     end
 
+    it 'does not send progress in destroy' do
+      allow(KeyValue).to receive(:get).and_call_original
+      allow(KeyValue).to receive(:get).with(:deploy_action).and_return('destroy')
+      allow(Terraform).to(
+        receive(:stdout)
+          .and_return(
+            StringIO.new('hello world! Destroy complete!')
+          )
+      )
+      allow(controller).to receive(:update_progress)
+
+      allow(ruby_terraform).to receive(:apply)
+
+      get :send_current_status, format: :json
+
+      expect(controller).not_to(
+        have_received(:update_progress)
+      )
+
+      expect(response).to be_success
+    end
+
     it 'can show error output when deploy fails' do
       allow(JSON).to receive(:parse).and_return(foo: 'bar')
+      allow(KeyValue).to receive(:get).and_call_original
+      allow(KeyValue).to receive(:get).with(:deploy_action).and_return('apply')
 
       allow(Terraform).to receive(:stderr).and_return(StringIO.new('Error'))
       allow(Terraform).to receive(:stdout).and_return(StringIO.new('Creating'))
@@ -136,17 +179,25 @@ RSpec.describe DeploysController, type: :controller do
 
   context 'when destroying terraform resources' do
     let(:ruby_terraform) { RubyTerraform }
+    let(:tfstate) { working_path.join('terraform.tfstate') }
 
     it 'destroys the resources deployed' do
       allow(ruby_terraform).to receive(:destroy)
       allow(File).to receive(:exist?).and_return(true)
-      allow(controller).to receive(:redirect_to).with(action: 'show')
+      allow(File).to receive(:delete).with(tfstate)
 
-      delete :destroy
+      delete :destroy, format: :json
 
       expect(response).to be_success
-      expect(flash[:notice]).to(
-        include('Terraform resources have been destroyed.')
+      expect(KeyValue.get(:deploy_action)).to eq('destroy')
+
+      expect(controller.instance_variable_get(:@flash_data)).to(
+        eql(
+          {
+            message: 'Rollback operation successfully executed',
+            state:   'alert-success'
+          }
+        )
       )
     end
 
@@ -156,13 +207,17 @@ RSpec.describe DeploysController, type: :controller do
           .and_raise(RubyTerraform::Errors::ExecutionError)
       )
       allow(File).to receive(:exist?).and_return(true)
-      allow(controller).to receive(:redirect_to).with(action: 'show')
 
-      delete :destroy
+      delete :destroy, format: :json
 
       expect(response).to be_success
-      expect(flash[:error]).to(
-        include('Error: Terraform destroy has failed.')
+      expect(controller.instance_variable_get(:@flash_data)).to(
+        eql(
+          {
+            message: 'Rollback operation failed. Please, check the logs in the Installation details box',
+            state:   'alert-danger'
+          }
+        )
       )
     end
   end

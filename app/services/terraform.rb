@@ -134,7 +134,7 @@ class Terraform
       RubyTerraform.apply(args)
     end
   rescue RubyTerraform::Errors::ExecutionError
-    nil
+    return 'Error: Terraform apply has failed.'
   ensure
     KeyValue.set(:active_terraform_action, nil)
   end
@@ -163,8 +163,10 @@ class Terraform
     KeyValue.set(:active_terraform_action, 'destroy')
     destroy_args = {
       directory:    Rails.configuration.x.source_export_dir,
-      auto_approve: true
+      auto_approve: true,
+      no_color:     true
     }
+    set_output
     in_export_dir do
       RubyTerraform.destroy(destroy_args)
     end
