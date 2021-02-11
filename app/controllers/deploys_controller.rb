@@ -40,7 +40,7 @@ class DeploysController < ApplicationController
   def send_current_status
     if Terraform.stderr.is_a?(StringIO) && !Terraform.stderr.string.empty?
       error = Terraform.stderr.string
-      content = error
+      content = Terraform.stdout.string + error
       success = false
       write_output(content, success)
     elsif Terraform.stdout.is_a?(StringIO)

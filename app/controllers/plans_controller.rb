@@ -88,9 +88,14 @@ class PlansController < ApplicationController
   end
 
   def cleanup
+    log_file = File.basename(Rails.configuration.x.terraform_log_filename, '.*')
+    log_file_abs = Rails.configuration.x.source_export_dir.join(log_file)
     exports = Rails.configuration.x.source_export_dir.join('*')
-    Rails.logger.debug("cleaning up #{exports}")
-    rm_r(Dir.glob(exports), secure: true)
+    filtered_exports = Dir.glob(exports).reject do |item|
+      item.match(/#{log_file_abs}.*/)
+    end
+    Rails.logger.debug("cleaning up #{filtered_exports}")
+    FileUtils.rm_r(filtered_exports, secure: true)
   end
 
   def prep
