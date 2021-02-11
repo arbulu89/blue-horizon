@@ -66,6 +66,10 @@ RSpec.describe DeploysController, type: :controller do
         receive(:stderr)
           .and_return(StringIO.new('Something went wrong'))
       )
+      allow(ruby_terraform.configuration).to(
+        receive(:stdout)
+          .and_return(StringIO.new('Something happened\n'))
+      )
       allow(controller).to(
         receive(:update_progress)
           .and_return('progress')
@@ -77,7 +81,7 @@ RSpec.describe DeploysController, type: :controller do
       expect(File).to exist(filename)
       file_content = File.read(filename)
       expect(
-        file_content.include?('Something went wrong')
+        file_content.include?('Something happened\nSomething went wrong')
       ).to be true
     end
 

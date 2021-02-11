@@ -113,6 +113,32 @@ RSpec.describe PlansController, type: :controller do
       )
     end
 
+    it 'cleans up the files except the logs' do
+      allow(instance_terra).to receive(:plan).and_return('')
+      allow(instance_storage).to receive(:check_resource).and_return(true)
+      allow(Dir).to receive(:glob).and_return(
+        [
+          Rails.configuration.x.source_export_dir.join('test').to_s,
+          Rails.configuration.x.source_export_dir.join('test2').to_s,
+          Rails.configuration.x.source_export_dir.join('ruby-terraform.log').to_s,
+          Rails.configuration.x.source_export_dir.join('ruby-terraform-0.log').to_s
+        ]
+      )
+      allow(FileUtils).to receive(:rm_r)
+
+      put :update
+
+      expect(controller).to redirect_to action: :show
+      expect(FileUtils).to have_received(:rm_r)
+        .with(
+          [
+            Rails.configuration.x.source_export_dir.join('test').to_s,
+            Rails.configuration.x.source_export_dir.join('test2').to_s
+          ],
+          secure: true
+        )
+    end
+
     it 'raises a flash error on ssh file check' do
       ssh_content = 'ssh-rs AAAAB3NzaC1yc2xxxxxx=== blue-horizon@test'
       allow(File).to receive(:read).with(ssh_file).and_return(ssh_content)

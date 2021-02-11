@@ -67,6 +67,7 @@ en:
     variables: "Variables"
     plan: "Plan"
     download_plan: "Download plan"
+    download_logs: "Download execution logs"
     deploy: "Deploy"
     home: "Next steps"
     download: "Download"
@@ -110,6 +111,7 @@ en:
     copy: "Copy to clipboard"
     copied: "Copied!"
     unsupported: "Beta features are not covered by SUSE Enterprise Support licenses and are only provided as a technical preview"
+    download_logs: "Download execution logs"
 
   page_title:
     cluster: "SAP System size"
@@ -152,6 +154,7 @@ en:
 
   # Deployment view and progress bar texts
   deploy:
+    download_content: "Download content"
     details: "Installation details"
     not_started: "Not started"
     in_progress: "Installation in progress..."
